@@ -7,38 +7,54 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import jakarta.servlet.DispatcherType
 import org.springframework.http.HttpStatus
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.authentication.HttpStatusEntryPoint
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
+@EnableWebSecurity
 class SecurityConfig(
     private val jwtAuthFilter: JwtAuthFilter
 ) {
 
     @Bean
-    fun filterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
-        return httpSecurity
-            .csrf { csrf -> csrf.disable() }
-            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+    fun filterChain(http: HttpSecurity): SecurityFilterChain {
+        return http
+            .csrf { it.disable() }
+            .cors { it.configurationSource(corsConfigurationSource()) } // 1. Добавляем CORS
+            .sessionManagement {
+                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }
             .authorizeHttpRequests { auth ->
                 auth
-                    .requestMatchers("/")
-                    .permitAll()
-                    .requestMatchers("/auth/**")
-                    .permitAll()
-                    .dispatcherTypeMatchers(
-                        DispatcherType.ERROR,
-                        DispatcherType.FORWARD
-                    )
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated()
-            }
-            .exceptionHandling { configurer ->
-                configurer
-                    .authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                    .requestMatchers(
+                        "/",
+                        "/auth/**",
+                        "/api/reports/**",
+                        "/swagger-ui/**",
+                        "/v3/api-docs/**"
+                    ).permitAll()
+                    .anyRequest().authenticated()
             }
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .exceptionHandling {
+                it.authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+            }
             .build()
+    }
+
+    // 4. Конфигурация CORS
+    private fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = listOf("*")
+        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE")
+        configuration.allowedHeaders = listOf("Authorization", "Content-Type")
+
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        return source
     }
 }

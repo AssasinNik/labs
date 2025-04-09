@@ -44,7 +44,7 @@ class AuthService(
         )
     }
 
-    @Transactional
+    @Transactional("transactionManager")
     fun refresh(refreshToken: String): TokenPair {
         if(!jwtService.validateRefreshToken(refreshToken)) {
             throw ResponseStatusException(HttpStatusCode.valueOf(401), "Invalid refresh token.")
