@@ -100,6 +100,7 @@ dependencies {
 	implementation("org.jooq:jooq-meta:3.19.21")
 	jooqGenerator("org.postgresql:postgresql")
 	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
 	runtimeOnly("org.postgresql:r2dbc-postgresql")
 	runtimeOnly("org.postgresql:postgresql")
 	implementation("org.springframework.boot:spring-boot-starter-jooq")

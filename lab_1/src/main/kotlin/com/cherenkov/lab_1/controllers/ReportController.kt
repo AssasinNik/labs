@@ -16,7 +16,7 @@ class ReportController(
 ) {
 
     @PostMapping("/attendance")
-    fun generateAttendanceReport(@RequestBody request: ReportRequest): Flux<StudentReport> {
+    fun generateAttendanceReport(@RequestBody request: ReportRequest): List<StudentReport> {
         return reportService.generateReport(request)
     }
 }

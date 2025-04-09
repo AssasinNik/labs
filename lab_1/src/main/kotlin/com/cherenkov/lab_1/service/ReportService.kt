@@ -10,88 +10,72 @@ import com.cherenkov.generated.jooq.tables.University.Companion.UNIVERSITY
 import com.cherenkov.lab_1.dto.LectureMaterial
 import com.cherenkov.lab_1.dto.ReportRequest
 import com.cherenkov.lab_1.dto.StudentReport
-import org.springframework.data.elasticsearch.client.elc.ReactiveElasticsearchTemplate
 import org.springframework.data.elasticsearch.core.query.Query
 import org.springframework.data.elasticsearch.core.query.Criteria
-import org.springframework.data.redis.core.ReactiveRedisTemplate
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
-import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
-import java.time.Instant
 import org.jooq.DSLContext
 import org.jooq.Log
 import org.jooq.impl.DSL
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate
+import org.springframework.data.elasticsearch.core.SearchHits
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery
-import reactor.kotlin.core.publisher.toFlux
+import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 
 @Service
 class ReportService(
-    private val elasticsearchTemplate: ReactiveElasticsearchTemplate,
+    private val elasticsearchTemplate: ElasticsearchTemplate,
     private val dsl: DSLContext,
-    private val redisOperations: ReactiveRedisTemplate<String, Any>,
+    private val redisOperations: RedisTemplate<String, Any>,
 ) {
 
-    fun generateReport(request: ReportRequest): Flux<StudentReport> {
-        return searchLecturesByTerm(request.term, elasticsearchTemplate)
-            .collectList()
-            .flatMapMany { lectures ->
-                lectures.takeIf { it.isNotEmpty() }
-                    ?.let { findLowAttendanceStudents(it.map { it.lectureId }, request.startDate, request.endDate) }
-                    ?: Flux.empty()
+    fun generateReport(request: ReportRequest): List<StudentReport> {
+        val lectures = searchLecturesByTerm(request.term)
+        val attendances = if (lectures.isNotEmpty()) findLowAttendanceStudents(lectures.map { it.lectureId }, request.startDate, request.endDate) else emptyList()
+        val attendancesAndInfos = if (attendances.isNotEmpty()) getStudentsInfo(attendances) else emptyList()
+
+        return attendancesAndInfos.map { (studentInfo, attendance) ->
+            fetchRedisData(studentInfo.redisKey)?.let { redisData ->
+                StudentReport(
+                    studentNumber = studentInfo.studentNumber,
+                    fullName = studentInfo.fullName,
+                    email = studentInfo.email,
+                    groupName = studentInfo.groupName,
+                    departmentName = studentInfo.departmentName,
+                    instituteName = studentInfo.instituteName,
+                    universityName = studentInfo.universityName,
+                    attendancePercentage = attendance.percentage,
+                    reportPeriod = "${request.startDate} - ${request.endDate}",
+                    searchTerm = request.term,
+                    redisKey = studentInfo.redisKey,
+                    groupNameFromRedis = redisData.groupName
+                )
             }
-            .collectList()
-            .flatMapMany { attendances ->
-                attendances.takeIf { it.isNotEmpty() }
-                    ?.let {
-                        getStudentsInfo(it)
-                            .zipWith(Flux.fromIterable(it)){studentInfo, attendance ->
-                                studentInfo to attendance
-                            }
-                    }
-                    ?: Flux.empty()
-            }
-            .flatMap { (studentInfo, attendance) ->
-                fetchRedisData(studentInfo.redisKey)
-                    .map { redisData ->
-                        StudentReport(
-                            studentNumber = studentInfo.studentNumber,
-                            fullName = studentInfo.fullName,
-                            email = studentInfo.email,
-                            groupName = studentInfo.groupName,
-                            departmentName = studentInfo.departmentName,
-                            instituteName = studentInfo.instituteName,
-                            universityName = studentInfo.universityName,
-                            attendancePercentage = attendance.percentage,
-                            reportPeriod = "${request.startDate} - ${request.endDate}",
-                            searchTerm = request.term,
-                            redisKey = studentInfo.redisKey,
-                            groupNameFromRedis = redisData?.groupName
-                        )
-                    }
-            }
+        }.filterNotNull()
     }
 
-    private fun searchLecturesByTerm(term: String, elasticsearchTemplate: ReactiveElasticsearchTemplate): Flux<LectureMaterial> {
+    private fun searchLecturesByTerm(term: String): List<LectureMaterial> {
         val criteria = Criteria("description").matches(term)
         val query = CriteriaQuery(criteria)
-        return elasticsearchTemplate.search(query, LectureMaterial::class.java)
-            .map { it.content }
+        val answer = elasticsearchTemplate.search(query, LectureMaterial::class.java)
+        val answer1 = answer.toList123()
+        return answer1
     }
 
     private fun findLowAttendanceStudents(
         lectureIds: List<Long>,
         start: Instant,
         end: Instant
-    ): Flux<StudentAttendance> {
+    ): List<StudentAttendance> {
         val a = ATTENDANCE.`as`("a")
         val s = SCHEDULE.`as`("s")
 
         val startDateTime = LocalDateTime.ofInstant(start, ZoneId.systemDefault())
         val endDateTime = LocalDateTime.ofInstant(end, ZoneId.systemDefault())
 
-        return dsl.select(
+        val query = dsl.select(
             a.ID_STUDENT,
             DSL.count().`as`("total"),
             DSL.sum(DSL.`when`(a.STATUS, 1).otherwise(0)).`as`("attended"),
@@ -107,23 +91,23 @@ class ReportService(
             .groupBy(a.ID_STUDENT)
             .orderBy(DSL.field("percentage").asc())
             .limit(10)
-            .fetchAsync()
-            .let { Mono.fromCompletionStage(it) }
-            .flatMapIterable { it }
-            .map { record ->
-                StudentAttendance(
-                    record[a.ID_STUDENT]!!,
-                    record["total", Long::class.java]!!,
-                    record["attended", Long::class.java]!!,
-                    record["percentage", Double::class.java]!!
-                )
-            }
+
+        val result = query.fetch()
+
+        return result.map { record ->
+            StudentAttendance(
+                record[a.ID_STUDENT]!!,
+                record["total", Long::class.java]!!,
+                record["attended", Long::class.java]!!,
+                record["percentage", Double::class.java]!!
+            )
+        }
     }
 
-    private fun getStudentsInfo(attendances: List<StudentAttendance>): Flux<StudentInfo> {
+    private fun getStudentsInfo(attendances: List<StudentAttendance>): List<Pair<StudentInfo, StudentAttendance>> {
         val studentNumbers = attendances.map { it.studentNumber }
 
-        return dsl.select(
+        val query = dsl.select(
             STUDENT.STUDENT_NUMBER,
             STUDENT.FULLNAME,
             STUDENT.EMAIL,
@@ -139,31 +123,32 @@ class ReportService(
             .join(INSTITUTE).on(DEPARTMENT.ID_INSTITUTE.eq(INSTITUTE.ID))
             .join(UNIVERSITY).on(INSTITUTE.ID_UNIVERSITY.eq(UNIVERSITY.ID))
             .where(STUDENT.STUDENT_NUMBER.`in`(studentNumbers))
-            .fetchAsync()
-            .let { Mono.fromCompletionStage(it) }
-            .flatMapIterable { it }
-            .map { record ->
-                StudentInfo(
-                    record[STUDENT.STUDENT_NUMBER]!!,
-                    record[STUDENT.FULLNAME]!!,
-                    record[STUDENT.EMAIL],
-                    record["group_name", String::class.java]!!,
-                    record["department_name", String::class.java]!!,
-                    record["institute_name", String::class.java]!!,
-                    record["university_name", String::class.java]!!,
-                    record[STUDENT.REDIS_KEY]
-                )
-            }
+
+        val result = query.fetch()
+
+        return result.map { record ->
+            StudentInfo(
+                record[STUDENT.STUDENT_NUMBER]!!,
+                record[STUDENT.FULLNAME]!!,
+                record[STUDENT.EMAIL],
+                record["group_name", String::class.java]!!,
+                record["department_name", String::class.java]!!,
+                record["institute_name", String::class.java]!!,
+                record["university_name", String::class.java]!!,
+                record[STUDENT.REDIS_KEY]
+            ) to attendances.first { it.studentNumber == record[STUDENT.STUDENT_NUMBER]!! }
+        }
     }
 
-    private fun fetchRedisData(redisKey: String?): Mono<RedisData> {
+    private fun fetchRedisData(redisKey: String?): RedisData? {
         return redisKey?.let { key ->
-            redisOperations.opsForValue().get(key)
-                .map { data ->
-                    RedisData((data as Map<String, String>)["group_name"])
-                }
-                .onErrorResume { Mono.empty() }
-        } ?: Mono.empty()
+            val dataMap = redisOperations.opsForHash<String, String>().entries(key)
+            return if (dataMap.isNotEmpty()) {
+                RedisData(dataMap["group_name"])
+            } else {
+                null
+            }
+        }
     }
 }
 
@@ -186,3 +171,7 @@ data class StudentInfo(
 )
 
 data class RedisData(val groupName: String?)
+
+fun SearchHits<LectureMaterial>.toList123(): List<LectureMaterial> {
+    return this.searchHits.map { it.content }
+}
