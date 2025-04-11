@@ -7,6 +7,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import jakarta.servlet.DispatcherType
 import org.springframework.http.HttpStatus
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.web.authentication.HttpStatusEntryPoint
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
@@ -16,6 +17,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 class SecurityConfig(
     private val jwtAuthFilter: JwtAuthFilter
 ) {
@@ -24,7 +26,7 @@ class SecurityConfig(
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
             .csrf { it.disable() }
-            .cors { it.configurationSource(corsConfigurationSource()) } // 1. Добавляем CORS
+            .cors { it.configurationSource(corsConfigurationSource()) }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
@@ -33,12 +35,14 @@ class SecurityConfig(
                     .requestMatchers(
                         "/",
                         "/auth/**",
-                        "/api/reports/**",
                         "/swagger-ui/**",
                         "/v3/api-docs/**"
                     ).permitAll()
+                    // Все API запросы должны быть авторизованы
+                    .requestMatchers("/api/**").authenticated()
                     .anyRequest().authenticated()
             }
+            // Добавляем JWT фильтр перед стандартным фильтром аутентификации
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling {
                 it.authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
@@ -46,12 +50,14 @@ class SecurityConfig(
             .build()
     }
 
-    // 4. Конфигурация CORS
+    // Конфигурация CORS
     private fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
         configuration.allowedOrigins = listOf("*")
-        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE")
-        configuration.allowedHeaders = listOf("Authorization", "Content-Type")
+        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        configuration.allowedHeaders = listOf("Authorization", "Content-Type", "Accept", "Origin")
+        configuration.exposedHeaders = listOf("Authorization")
+        configuration.maxAge = 3600L
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
