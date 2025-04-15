@@ -1,595 +1,564 @@
-import psycopg2
-from psycopg2.extras import execute_batch, RealDictCursor
-from pymongo import MongoClient, errors as mongo_errors
-import redis
-from py2neo import Graph, Node, Relationship
-from elasticsearch import Elasticsearch
-from faker import Faker
 import random
 import datetime
-import logging
-import sys
 
-# Настройка логирования
-logging.basicConfig(
-    level=logging.INFO,
-    format='[%(asctime)s] %(levelname)s: %(message)s',
-    handlers=[
-        logging.StreamHandler(sys.stdout)
-    ]
-)
-logger = logging.getLogger(__name__)
+import psycopg2
+from psycopg2 import sql
+from faker import Faker
 
-# Конфигурация подключения к базам данных (согласно docker-compose)
-PG_CONFIG = {
-    'host': 'host.docker.internal',
-    'port': 5433,
-    'user': 'admin',
-    'password': 'secret',
-    'dbname': 'mydb'
-}
-MONGO_CONFIG = {
-    'host': 'host.docker.internal',
-    'port': 27017,
-    'db': 'university_db'
-}
-REDIS_CONFIG = {
-    'host': 'host.docker.internal',
-    'port': 6379,
-    'db': 0
-}
-NEO4J_CONFIG = {
-    'uri': 'bolt://host.docker.internal:7687',
-    'user': None,  # без аутентификации
-    'password': None
-}
-ES_CONFIG = {
-    'hosts': ['http://host.docker.internal:9200']
-}
+from pymongo import MongoClient
+from neo4j import GraphDatabase
+import redis
+from elasticsearch import Elasticsearch
 
-# Списки для генерации данных
-UNIVERSITIES = [
-    "МГУ", "СПбГУ", "МИРЭА", "МФТИ", "НИЮВГУ", "РТУ МИРЭА", "НИУ ВШЭ", "ИТМО", "РАНХиГС", "МИИРЭ"
-]
-INSTITUTE_NAMES = ["Институт информационных технологий", "Институт кибернетики", "Институт физики", "Институт математики"]
-DEPARTMENT_NAMES = ["Кафедра программирования", "Кафедра прикладной математики", "Кафедра информационных систем"]
-GROUP_PREFIXES = ["БСБО", "ИББО", "ДЭ", "КН"]
-COURSE_NAMES = ["Алгоритмы", "Базы данных", "Контейнеризация", "Машинное обучение", "Операционные системы"]
-
+# Инициализация Faker (русская локализация)
 fake = Faker("ru_RU")
-Faker.seed(0)
-random.seed(0)
 
-def recreate_postgres_schema():
-    """Очистка базы и создание таблиц по предоставленной схеме, включая партиционирование таблицы attendance по неделям."""
-    try:
-        conn = psycopg2.connect(**PG_CONFIG)
-        conn.autocommit = True
-        cur = conn.cursor()
+# Параметры подключения (согласно docker-compose)
+PG_CONN_PARAMS = {
+    "host": "host.docker.internal",
+    "port": 5433,  # проброшенный порт для PostgreSQL
+    "user": "admin",
+    "password": "secret",
+    "dbname": "mydb",
+}
 
-        # Сначала удаляем таблицы, включая возможные партиции attendance
-        tables = ["lecture_materials", "attendance", "groups", "department", "institute", "university", "course", "lecture", "schedule", "student"]
-        for table in tables:
-            cur.execute(f"DROP TABLE IF EXISTS {table} CASCADE;")
-        
-        # Создаём основные таблицы согласно схеме
-        schema_sql = """
-        -- Основные таблицы
-        CREATE TABLE university (
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(200) NOT NULL,
-            created_at TIMESTAMP DEFAULT NOW(),
-            updated_at TIMESTAMP DEFAULT NOW()
-        );
+MONGO_CONN_STRING = "mongodb://host.docker.internal:27017/"
+NEO4J_URI = "bolt://host.docker.internal:7687"
+NEO4J_AUTH = None  # если NEO4J_AUTH=none
+REDIS_HOST = "host.docker.internal"
+REDIS_PORT = 6379
+ES_HOSTS = ["http://host.docker.internal:9200"]
 
-        CREATE TABLE institute (
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(200) NOT NULL,
-            id_university INT NOT NULL REFERENCES university(id),
-            created_at TIMESTAMP DEFAULT NOW(),
-            updated_at TIMESTAMP DEFAULT NOW()
-        );
+##########################################################################
+# PostgreSQL: Создание схемы с партиционированием таблицы attendance
+##########################################################################
 
-        CREATE INDEX idx_institute_university ON institute(id_university);
+def create_postgres_schema(conn):
+    """
+    Пересоздаёт схему PostgreSQL для таблиц:
+    attendance, schedule, lecture, course, student, groups, department, institute, university.
+    Создаются партиции для attendance на период с сентября 2023 до февраля 2024.
+    """
+    cur = conn.cursor()
+    tables = [
+        "attendance",
+        "schedule",
+        "lecture",
+        "course",
+        "student",
+        "groups",
+        "department",
+        "institute",
+        "university",
+    ]
+    for table in tables:
+        cur.execute(sql.SQL("DROP TABLE IF EXISTS {} CASCADE;").format(sql.Identifier(table)))
+    conn.commit()
 
-        CREATE TABLE department (
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(200) NOT NULL,
-            id_institute INT NOT NULL REFERENCES institute(id),
-            created_at TIMESTAMP DEFAULT NOW(),
-            updated_at TIMESTAMP DEFAULT NOW()
-        );
+    schema_sql = """
+    -- Университет
+    CREATE TABLE university (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(200) NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+    );
 
-        CREATE INDEX idx_department_institute ON department(id_institute);
+    -- Институт
+    CREATE TABLE institute (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(200) NOT NULL,
+        id_university INT NOT NULL REFERENCES university(id),
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+    );
+    CREATE INDEX idx_institute_university ON institute(id_university);
 
-        CREATE TABLE groups (
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(200) NOT NULL,
-            id_department INT NOT NULL REFERENCES department(id),
-            mongo_id VARCHAR(100),
-            formation_year INT,
-            created_at TIMESTAMP DEFAULT NOW()
-        );
+    -- Кафедра
+    CREATE TABLE department (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(200) NOT NULL,
+        id_institute INT NOT NULL REFERENCES institute(id),
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+    );
+    CREATE INDEX idx_department_institute ON department(id_institute);
 
-        CREATE INDEX idx_groups_department ON groups(id_department);
+    -- Группа
+    CREATE TABLE groups (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(200) NOT NULL,
+        id_department INT NOT NULL REFERENCES department(id),
+        mongo_id VARCHAR(100),
+        formation_year INT,
+        created_at TIMESTAMP DEFAULT NOW()
+    );
+    CREATE INDEX idx_groups_department ON groups(id_department);
 
-        CREATE TABLE student (
-            student_number VARCHAR(100) PRIMARY KEY,
-            fullname VARCHAR(200) NOT NULL,
-            email VARCHAR(255),
-            id_group INT NOT NULL REFERENCES groups(id),
-            redis_key VARCHAR(100),
-            created_at TIMESTAMP DEFAULT NOW()
-        );
+    -- Студент
+    CREATE TABLE student (
+        student_number VARCHAR(100) PRIMARY KEY,
+        fullname VARCHAR(200) NOT NULL,
+        email VARCHAR(255),
+        id_group INT NOT NULL REFERENCES groups(id),
+        redis_key VARCHAR(100),
+        created_at TIMESTAMP DEFAULT NOW()
+    );
+    CREATE INDEX idx_student_group ON student(id_group);
 
-        CREATE INDEX idx_student_group ON student(id_group);
+    -- Курс
+    CREATE TABLE course (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(200) NOT NULL,
+        id_department INT NOT NULL REFERENCES department(id),
+        created_at TIMESTAMP DEFAULT NOW(),
+        updated_at TIMESTAMP DEFAULT NOW()
+    );
+    CREATE INDEX idx_course_department ON course(id_department);
 
-        -- Курсы и лекции
-        CREATE TABLE course (
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(200) NOT NULL,
-            id_department INT NOT NULL REFERENCES department(id),
-            created_at TIMESTAMP DEFAULT NOW(),
-            updated_at TIMESTAMP DEFAULT NOW()
-        );
+    -- Лекция
+    CREATE TABLE lecture (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(200) NOT NULL,
+        duration_hours INT DEFAULT 2 CHECK (duration_hours = 2),
+        tech_equipment BOOLEAN DEFAULT FALSE,
+        id_course INT NOT NULL REFERENCES course(id),
+        elasticsearch_id VARCHAR(100),
+        created_at TIMESTAMP DEFAULT NOW()
+    );
+    CREATE INDEX idx_lecture_course ON lecture(id_course);
 
-        CREATE INDEX idx_course_department ON course(id_department);
+    -- Расписание (schedule)
+    CREATE TABLE schedule (
+        id SERIAL PRIMARY KEY,
+        id_lecture INT NOT NULL REFERENCES lecture(id),
+        id_group INT NOT NULL REFERENCES groups(id),
+        timestamp TIMESTAMP NOT NULL,
+        location VARCHAR(100),
+        created_at TIMESTAMP DEFAULT NOW()
+    );
+    CREATE INDEX idx_schedule_timestamp ON schedule(timestamp);
+    CREATE INDEX idx_schedule_lecture_group ON schedule(id_lecture, id_group);
 
-        CREATE TABLE lecture (
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(200) NOT NULL,
-            duration_hours INT DEFAULT 2 CHECK (duration_hours = 2),
-            tech_equipment BOOLEAN DEFAULT FALSE,
-            id_course INT NOT NULL REFERENCES course(id),
-            elasticsearch_id VARCHAR(100),
-            created_at TIMESTAMP DEFAULT NOW()
-        );
+    -- Посещение (attendance) с партиционированием по неделям
+    CREATE TABLE attendance (
+        id SERIAL,
+        timestamp TIMESTAMP NOT NULL,
+        week_start DATE NOT NULL,
+        id_student VARCHAR(100) NOT NULL REFERENCES student(student_number),
+        id_schedule INT NOT NULL REFERENCES schedule(id),
+        status BOOLEAN NOT NULL DEFAULT TRUE,
+        PRIMARY KEY (id, week_start)
+    ) PARTITION BY RANGE (week_start);
+    CREATE INDEX idx_attendance_student ON attendance(id_student);
+    CREATE INDEX idx_attendance_schedule ON attendance(id_schedule);
 
-        CREATE INDEX idx_lecture_course ON lecture(id_course);
+    -- Триггер для автоматического расчёта week_start по timestamp
+    CREATE OR REPLACE FUNCTION set_week_start()
+    RETURNS TRIGGER AS $$
+    BEGIN
+        NEW.week_start := DATE_TRUNC('week', NEW.timestamp)::DATE;
+        RETURN NEW;
+    END;
+    $$ LANGUAGE plpgsql;
+    CREATE TRIGGER trg_set_week_start
+    BEFORE INSERT OR UPDATE ON attendance
+    FOR EACH ROW
+    EXECUTE FUNCTION set_week_start();
 
-        -- Расписание
-        CREATE TABLE schedule (
-            id SERIAL PRIMARY KEY,
-            id_lecture INT NOT NULL REFERENCES lecture(id),
-            id_group INT NOT NULL REFERENCES groups(id),
-            timestamp TIMESTAMP NOT NULL,
-            location VARCHAR(100),
-            created_at TIMESTAMP DEFAULT NOW()
-        );
+    -- Создание партиций для attendance
+    CREATE TABLE attendance_2023_09 PARTITION OF attendance
+        FOR VALUES FROM ('2023-09-01') TO ('2023-10-01');
+    CREATE TABLE attendance_2023_10 PARTITION OF attendance
+        FOR VALUES FROM ('2023-10-01') TO ('2023-11-01');
+    CREATE TABLE attendance_2023_11 PARTITION OF attendance
+        FOR VALUES FROM ('2023-11-01') TO ('2023-12-01');
+    CREATE TABLE attendance_2023_12 PARTITION OF attendance
+        FOR VALUES FROM ('2023-12-01') TO ('2024-01-01');
+    CREATE TABLE attendance_2024_01 PARTITION OF attendance
+        FOR VALUES FROM ('2024-01-01') TO ('2024-02-01');
+    """
+    cur.execute(schema_sql)
+    conn.commit()
+    cur.close()
+    print("Схема PostgreSQL создана (таблицы и партиции attendance обновлены).")
 
-        CREATE INDEX idx_schedule_timestamp ON schedule(timestamp);
-        CREATE INDEX idx_schedule_lecture_group ON schedule(id_lecture, id_group);
+##########################################################################
+# Заполнение PostgreSQL данными (University → Institute → Department → Groups → Student,
+# Course → Lecture → Schedule → Attendance)
+##########################################################################
 
-        -- Посещения (партиционированная таблица по неделям)
-        CREATE TABLE attendance (
-            id SERIAL,
-            timestamp TIMESTAMP NOT NULL,
-            week_start DATE NOT NULL,
-            id_student VARCHAR(100) NOT NULL REFERENCES student(student_number),
-            id_schedule INT NOT NULL REFERENCES schedule(id),
-            status BOOLEAN NOT NULL DEFAULT TRUE,
-            PRIMARY KEY (id, week_start)
-        ) PARTITION BY RANGE (week_start);
+def populate_postgres(conn):
+    """
+    Заполняет PostgreSQL иерархически:
+      - Университеты, институты, кафедры, группы, студенты.
+      - Для каждой кафедры создаются курсы и лекции.
+      - Для каждой лекции для всех групп кафедры создаётся расписание.
+      - Для выборочных студентов добавляются записи посещаемости.
+    Для каждой записи attendance вычисляется week_start на основе времени расписания.
+    """
+    cur = conn.cursor()
 
-        CREATE INDEX idx_attendance_student ON attendance(id_student);
-        CREATE INDEX idx_attendance_schedule ON attendance(id_schedule);
+    # Задаем параметры генерации
+    num_universities = 3
+    institutes_per_univ = 4
+    departments_per_inst = 5
+    groups_per_department = 5
+    students_per_group = 100    # Итог: 3 * 4 * 5 * 5 * 100 ≈ 30000 студентов
+    courses_per_department = 10
+    lectures_per_course = 3
 
-        -- Триггерная функция для заполнения week_start
-        CREATE OR REPLACE FUNCTION set_week_start()
-        RETURNS TRIGGER AS $$
-        BEGIN
-            NEW.week_start := DATE_TRUNC('week', NEW.timestamp)::DATE;
-            RETURN NEW;
-        END;
-        $$ LANGUAGE plpgsql;
+    # Базовое время для расписания лекций
+    base_datetime = datetime.datetime(2023, 9, 4, 9, 0, 0)
 
-        CREATE TRIGGER trg_set_week_start
-        BEFORE INSERT OR UPDATE ON attendance
-        FOR EACH ROW
-        EXECUTE FUNCTION set_week_start();
+    # Списки для контроля вставки
+    universities = []    # (id, name)
+    institutes = {}      # {uni_id: [(inst_id, name), ...]}
+    departments = {}     # {inst_id: [(dept_id, name), ...]}
+    groups = {}          # {dept_id: [(group_id, name), ...]}
 
-        CREATE TABLE lecture_materials (
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(100) NOT NULL,
-            description TEXT,
-            created_at TIMESTAMP DEFAULT NOW(),
-            id_lecture INT NOT NULL REFERENCES lecture(id)
-        );
-        """
-        cur.execute(schema_sql)
+    # 1. Университеты
+    for i in range(num_universities):
+        uni_name = fake.company()
+        cur.execute("INSERT INTO university(name) VALUES (%s) RETURNING id;", (uni_name,))
+        uni_id = cur.fetchone()[0]
+        universities.append((uni_id, uni_name))
+    conn.commit()
+    print("Университеты созданы.")
 
-        # Теперь создадим партиции для attendance по неделям.
-        # Например, создадим партиции от (начало текущей недели - 10 недель) до (начало текущей недели + 2 недели)
-        now_dt = datetime.datetime.now()
-        start_week = now_dt - datetime.timedelta(days=now_dt.weekday())
-        partition_start = start_week - datetime.timedelta(weeks=10)
-        partition_end = start_week + datetime.timedelta(weeks=2)
-
-        current = partition_start.date()
-        end_date = partition_end.date()
-        while current < end_date:
-            next_week = current + datetime.timedelta(days=7)
-            partition_name = f"attendance_{current.strftime('%Y%m%d')}"
-            create_partition_sql = f"""
-            CREATE TABLE {partition_name} PARTITION OF attendance
-                FOR VALUES FROM ('{current}') TO ('{next_week}');
-            """
-            cur.execute(create_partition_sql)
-            logger.info("Создана партиция %s для диапазона [%s, %s)", partition_name, current, next_week)
-            current = next_week
-
-        cur.close()
-        conn.close()
-        logger.info("PostgreSQL: Схема пересоздана.")
-    except Exception as e:
-        logger.error("Ошибка при пересоздании схемы PostgreSQL: %s", e)
-        sys.exit(1)
-
-def populate_postgres_data():
-    """Генерация и вставка данных в PostgreSQL."""
-    try:
-        conn = psycopg2.connect(**PG_CONFIG)
-        cur = conn.cursor()
-        
-        # 1. Университеты
-        uni_ids = {}
-        for uni in UNIVERSITIES:
-            cur.execute("INSERT INTO university (name) VALUES (%s) RETURNING id;", (uni,))
-            uni_id = cur.fetchone()[0]
-            uni_ids[uni] = uni_id
-
-        # 2. Институты для каждого университета (по 1-3 на универ)
-        institute_ids = {}
-        for uni, uni_id in uni_ids.items():
-            n_institutes = random.randint(1, 3)
-            for _ in range(n_institutes):
-                inst_name = random.choice(INSTITUTE_NAMES) + " " + fake.word().capitalize()
-                cur.execute("INSERT INTO institute (name, id_university) VALUES (%s, %s) RETURNING id;", (inst_name, uni_id))
-                inst_id = cur.fetchone()[0]
-                institute_ids[inst_id] = {'university': uni_id, 'name': inst_name}
-
-        # 3. Кафедры для каждого института (1-3 кафедры)
-        department_ids = {}
-        for inst_id in institute_ids.keys():
-            n_depts = random.randint(1, 3)
-            for _ in range(n_depts):
-                dept_name = random.choice(DEPARTMENT_NAMES) + " " + fake.word().capitalize()
-                cur.execute("INSERT INTO department (name, id_institute) VALUES (%s, %s) RETURNING id;", (dept_name, inst_id))
+    # 2. Институты → Кафедры → Группы → Студенты
+    for uni_id, uni_name in universities:
+        institutes[uni_id] = []
+        for j in range(institutes_per_univ):
+            inst_name = f"Институт {fake.word().capitalize()}"
+            cur.execute("INSERT INTO institute(name, id_university) VALUES (%s, %s) RETURNING id;", (inst_name, uni_id))
+            inst_id = cur.fetchone()[0]
+            institutes[uni_id].append((inst_id, inst_name))
+            # Для каждого института создаем кафедры
+            departments[inst_id] = []
+            for k in range(departments_per_inst):
+                dept_name = f"Кафедра {fake.job().split()[0]}"
+                cur.execute("INSERT INTO department(name, id_institute) VALUES (%s, %s) RETURNING id;", (dept_name, inst_id))
                 dept_id = cur.fetchone()[0]
-                department_ids[dept_id] = {'institute': inst_id, 'name': dept_name}
+                departments[inst_id].append((dept_id, dept_name))
+                # Для каждой кафедры создаем группы
+                groups[dept_id] = []
+                for g in range(groups_per_department):
+                    group_name = f"БСБО-{random.randint(10, 99)}-{random.randint(10, 99)}"
+                    formation_year = random.randint(2015, 2023)
+                    cur.execute("INSERT INTO groups(name, id_department, formation_year) VALUES (%s, %s, %s) RETURNING id;",
+                                (group_name, dept_id, formation_year))
+                    group_id = cur.fetchone()[0]
+                    groups[dept_id].append((group_id, group_name))
+                    # Для каждой группы создаются студенты
+                    for s in range(students_per_group):
+                        student_number = f"S{uni_id}{inst_id}{dept_id}{group_id}{s:04d}"
+                        fullname = fake.name()
+                        email = fake.email()
+                        redis_key = f"student:{student_number}"
+                        cur.execute("INSERT INTO student(student_number, fullname, email, id_group, redis_key) VALUES (%s, %s, %s, %s, %s);",
+                                    (student_number, fullname, email, group_id, redis_key))
+    conn.commit()
+    print("Институты, кафедры, группы и студенты созданы.")
 
-        # 4. Группы для каждой кафедры (1-4 группы)
-        group_ids = {}
-        for dept_id in department_ids.keys():
-            n_groups = random.randint(1, 4)
-            for _ in range(n_groups):
-                group_name = random.choice(GROUP_PREFIXES) + "-" + fake.bothify(text="??##")
-                formation_year = random.choice(range(2015, 2023))
-                cur.execute("INSERT INTO groups (name, id_department, formation_year) VALUES (%s, %s, %s) RETURNING id;", 
-                            (group_name, dept_id, formation_year))
-                group_id = cur.fetchone()[0]
-                group_ids[group_id] = {'department': dept_id, 'name': group_name}
-
-        # 5. Студенты (30 000 записей)
-        student_records = []
-        student_keys = []
-        group_id_list = list(group_ids.keys())
-        for i in range(30000):
-            student_number = f"STU{i+1:05d}"
-            fullname = fake.name()
-            email = fake.email()
-            id_group = random.choice(group_id_list)
-            redis_key = None  # будет обновлён ниже
-            student_records.append((student_number, fullname, email, id_group, redis_key))
-            student_keys.append(student_number)
-        execute_batch(cur, 
-                      "INSERT INTO student (student_number, fullname, email, id_group, redis_key) VALUES (%s, %s, %s, %s, %s);", 
-                      student_records, page_size=1000)
-        
-        # 6. Курсы для кафедр (1-3 курса на кафедру)
-        course_ids = {}
-        for dept_id in department_ids.keys():
-            n_courses = random.randint(1, 3)
-            for _ in range(n_courses):
-                course_name = random.choice(COURSE_NAMES) + " " + fake.word().capitalize()
-                cur.execute("INSERT INTO course (name, id_department) VALUES (%s, %s) RETURNING id;", (course_name, dept_id))
+    # 3. Курсы, лекции, расписание и посещаемость
+    for inst_id, depts in departments.items():
+        for dept_id, dept_name in depts:
+            for c in range(courses_per_department):
+                course_name = f"Курс {fake.bs().capitalize()}"
+                cur.execute("INSERT INTO course(name, id_department) VALUES (%s, %s) RETURNING id;", (course_name, dept_id))
                 course_id = cur.fetchone()[0]
-                course_ids[course_id] = {'department': dept_id, 'name': course_name}
-        
-        # 7. Лекции для курсов (1-4 лекции на курс)
-        lecture_ids = {}
-        for course_id in course_ids.keys():
-            n_lectures = random.randint(1, 4)
-            for _ in range(n_lectures):
-                lecture_name = "Лекция по " + fake.word().capitalize()
-                tech_equipment = random.choice([True, False])
-                cur.execute("INSERT INTO lecture (name, tech_equipment, id_course) VALUES (%s, %s, %s) RETURNING id;", 
-                            (lecture_name, tech_equipment, course_id))
-                lecture_id = cur.fetchone()[0]
-                lecture_ids[lecture_id] = {'course': course_id, 'name': lecture_name}
+                # Для курса создаются лекции
+                for l in range(lectures_per_course):
+                    lecture_name = f"Лекция {fake.catch_phrase()}"
+                    tech_equipment = random.choice([True, False])
+                    cur.execute("INSERT INTO lecture(name, duration_hours, tech_equipment, id_course) VALUES (%s, %s, %s, %s) RETURNING id;",
+                                (lecture_name, 2, tech_equipment, course_id))
+                    lecture_id = cur.fetchone()[0]
+                    # Для каждой лекции создаём расписание для всех групп данной кафедры
+                    cur.execute("SELECT id FROM groups WHERE id_department = %s;", (dept_id,))
+                    dept_groups = cur.fetchall()
+                    for group in dept_groups:
+                        group_id = group[0]
+                        schedule_time = base_datetime + datetime.timedelta(weeks=random.randint(0, 15))
+                        location = f"Аудитория {random.randint(100, 500)}"
+                        cur.execute("INSERT INTO schedule(id_lecture, id_group, timestamp, location) VALUES (%s, %s, %s, %s) RETURNING id;",
+                                    (lecture_id, group_id, schedule_time, location))
+                        schedule_id = cur.fetchone()[0]
+                        # Создаем записи посещаемости для студентов группы (вероятность 10%)
+                        cur.execute("SELECT student_number FROM student WHERE id_group = %s;", (group_id,))
+                        student_numbers = [row[0] for row in cur.fetchall()]
+                        for stud_num in student_numbers:
+                            if random.random() < 0.1:
+                                week_start = schedule_time - datetime.timedelta(days=schedule_time.weekday())
+                                cur.execute(
+                                    "INSERT INTO attendance(timestamp, week_start, id_student, id_schedule, status) VALUES (%s, %s, %s, %s, %s);",
+                                    (schedule_time, week_start, stud_num, schedule_id, True)
+                                )
+    conn.commit()
+    cur.close()
+    print("Курсы, лекции, расписание и посещаемость созданы.")
 
-        # 8. Расписание для лекций (каждая лекция - несколько записей, связываем с группами)
-        schedule_ids = []
-        for lecture_id in lecture_ids.keys():
-            id_group = random.choice(group_id_list)
-            for day_offset in range(0, 5):
-                ts = datetime.datetime.now() + datetime.timedelta(days=day_offset * 7)
-                location = "Аудитория " + str(random.randint(1, 300))
-                cur.execute("INSERT INTO schedule (id_lecture, id_group, timestamp, location) VALUES (%s, %s, %s, %s) RETURNING id;",
-                            (lecture_id, id_group, ts, location))
-                sched_id = cur.fetchone()[0]
-                schedule_ids.append(sched_id)
+##########################################################################
+# MongoDB: Заполнение коллекции «universities» вложенной структурой
+##########################################################################
 
-        # 9. Посещения: для каждой записи расписания создаём посещения для нескольких студентов
-        for sched_id in schedule_ids:
-            students_for_sched = random.sample(student_keys, 5)
-            for stu in students_for_sched:
-                ts = datetime.datetime.now() - datetime.timedelta(days=random.randint(0, 30))
-                # week_start вычисляется триггером, но можно задать и явно:
-                week_start = ts - datetime.timedelta(days=ts.weekday())
-                status = random.choice([True, False])
-                cur.execute("INSERT INTO attendance (timestamp, week_start, id_student, id_schedule, status) VALUES (%s, %s, %s, %s, %s);",
-                            (ts, week_start.date(), stu, sched_id, status))
-
-        # 10. Материалы лекций (1-2 записи на лекцию)
-        for lecture_id in lecture_ids.keys():
-            n_materials = random.randint(1, 2)
-            for _ in range(n_materials):
-                material_name = "Материал " + fake.word().capitalize()
-                description = fake.text(max_nb_chars=200)
-                cur.execute("INSERT INTO lecture_materials (name, description, id_lecture) VALUES (%s, %s, %s);",
-                            (material_name, description, lecture_id))
-
-        # Обновление ключей в student и lecture
-        cur.execute("UPDATE student SET redis_key = 'student:' || student_number;")
-        cur.execute("UPDATE lecture SET elasticsearch_id = 'lecture:' || id;")
-        
-        conn.commit()
-        cur.close()
-        conn.close()
-        logger.info("PostgreSQL: Данные успешно заполнены.")
-    except Exception as e:
-        logger.error("Ошибка при заполнении данных в PostgreSQL: %s", e)
-        sys.exit(1)
-
-def populate_mongodb():
+def populate_mongodb(pg_conn):
     """
-    Извлекаем из Postgres данные по университетам, институтам и кафедрам,
-    формируя вложенную структуру для MongoDB с батчевой вставкой.
+    Извлекает из PostgreSQL данные по университетам, институтам и кафедрам,
+    формирует вложенную структуру и загружает в MongoDB.
     """
-    try:
-        conn = psycopg2.connect(**PG_CONFIG)
-        cur = conn.cursor(cursor_factory=RealDictCursor)
-        cur.execute("SELECT id, name FROM university;")
-        universities = cur.fetchall()
+    cur = pg_conn.cursor()
+    cur.execute("""
+        SELECT u.id, u.name, i.id, i.name, d.id, d.name 
+        FROM university u
+        JOIN institute i ON i.id_university = u.id
+        JOIN department d ON d.id_institute = i.id;
+    """)
+    rows = cur.fetchall()
+    cur.close()
 
-        for uni in universities:
-            cur.execute("SELECT id, name FROM institute WHERE id_university = %s;", (uni['id'],))
-            institutes = cur.fetchall()
-            uni['institutes'] = []
-            for inst in institutes:
-                cur.execute("SELECT d.id, d.name FROM department d JOIN institute i ON d.id_institute = i.id WHERE i.id = %s;", (inst['id'],))
-                departments = cur.fetchall()
-                inst['departments'] = [{'id': dept['id'], 'name': dept['name']} for dept in departments]
-                uni['institutes'].append({
-                    'id': inst['id'],
-                    'name': inst['name'],
-                    'departments': inst['departments']
-                })
-        cur.close()
-        conn.close()
-    except Exception as e:
-        logger.error("Ошибка при выборке данных для MongoDB: %s", e)
-        sys.exit(1)
-    
-    try:
-        client = MongoClient(MONGO_CONFIG['host'], MONGO_CONFIG['port'])
-        db = client[MONGO_CONFIG['db']]
-        db.universities.drop()
-        if universities:
-            # Оптимизированная батчевая вставка
-            db.universities.insert_many(universities, ordered=False)
-        logger.info("MongoDB: Данные из PostgreSQL скопированы в коллекцию universities.")
-    except mongo_errors.PyMongoError as e:
-        logger.error("Ошибка при вставке данных в MongoDB: %s", e)
-        sys.exit(1)
-
-def populate_redis(batch_size=1000):
-    """
-    Извлекаем все данные студентов из Postgres с постраничной выборкой и записываем их в Redis.
-    Используем server-side курсор и fetchmany для обработки больших объёмов.
-    """
-    try:
-        conn = psycopg2.connect(**PG_CONFIG)
-        cur = conn.cursor(cursor_factory=RealDictCursor)
-        query = """
-            SELECT s.student_number, s.fullname, s.email, s.redis_key, g.id AS group_id, g.name AS group_name
-            FROM student s
-            JOIN groups g ON s.id_group = g.id
-        """
-        cur.execute(query)
-        r = redis.Redis(host=REDIS_CONFIG['host'], port=REDIS_CONFIG['port'], db=REDIS_CONFIG['db'])
-        r.flushdb()
-        total = 0
-        while True:
-            rows = cur.fetchmany(batch_size)
-            if not rows:
-                break
-            for stu in rows:
-                key = stu['redis_key']
-                student_data = {
-                    "fullname": stu['fullname'],
-                    "email": stu['email'],
-                    "group_id": stu['group_id'],
-                    "group_name": stu['group_name'],
-                    "redis_key": key
-                }
-                r.hmset(key, student_data)
-                total += 1
-        cur.close()
-        conn.close()
-        logger.info("Redis: %d записей студентов перенесены в Redis.", total)
-    except Exception as e:
-        logger.error("Ошибка при переносе данных в Redis: %s", e)
-        sys.exit(1)
-
-def populate_neo4j(batch_size=1000):
-    """
-    Извлекаем данные для графа из Postgres с постраничной выборкой.
-    Формируем граф: Student -[BELONGS_TO]-> Group -[HAS_SCHEDULE]-> Lecture -[ORIGINATES_FROM]-> Department.
-    """
-    try:
-        conn = psycopg2.connect(**PG_CONFIG)
-        cur = conn.cursor(cursor_factory=RealDictCursor)
-        
-        # Извлекаем группы
-        cur.execute("SELECT id, name FROM groups;")
-        groups = {row['id']: row for row in cur.fetchall()}
-        
-        # Создаем словарь групп для Neo4j
-        neo_groups = {}
-        graph = Graph(NEO4J_CONFIG['uri'], auth=None)
-        graph.delete_all()
-        for grp in groups.values():
-            node = Node("Group", group_id=grp['id'], name=grp['name'])
-            graph.merge(node, "Group", "group_id")
-            neo_groups[grp['id']] = node
-
-        # Обрабатываем студентов постранично
-        cur.execute("SELECT student_number, fullname, redis_key, id_group FROM student;")
-        total_students = 0
-        while True:
-            students = cur.fetchmany(batch_size)
-            if not students:
-                break
-            for stu in students:
-                stu_node = Node("Student", student_number=stu['student_number'], name=stu['fullname'])
-                graph.merge(stu_node, "Student", "student_number")
-                grp_node = neo_groups.get(stu['id_group'])
-                if grp_node:
-                    rel = Relationship(stu_node, "BELONGS_TO", grp_node)
-                    graph.merge(rel)
-                total_students += 1
-
-        # Извлекаем расписания для связи групп с лекциями
-        cur.execute("SELECT DISTINCT id_group, id_lecture FROM schedule;")
-        schedule_links = []
-        while True:
-            links = cur.fetchmany(batch_size)
-            if not links:
-                break
-            schedule_links.extend(links)
-
-        # Извлекаем лекции с данными кафедры
-        cur.execute("""
-            SELECT l.id AS lecture_id, l.name AS lecture_name, d.id AS department_id, d.name AS department_name
-            FROM lecture l
-            JOIN course c ON l.id_course = c.id
-            JOIN department d ON c.id_department = d.id;
-        """)
-        lectures = {}
-        for row in cur.fetchall():
-            lectures[row['lecture_id']] = {
-                "lecture_name": row['lecture_name'],
-                "department_id": row['department_id'],
-                "department_name": row['department_name']
+    mongo_data = {}
+    for u_id, u_name, i_id, i_name, d_id, d_name in rows:
+        if u_id not in mongo_data:
+            mongo_data[u_id] = {
+                "id": u_id,
+                "name": u_name,
+                "institutes": {}
             }
+        if i_id not in mongo_data[u_id]["institutes"]:
+            mongo_data[u_id]["institutes"][i_id] = {
+                "id": i_id,
+                "name": i_name,
+                "departments": []
+            }
+        mongo_data[u_id]["institutes"][i_id]["departments"].append({
+            "id": d_id,
+            "name": d_name
+        })
+
+    documents = []
+    for uni in mongo_data.values():
+        uni["institutes"] = list(uni["institutes"].values())
+        documents.append(uni)
+
+    client = MongoClient(MONGO_CONN_STRING)
+    db = client["university"]
+    collection = db["universities"]
+    collection.delete_many({})  # очищаем коллекцию перед загрузкой
+    if documents:
+        collection.insert_many(documents)
+    print("Данные MongoDB заполнены.")
+
+##########################################################################
+# Neo4j: Полное заполнение: создаются узлы для кафедр, лекций, групп и студентов;
+# устанавливаются отношения:
+#  – Lecture -[ORIGINATES_FROM]-> Department (связь через course)
+#  – Group -[HAS_SCHEDULE]-> Lecture (на основании расписания)
+#  – Student -[BELONGS_TO]-> Group
+##########################################################################
+
+def populate_neo4j(pg_conn):
+    """
+    Полностью переносит данные из PostgreSQL в Neo4j:
+      1. Создаются узлы Department.
+      2. Создаются узлы Lecture с отношением к соответствующей кафедре (по данным JOIN lecture+course).
+      3. Создаются узлы Group.
+      4. Создаются узлы Student (в batch-режиме, если их много).
+      5. Создаются отношения:
+           - (Lecture)-[:ORIGINATES_FROM]->(Department)
+           - (Group)-[:HAS_SCHEDULE]->(Lecture) (на основании уникальных пар из schedule)
+           - (Student)-[:BELONGS_TO]->(Group)
+    """
+    driver = GraphDatabase.driver(NEO4J_URI, auth=NEO4J_AUTH)
+    with driver.session() as session:
+        # Очищаем базу Neo4j
+        session.run("MATCH (n) DETACH DELETE n")
+        
+        # 1. Создаем узлы Department
+        cur = pg_conn.cursor()
+        cur.execute("SELECT id, name FROM department;")
+        depts = cur.fetchall()  # (id, name)
         cur.close()
-        conn.close()
-
-        # Создаем узлы лекций и отделов, устанавливая связи
-        neo_lectures = {}
-        neo_departments = {}
-        for link in schedule_links:
-            grp_id = link['id_group']
-            lec_id = link['id_lecture']
-            if lec_id not in lectures:
-                continue
-            lec_info = lectures[lec_id]
-            if lec_id not in neo_lectures:
-                lec_node = Node("Lecture", lecture_id=lec_id, name=lec_info['lecture_name'])
-                graph.merge(lec_node, "Lecture", "lecture_id")
-                neo_lectures[lec_id] = lec_node
-            else:
-                lec_node = neo_lectures[lec_id]
-            dep_id = lec_info['department_id']
-            if dep_id not in neo_departments:
-                dep_node = Node("Department", department_id=dep_id, name=lec_info['department_name'])
-                graph.merge(dep_node, "Department", "department_id")
-                neo_departments[dep_id] = dep_node
-            else:
-                dep_node = neo_departments[dep_id]
-            rel_dep = Relationship(lec_node, "ORIGINATES_FROM", dep_node)
-            graph.merge(rel_dep)
-            grp_node = neo_groups.get(grp_id)
-            if grp_node:
-                rel_sched = Relationship(grp_node, "HAS_SCHEDULE", lec_node)
-                graph.merge(rel_sched)
-        logger.info("Neo4j: Данные успешно перенесены в графовую базу.")
-    except Exception as e:
-        logger.error("Ошибка при переносе данных в Neo4j: %s", e)
-        sys.exit(1)
-
-def populate_elasticsearch(batch_size=1000):
-    """
-    Извлекаем данные лекций с постраничной выборкой и индексируем их в Elasticsearch.
-    Для каждой лекции используем первое описание из lecture_materials (если имеется).
-    """
-    try:
-        conn = psycopg2.connect(**PG_CONFIG)
-        cur = conn.cursor(cursor_factory=RealDictCursor)
+        dept_nodes = [{"id": d[0], "name": d[1], "neo_id": f"neo_dept_{d[0]}"} for d in depts]
+        session.run("UNWIND $nodes AS node CREATE (d:Department {id: node.id, name: node.name, neo_id: node.neo_id})", nodes=dept_nodes)
+        
+        # 2. Создаем узлы Lecture и связываем с Department
+        cur = pg_conn.cursor()
         cur.execute("""
-            SELECT l.id, l.name, l.elasticsearch_id, l.created_at,
-                   (SELECT lm.description FROM lecture_materials lm WHERE lm.id_lecture = l.id LIMIT 1) AS description
-            FROM lecture l;
+            SELECT l.id, l.name, c.id_department
+            FROM lecture l JOIN course c ON l.id_course = c.id;
         """)
-        es = Elasticsearch(ES_CONFIG['hosts'])
-        index_name = "lectures"
-        if es.indices.exists(index=index_name):
-            es.indices.delete(index=index_name)
-        es.indices.create(index=index_name)
-        total = 0
-        while True:
-            lectures = cur.fetchmany(batch_size)
-            if not lectures:
-                break
-            for lec in lectures:
-                doc = {
-                    "id": lec["id"],
-                    "name": lec["name"],
-                    "description": lec["description"] if lec["description"] else "",
-                    "created_at": lec["created_at"].strftime("%Y-%m-%d %H:%M:%S"),
-                    "lecture_id": lec["id"]
-                }
-                es.index(index=index_name, id=lec["id"], document=doc)
-                total += 1
+        lectures = cur.fetchall()  # (lecture_id, name, dept_id)
         cur.close()
-        conn.close()
-        logger.info("Elasticsearch: %d записей лекций перенесены в индекс '%s'.", total, index_name)
-    except (psycopg2.Error) as e:
-        logger.error("Ошибка при переносе данных в Elasticsearch: %s", e)
-        sys.exit(1)
+        lecture_nodes = [{"id": lec[0], "name": lec[1]} for lec in lectures]
+        session.run("UNWIND $nodes AS node CREATE (l:Lecture {id: node.id, name: node.name})", nodes=lecture_nodes)
+        for lec in lectures:
+            lec_id, _, dept_id = lec
+            session.run("""
+                MATCH (l:Lecture {id: $lec_id}), (d:Department {id: $dept_id})
+                CREATE (l)-[:ORIGINATES_FROM]->(d)
+            """, lec_id=lec_id, dept_id=dept_id)
+        
+        # 3. Создаем узлы Group
+        cur = pg_conn.cursor()
+        cur.execute("SELECT id, name, mongo_id FROM groups;")
+        groups = cur.fetchall()  # (id, name, mongo_id)
+        cur.close()
+        group_nodes = [{"id": g[0], "name": g[1], "mongo_id": g[2]} for g in groups]
+        session.run("UNWIND $nodes AS node CREATE (g:Group {id: node.id, name: node.name, mongo_id: node.mongo_id})", nodes=group_nodes)
+        
+        # 4. Создаем узлы Student и связываем с Group (batch-режим для 30000+ записей)
+        cur = pg_conn.cursor()
+        cur.execute("SELECT student_number, fullname, redis_key, id_group FROM student;")
+        students = cur.fetchall()  # (student_number, fullname, redis_key, group_id)
+        cur.close()
+        student_nodes = [{"student_number": s[0], "fullname": s[1], "redis_key": s[2], "id_group": s[3]} for s in students]
+        batch_size = 1000
+        for i in range(0, len(student_nodes), batch_size):
+            batch = student_nodes[i:i+batch_size]
+            session.run("""
+                UNWIND $nodes AS node
+                CREATE (st:Student {student_number: node.student_number, fullname: node.fullname, redis_key: node.redis_key})
+            """, nodes=batch)
+        # Создаем отношения (Student)-[:BELONGS_TO]->(Group)
+        for s in student_nodes:
+            session.run("""
+                MATCH (st:Student {student_number: $student_number}), (g:Group {id: $group_id})
+                CREATE (st)-[:BELONGS_TO]->(g)
+            """, student_number=s["student_number"], group_id=s["id_group"])
+        
+        # 5. Создаем отношения (Group)-[:HAS_SCHEDULE]->(Lecture) на основании расписания
+        cur = pg_conn.cursor()
+        cur.execute("SELECT DISTINCT id_group, id_lecture FROM schedule;")
+        schedule_pairs = cur.fetchall()  # (group_id, lecture_id)
+        cur.close()
+        for pair in schedule_pairs:
+            group_id, lecture_id = pair
+            session.run("""
+                MATCH (g:Group {id: $group_id}), (l:Lecture {id: $lecture_id})
+                CREATE (g)-[:HAS_SCHEDULE]->(l)
+            """, group_id=group_id, lecture_id=lecture_id)
+    driver.close()
+    print("Neo4j заполнен полностью данными из Postgres.")
+
+##########################################################################
+# Redis: Запись данных о студентах в виде hash
+##########################################################################
+
+def populate_redis(pg_conn):
+    """
+    Извлекает данные по студентам из PostgreSQL и сохраняет их в Redis.
+    Ключ – redis_key, значения – поля fullname, email, group_id.
+    """
+    r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
+    cur = pg_conn.cursor()
+    cur.execute("SELECT student_number, fullname, email, id_group, redis_key FROM student;")
+    students = cur.fetchall()
+    cur.close()
+
+    r.flushdb()  # очистка Redis для тестовой среды
+
+    for stud in students:
+        _, fullname, email, id_group, redis_key = stud
+        r.hset(redis_key, mapping={
+            "fullname": fullname,
+            "email": email,
+            "group_id": id_group,
+            "redis_key": redis_key
+        })
+    print("Данные Redis заполнены.")
+
+##########################################################################
+# Elasticsearch: Индексирование лекций
+##########################################################################
+
+def populate_elasticsearch(pg_conn):
+    """
+    Извлекает данные по лекциям из PostgreSQL и индексирует их в Elasticsearch.
+    Каждый документ включает id, имя лекции, описание и дату создания.
+    """
+    es = Elasticsearch(ES_HOSTS)
+    cur = pg_conn.cursor()
+    cur.execute("SELECT id, name, created_at FROM lecture;")
+    lectures = cur.fetchall()
+    cur.close()
+
+    if es.indices.exists(index="lectures"):
+        es.indices.delete(index="lectures")
+    es.indices.create(index="lectures", ignore=400)
+
+    for lec in lectures:
+        lec_id, name, created_at = lec
+        doc = {
+            "id": lec_id,
+            "name": name,
+            "description": fake.text(max_nb_chars=100),
+            "created_at": created_at.strftime("%Y-%m-%d %H:%M:%S"),
+            "lecture_id": lec_id
+        }
+        es.index(index="lectures", id=lec_id, body=doc)
+    print("Данные Elasticsearch заполнены.")
+
+##########################################################################
+# Обновление Postgres с id из внешних систем (mongo_id, elasticsearch_id, neo_id)
+##########################################################################
+
+def update_postgres_ids(pg_conn):
+    """
+    После загрузки данных во внешние БД обновляет в Postgres поля:
+      - groups.mongo_id формируется как 'mongo_group_<id>',
+      - lecture.elasticsearch_id формируется как 'elastic_lecture_<id>',
+      - В department добавляется (если отсутствует) и обновляется поле neo_id, формируется как 'neo_dept_<id>'.
+    """
+    cur = pg_conn.cursor()
+    cur.execute("UPDATE groups SET mongo_id = 'mongo_group_' || id;")
+    cur.execute("UPDATE lecture SET elasticsearch_id = 'elastic_lecture_' || id;")
+    cur.execute("ALTER TABLE department ADD COLUMN IF NOT EXISTS neo_id VARCHAR(100);")
+    cur.execute("UPDATE department SET neo_id = 'neo_dept_' || id;")
+    pg_conn.commit()
+    cur.close()
+    print("Postgres обновлён: mongo_id, elasticsearch_id и neo_id заполнены.")
+
+##########################################################################
+# Основной запуск: заполнение всех БД и обновление id в Postgres
+##########################################################################
 
 def main():
-    logger.info("Начало работы скрипта.")
-    recreate_postgres_schema()
-    
-    logger.info("Заполнение PostgreSQL данными...")
-    populate_postgres_data()
-    
-    logger.info("Перенос данных в MongoDB из PostgreSQL...")
-    populate_mongodb()
-    
-    logger.info("Перенос данных в Redis из PostgreSQL с пагинацией...")
-    populate_redis()
-    
-    logger.info("Перенос данных в Neo4j из PostgreSQL с пагинацией...")
-    populate_neo4j()
-    
-    logger.info("Перенос данных в Elasticsearch из PostgreSQL с пагинацией...")
-    populate_elasticsearch()
-    
-    logger.info("Все базы данных успешно обновлены и заполнены данными.")
+    try:
+        pg_conn = psycopg2.connect(**PG_CONN_PARAMS)
+        print("Подключение к PostgreSQL успешно установлено.")
+    except Exception as e:
+        print(f"Ошибка подключения к PostgreSQL: {e}")
+        return
+
+    # Создаем схему и заполняем PostgreSQL
+    create_postgres_schema(pg_conn)
+    populate_postgres(pg_conn)
+
+    # Выводим количество записей в таблицах для контроля
+    check_tables = [
+        "university", "institute", "department", "groups", 
+        "student", "course", "lecture", "schedule", "attendance"
+    ]
+    cur = pg_conn.cursor()
+    for tbl in check_tables:
+        cur.execute(sql.SQL("SELECT COUNT(*) FROM {}").format(sql.Identifier(tbl)))
+        count = cur.fetchone()[0]
+        print(f"В таблице {tbl} записей: {count}")
+    cur.close()
+
+    # Заполнение внешних БД
+    populate_mongodb(pg_conn)
+    populate_neo4j(pg_conn)
+    populate_redis(pg_conn)
+    populate_elasticsearch(pg_conn)
+
+    # Обновляем идентификаторы во внешних системах в Postgres
+    update_postgres_ids(pg_conn)
+
+    pg_conn.close()
+    print("Все БД успешно заполнены и синхронизированы.")
 
 if __name__ == "__main__":
     main()

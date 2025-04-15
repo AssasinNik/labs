@@ -4,339 +4,387 @@ import com.cherenkov.generated.jooq.tables.Attendance.Companion.ATTENDANCE
 import com.cherenkov.generated.jooq.tables.Department.Companion.DEPARTMENT
 import com.cherenkov.generated.jooq.tables.Groups.Companion.GROUPS
 import com.cherenkov.generated.jooq.tables.Institute.Companion.INSTITUTE
-import com.cherenkov.generated.jooq.tables.Lecture.Companion.LECTURE
-import com.cherenkov.generated.jooq.tables.LectureMaterials.Companion.LECTURE_MATERIALS
-import com.cherenkov.generated.jooq.tables.Course.Companion.COURSE
 import com.cherenkov.generated.jooq.tables.Schedule.Companion.SCHEDULE
 import com.cherenkov.generated.jooq.tables.Student.Companion.STUDENT
 import com.cherenkov.generated.jooq.tables.University.Companion.UNIVERSITY
-import com.cherenkov.lab_1.dto.LectureMaterial
-import com.cherenkov.lab_1.dto.ReportRequest
-import com.cherenkov.lab_1.dto.StudentReport
-import org.bson.Document
-import org.springframework.cache.annotation.Cacheable
+import com.cherenkov.lab_1.dto.*
+import com.cherenkov.lab_1.exceptions.*
+import com.cherenkov.lab_1.mappers.toList123
 import org.springframework.data.elasticsearch.core.query.Criteria
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
 import org.jooq.DSLContext
 import org.jooq.impl.DSL
-import org.slf4j.LoggerFactory
-import org.springframework.cache.annotation.EnableCaching
+import org.springframework.dao.DataAccessException
+import org.springframework.data.elasticsearch.NoSuchIndexException
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate
-import org.springframework.data.elasticsearch.core.SearchHits
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery
-import org.springframework.data.mongodb.core.MongoTemplate
-import org.springframework.data.mongodb.core.query.Query
-import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.data.redis.RedisConnectionFailureException
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
+import org.slf4j.LoggerFactory
+import org.jooq.exception.DataAccessException as JooqDataAccessException
 
 @Service
-@EnableCaching
 class ReportService(
     private val elasticsearchTemplate: ElasticsearchTemplate,
     private val dsl: DSLContext,
     private val redisOperations: RedisTemplate<String, Any>,
-    private val mongoTemplate: MongoTemplate
 ) {
     private val logger = LoggerFactory.getLogger(ReportService::class.java)
 
-    /**
-     * Генерирует отчет о студентах с минимальным процентом посещения лекций,
-     * содержащих заданный термин, за определенный период обучения
-     */
-    @Cacheable(value = ["attendance_reports"], key = "#request.term + '_' + #request.startDate + '_' + #request.endDate")
-    fun generateReport(request: ReportRequest): List<StudentReport> {
-        logger.info("Генерация отчета о посещаемости: термин='${request.term}', период=${request.startDate} - ${request.endDate}")
+    fun generateReport(request: ReportRequest): ReportResult {
+        logger.info("Начало генерации отчета с параметрами: term={}, startDate={}, endDate={}", 
+                    request.term, request.startDate, request.endDate)
         
-        // Получаем текущего пользователя для логирования
-        val userId = SecurityContextHolder.getContext().authentication?.principal?.toString() ?: "anonymous"
-        logger.info("Пользователь $userId запросил отчет о посещаемости")
-
-        // Поиск лекций, содержащих заданный термин
-        val lectures = searchLecturesByTerm(request.term)
-        
-        if (lectures.isEmpty()) {
-            logger.warn("Лекции с термином '${request.term}' не найдены")
-            return emptyList()
-        }
-        logger.info("Найдено ${lectures.size} лекций с термином '${request.term}'")
-
-        // Поиск студентов с низкой посещаемостью этих лекций
-        val lectureIds = lectures.map { it.lectureId }
-        val studentsWithAttendance = findLowAttendanceStudents(lectureIds, request.startDate, request.endDate)
-        
-        if (studentsWithAttendance.isEmpty()) {
-            logger.warn("Студенты с низкой посещаемостью для выбранных лекций не найдены")
-            return emptyList()
-        }
-        logger.info("Найдено ${studentsWithAttendance.size} студентов с низкой посещаемостью")
-
-        // Получение полной информации о студентах
-        val studentsInfo = getStudentsInfo(studentsWithAttendance)
-        logger.info("Получена информация для ${studentsInfo.size} студентов")
-        
-        // Формирование отчета для каждого студента
-        return studentsInfo.map { (studentInfo, attendance) ->
-            val redisData = fetchRedisData(studentInfo.redisKey)
-            val mongoData = fetchMongoDataForStudent(studentInfo) 
+        try {
+            validateReportRequest(request)
             
-            StudentReport(
-                studentNumber = studentInfo.studentNumber,
-                fullName = studentInfo.fullName,
-                email = studentInfo.email,
-                groupName = studentInfo.groupName,
-                departmentName = studentInfo.departmentName,
-                instituteName = studentInfo.instituteName,
-                universityName = studentInfo.universityName,
-                attendancePercentage = attendance.percentage,
-                attendedLectures = attendance.attended,
-                totalLectures = attendance.total,
-                reportPeriod = "${request.startDate} - ${request.endDate}",
-                searchTerm = request.term,
-                redisKey = studentInfo.redisKey,
-                groupNameFromRedis = redisData?.groupName,
-                mongoData = mongoData
-            )
-        }
-    }
-
-    /**
-     * Поиск лекций, содержащих указанный термин в описании материалов
-     */
-    private fun searchLecturesByTerm(term: String): List<LectureMaterial> {
-        logger.debug("Поиск лекций с термином: $term")
-        
-        // Сначала пробуем искать в Elasticsearch
-        val criteria = Criteria("description").contains(term)
-        val query = CriteriaQuery(criteria)
-        val searchResults = elasticsearchTemplate.search(query, LectureMaterial::class.java)
-        val lectures = searchResults.searchHits.map { it.content }
-        
-        // Если в ES ничего не нашли, можем попробовать поискать в PostgreSQL
-        if (lectures.isEmpty()) {
-            logger.debug("В Elasticsearch не найдены лекции с термином '$term', ищем в PostgreSQL")
+            // Поиск лекций по заданному термину
+            logger.debug("Поиск лекций по термину: {}", request.term)
+            val lectures = searchLecturesByTerm(request.term)
+            logger.info("Найдено {} лекций по термину '{}'", lectures.size, request.term)
             
-            // Поиск в PostgreSQL через материалы лекций
-            val lm = LECTURE_MATERIALS.`as`("lm")
-            val l = LECTURE.`as`("l")
-            
-            val pgResults = dsl.select(
-                l.ID,
-                l.NAME,
-                lm.DESCRIPTION
-            )
-                .from(lm)
-                .join(l).on(lm.ID_LECTURE.eq(l.ID))
-                .where(lm.DESCRIPTION.containsIgnoreCase(term))
-                .fetch()
-                
-            return pgResults.map { record ->
-                LectureMaterial(
-                    id = record[l.ID].toString(),
-                    lectureId = record[l.ID],
-                    name = record[l.NAME],
-                    description = record[lm.DESCRIPTION] ?: ""
+            if (lectures.isEmpty()) {
+                logger.warn("Не найдено лекций по термину: {}", request.term)
+                return ReportResult(
+                    status = "WARNING",
+                    message = "Не найдено лекций по указанному термину",
+                    data = emptyList()
                 )
             }
+            
+            // Поиск студентов с низкой посещаемостью
+            logger.debug("Поиск студентов с низкой посещаемостью для {} лекций", lectures.size)
+            val attendances = findLowAttendanceStudents(lectures.map { it.lectureId }, request.startDate, request.endDate)
+            logger.info("Найдено {} студентов с низкой посещаемостью", attendances.size)
+            
+            if (attendances.isEmpty()) {
+                logger.warn("Не найдено студентов с низкой посещаемостью для указанного периода")
+                return ReportResult(
+                    status = "WARNING",
+                    message = "Не найдено студентов с низкой посещаемостью для указанного периода",
+                    data = emptyList()
+                )
+            }
+            
+            // Получение информации о студентах
+            logger.debug("Получение подробной информации о {} студентах", attendances.size)
+            val attendancesAndInfos = getStudentsInfo(attendances)
+            logger.info("Получена информация о {} студентах", attendancesAndInfos.size)
+            
+            if (attendancesAndInfos.isEmpty()) {
+                logger.warn("Не удалось получить информацию о студентах")
+                return ReportResult(
+                    status = "WARNING",
+                    message = "Не удалось получить информацию о студентах",
+                    data = emptyList()
+                )
+            }
+            
+            // Формирование отчета
+            logger.debug("Формирование итогового отчета")
+            val results = attendancesAndInfos.mapNotNull { (studentInfo, attendance) ->
+                try {
+                    val redisData = fetchRedisData(studentInfo.redisKey)
+                    val report = StudentReport(
+                        studentNumber = studentInfo.studentNumber,
+                        fullName = studentInfo.fullName,
+                        email = studentInfo.email,
+                        groupName = studentInfo.groupName,
+                        departmentName = studentInfo.departmentName,
+                        instituteName = studentInfo.instituteName,
+                        universityName = studentInfo.universityName,
+                        attendancePercentage = attendance.percentage,
+                        reportPeriod = "${request.startDate} - ${request.endDate}",
+                        searchTerm = request.term,
+                        redisKey = studentInfo.redisKey,
+                        groupNameFromRedis = redisData?.groupName
+                    )
+                    logger.debug("Создан отчет для студента: {}, посещаемость: {}%", 
+                                studentInfo.fullName, attendance.percentage)
+                    report
+                } catch (e: RedisAccessException) {
+                    logger.error("Ошибка Redis для студента {}: {}", 
+                                studentInfo.studentNumber, e.message, e)
+                    null
+                } catch (e: Exception) {
+                    logger.error("Непредвиденная ошибка при получении данных для студента {}: {}", 
+                                studentInfo.studentNumber, e.message, e)
+                    null
+                }
+            }
+            
+            logger.info("Отчет успешно сформирован, количество записей: {}", results.size)
+            return ReportResult(
+                status = "SUCCESS",
+                message = "Отчет успешно сформирован",
+                data = results
+            )
+            
+        } catch (e: ValidationException) {
+            logger.warn("Ошибка валидации запроса: {}", e.message)
+            return ReportResult(
+                status = "ERROR",
+                message = e.message ?: "Ошибка валидации запроса",
+                data = emptyList()
+            )
+        } catch (e: ElasticsearchAccessException) {
+            logger.error("Ошибка доступа к Elasticsearch: {}", e.message, e)
+            return ReportResult(
+                status = "ERROR",
+                message = e.message ?: "Ошибка доступа к Elasticsearch",
+                data = emptyList()
+            )
+        } catch (e: DatabaseAccessException) {
+            logger.error("Ошибка доступа к базе данных: {}", e.message, e)
+            return ReportResult(
+                status = "ERROR",
+                message = e.message ?: "Ошибка доступа к базе данных",
+                data = emptyList()
+            )
+        } catch (e: RedisAccessException) {
+            logger.error("Ошибка доступа к Redis: {}", e.message, e)
+            return ReportResult(
+                status = "ERROR",
+                message = e.message ?: "Ошибка доступа к Redis",
+                data = emptyList()
+            )
+        } catch (e: ReportGenerationException) {
+            logger.error("Ошибка генерации отчета: {}", e.message, e)
+            return ReportResult(
+                status = "ERROR",
+                message = e.message ?: "Ошибка при генерации отчета",
+                data = emptyList()
+            )
+        } catch (e: Exception) {
+            logger.error("Непредвиденная ошибка при формировании отчета: {}", e.message, e)
+            return ReportResult(
+                status = "ERROR",
+                message = "Непредвиденная ошибка при формировании отчета: ${e.message}",
+                data = emptyList()
+            )
+        }
+    }
+    
+    private fun validateReportRequest(request: ReportRequest) {
+        logger.debug("Валидация параметров запроса отчета")
+        
+        val errors = mutableListOf<String>()
+        
+        if (request.term.isBlank()) {
+            errors.add("Поисковый запрос не может быть пустым")
+            logger.warn("Пустой поисковый запрос в запросе отчета")
         }
         
-        logger.debug("Найдено ${lectures.size} лекций с термином '$term'")
-        return lectures
+        if (request.startDate.isAfter(request.endDate)) {
+            errors.add("Дата начала не может быть позже даты окончания")
+            logger.warn("Неверный диапазон дат: начало ({}) позже конца ({})", request.startDate, request.endDate)
+        }
+        
+        val now = Instant.now()
+        if (request.endDate.isAfter(now)) {
+            errors.add("Дата окончания не может быть в будущем")
+            logger.warn("Дата окончания в будущем: {}", request.endDate)
+        }
+        
+        if (errors.isNotEmpty()) {
+            val errorMessage = errors.joinToString("; ")
+            logger.warn("Ошибки валидации запроса отчета: {}", errorMessage)
+            throw ValidationException(errorMessage)
+        }
+        
+        logger.debug("Валидация параметров запроса отчета успешно пройдена")
     }
 
-    /**
-     * Поиск студентов с минимальным процентом посещения указанных лекций за период
-     */
+    private fun searchLecturesByTerm(term: String): List<LectureMaterial> {
+        logger.debug("Выполнение поиска в Elasticsearch по термину: {}", term)
+        try {
+            val criteria = Criteria("description").matches(term)
+            val query = CriteriaQuery(criteria)
+            
+            logger.debug("Запрос к Elasticsearch: {}", query)
+            val answer = elasticsearchTemplate.search(query, LectureMaterial::class.java)
+            val result = answer.toList123()
+            
+            logger.debug("Результат поиска в Elasticsearch: найдено {} записей", result.size)
+            return result
+        } catch (e: NoSuchIndexException) {
+            logger.error("Ошибка индекса Elasticsearch: {}", e.message, e)
+            throw ElasticsearchAccessException("Индекс не найден", e)
+        } catch (e: Exception) {
+            logger.error("Ошибка при поиске лекций в Elasticsearch: {}", e.message, e)
+            throw ElasticsearchAccessException("Ошибка при выполнении поиска: ${e.message}", e)
+        }
+    }
+
     private fun findLowAttendanceStudents(
         lectureIds: List<Long>,
         start: Instant,
         end: Instant
     ): List<StudentAttendance> {
-        logger.debug("Поиск студентов с низкой посещаемостью лекций: ${lectureIds.joinToString()}")
+        logger.debug("Поиск студентов с низкой посещаемостью. Лекции: {}, период: {} - {}", 
+                    lectureIds, start, end)
         
-        val a = ATTENDANCE.`as`("a")
-        val s = SCHEDULE.`as`("s")
-        val l = LECTURE.`as`("l")
-        val c = COURSE.`as`("c")
+        try {
+            val a = ATTENDANCE.`as`("a")
+            val s = SCHEDULE.`as`("s")
 
-        val startDateTime = LocalDateTime.ofInstant(start, ZoneId.systemDefault())
-        val endDateTime = LocalDateTime.ofInstant(end, ZoneId.systemDefault())
+            val startDateTime = LocalDateTime.ofInstant(start, ZoneId.systemDefault())
+            val endDateTime = LocalDateTime.ofInstant(end, ZoneId.systemDefault())
+            
+            logger.debug("Период для запроса: {} - {}", startDateTime, endDateTime)
 
-        // Запрос для получения студентов с минимальным процентом посещения лекций
-        val query = dsl.select(
-            a.ID_STUDENT,
-            DSL.count().`as`("total_lectures"),
-            DSL.sum(DSL.`when`(a.STATUS, 1).otherwise(0)).`as`("attended_lectures"),
-            DSL.sum(DSL.`when`(a.STATUS, 1).otherwise(0))
-                .times(100.0)
-                .divide(DSL.greatest(DSL.count(), 1))
-                .`as`("attendance_percentage")
-        )
-            .from(a)
-            .join(s).on(a.ID_SCHEDULE.eq(s.ID))
-            .join(l).on(s.ID_LECTURE.eq(l.ID))
-            .join(c).on(l.ID_COURSE.eq(c.ID))
-            .where(l.ID.`in`(lectureIds))
-            .and(s.TIMESTAMP.between(startDateTime, endDateTime))
-            .groupBy(a.ID_STUDENT)
-            .orderBy(DSL.field("attendance_percentage").asc())
-            .limit(10)
-
-        val result = query.fetch()
-        logger.debug("Найдено ${result.size} студентов с низкой посещаемостью")
-
-        return result.map { record ->
-            StudentAttendance(
-                studentNumber = record[a.ID_STUDENT]!!,
-                total = record["total_lectures", Long::class.java]!!,
-                attended = record["attended_lectures", Long::class.java]!!,
-                percentage = record["attendance_percentage", Double::class.java]!!
+            val query = dsl.select(
+                a.ID_STUDENT,
+                DSL.count().`as`("total"),
+                DSL.sum(DSL.`when`(a.STATUS, 1).otherwise(0)).`as`("attended"),
+                DSL.sum(DSL.`when`(a.STATUS, 1).otherwise(0))
+                    .times(100.0)
+                    .divide(DSL.count())
+                    .`as`("percentage")
             )
-        }
-    }
-
-    /**
-     * Получение полной информации о студентах
-     */
-    private fun getStudentsInfo(attendances: List<StudentAttendance>): List<Pair<StudentInfo, StudentAttendance>> {
-        logger.debug("Получение информации о студентах: ${attendances.size} записей")
-        
-        val studentNumbers = attendances.map { it.studentNumber }
-
-        // Запрос для получения полной информации о студентах
-        val query = dsl.select(
-            STUDENT.STUDENT_NUMBER,
-            STUDENT.FULLNAME,
-            STUDENT.EMAIL,
-            GROUPS.NAME.`as`("group_name"),
-            GROUPS.MONGO_ID,
-            DEPARTMENT.NAME.`as`("department_name"),
-            INSTITUTE.NAME.`as`("institute_name"),
-            UNIVERSITY.NAME.`as`("university_name"),
-            STUDENT.REDIS_KEY
-        )
-            .from(STUDENT)
-            .join(GROUPS).on(STUDENT.ID_GROUP.eq(GROUPS.ID))
-            .join(DEPARTMENT).on(GROUPS.ID_DEPARTMENT.eq(DEPARTMENT.ID))
-            .join(INSTITUTE).on(DEPARTMENT.ID_INSTITUTE.eq(INSTITUTE.ID))
-            .join(UNIVERSITY).on(INSTITUTE.ID_UNIVERSITY.eq(UNIVERSITY.ID))
-            .where(STUDENT.STUDENT_NUMBER.`in`(studentNumbers))
-
-        val result = query.fetch()
-        logger.debug("Получена информация для ${result.size} студентов")
-
-        return result.map { record ->
-            StudentInfo(
-                studentNumber = record[STUDENT.STUDENT_NUMBER]!!,
-                fullName = record[STUDENT.FULLNAME]!!,
-                email = record[STUDENT.EMAIL],
-                groupName = record["group_name", String::class.java]!!,
-                departmentName = record["department_name", String::class.java]!!,
-                instituteName = record["institute_name", String::class.java]!!,
-                universityName = record["university_name", String::class.java]!!,
-                redisKey = record[STUDENT.REDIS_KEY],
-                mongoId = record[GROUPS.MONGO_ID]
-            ) to attendances.first { it.studentNumber == record[STUDENT.STUDENT_NUMBER]!! }
-        }
-    }
-
-    /**
-     * Получение данных студента из Redis
-     */
-    private fun fetchRedisData(redisKey: String?): RedisData? {
-        if (redisKey == null) return null
-        
-        logger.debug("Получение данных из Redis для ключа: $redisKey")
-        return try {
-            val dataMap = redisOperations.opsForHash<String, String>().entries(redisKey)
-            if (dataMap.isNotEmpty()) {
-                RedisData(dataMap["group_name"])
-            } else {
-                logger.warn("Данные для ключа $redisKey не найдены в Redis")
-                null
+                .from(a)
+                .join(s).on(a.ID_SCHEDULE.eq(s.ID))
+                .where(s.ID_LECTURE.`in`(lectureIds))
+                .and(s.TIMESTAMP.between(startDateTime, endDateTime))
+                .groupBy(a.ID_STUDENT)
+                .orderBy(DSL.field("percentage").asc())
+                .limit(10)
+            
+            logger.debug("Выполнение SQL-запроса для поиска посещаемости: {}", query)
+            val result = query.fetch()
+            
+            val attendances = result.map { record ->
+                val studentNumber = record[a.ID_STUDENT]!!
+                val total = record["total", Long::class.java]!!
+                val attended = record["attended", Long::class.java]!!
+                val percentage = record["percentage", Double::class.java]!!
+                
+                logger.debug("Студент {}: всего занятий {}, посещено {}, процент {}%", 
+                            studentNumber, total, attended, percentage)
+                
+                StudentAttendance(
+                    studentNumber,
+                    total,
+                    attended,
+                    percentage
+                )
             }
+            
+            logger.debug("Найдено {} студентов с низкой посещаемостью", attendances.size)
+            return attendances
+        } catch (e: JooqDataAccessException) {
+            logger.error("Ошибка JOOQ при доступе к базе данных: {}", e.message, e)
+            throw DatabaseAccessException("Ошибка при выполнении запроса к базе данных", e)
+        } catch (e: DataAccessException) {
+            logger.error("Ошибка доступа к базе данных: {}", e.message, e)
+            throw DatabaseAccessException("Ошибка при выполнении запроса к базе данных", e)
         } catch (e: Exception) {
-            logger.error("Ошибка при получении данных из Redis: ${e.message}")
-            null
+            logger.error("Непредвиденная ошибка при поиске данных о посещаемости: {}", e.message, e)
+            throw ReportGenerationException("Ошибка при получении данных о посещаемости: ${e.message}", e)
         }
     }
-    
-    /**
-     * Получение данных о студенте из MongoDB
-     */
-    private fun fetchMongoDataForStudent(studentInfo: StudentInfo): Map<String, Any>? {
-        if (studentInfo.mongoId.isNullOrEmpty()) {
-            logger.debug("MongoDB ID для группы ${studentInfo.groupName} не найден")
+
+    private fun getStudentsInfo(attendances: List<StudentAttendance>): List<Pair<StudentInfo, StudentAttendance>> {
+        val studentNumbers = attendances.map { it.studentNumber }
+        logger.debug("Получение информации о студентах: {}", studentNumbers)
+        
+        try {
+            val query = dsl.select(
+                STUDENT.STUDENT_NUMBER,
+                STUDENT.FULLNAME,
+                STUDENT.EMAIL,
+                GROUPS.NAME.`as`("group_name"),
+                DEPARTMENT.NAME.`as`("department_name"),
+                INSTITUTE.NAME.`as`("institute_name"),
+                UNIVERSITY.NAME.`as`("university_name"),
+                STUDENT.REDIS_KEY
+            )
+                .from(STUDENT)
+                .join(GROUPS).on(STUDENT.ID_GROUP.eq(GROUPS.ID))
+                .join(DEPARTMENT).on(GROUPS.ID_DEPARTMENT.eq(DEPARTMENT.ID))
+                .join(INSTITUTE).on(DEPARTMENT.ID_INSTITUTE.eq(INSTITUTE.ID))
+                .join(UNIVERSITY).on(INSTITUTE.ID_UNIVERSITY.eq(UNIVERSITY.ID))
+                .where(STUDENT.STUDENT_NUMBER.`in`(studentNumbers))
+
+            logger.debug("Выполнение SQL-запроса для получения информации о студентах: {}", query)
+            val result = query.fetch()
+            logger.debug("Получены данные о {} студентах из базы данных", result.size)
+            
+            // Проверка, что найдены все студенты
+            if (result.size < studentNumbers.size) {
+                val foundNumbers = result.map { it[STUDENT.STUDENT_NUMBER] }
+                val notFoundNumbers = studentNumbers.filter { !foundNumbers.contains(it) }
+                logger.warn("Не найдена информация для {} студентов: {}", notFoundNumbers.size, notFoundNumbers)
+            }
+
+            return result.map { record ->
+                val studentNumber = record[STUDENT.STUDENT_NUMBER]!!
+                val fullName = record[STUDENT.FULLNAME]!!
+                val email = record[STUDENT.EMAIL]
+                val groupName = record["group_name", String::class.java]!!
+                val departmentName = record["department_name", String::class.java]!!
+                val instituteName = record["institute_name", String::class.java]!!
+                val universityName = record["university_name", String::class.java]!!
+                val redisKey = record[STUDENT.REDIS_KEY]
+                
+                logger.debug("Студент: {}, группа: {}, кафедра: {}, институт: {}, университет: {}", 
+                            fullName, groupName, departmentName, instituteName, universityName)
+                
+                val studentInfo = StudentInfo(
+                    studentNumber,
+                    fullName,
+                    email,
+                    groupName,
+                    departmentName,
+                    instituteName,
+                    universityName,
+                    redisKey
+                )
+                
+                val attendance = attendances.first { it.studentNumber == studentNumber }
+                studentInfo to attendance
+            }
+        } catch (e: JooqDataAccessException) {
+            logger.error("Ошибка JOOQ при получении информации о студентах: {}", e.message, e)
+            throw DatabaseAccessException("Ошибка при получении информации о студентах из базы данных", e)
+        } catch (e: Exception) {
+            logger.error("Ошибка при получении информации о студентах: {}", e.message, e)
+            throw ReportGenerationException("Ошибка при получении информации о студентах: ${e.message}", e)
+        }
+    }
+
+    private fun fetchRedisData(redisKey: String?): RedisData? {
+        if (redisKey == null) {
+            logger.debug("Redis ключ не указан для студента")
             return null
         }
         
-        logger.debug("Получение данных из MongoDB для группы ${studentInfo.groupName}")
-        return try {
-            // Ищем группу в MongoDB используя ID группы
-            val collection = mongoTemplate.getCollection("universities")
+        logger.debug("Получение данных из Redis по ключу: {}", redisKey)
+        try {
+            val dataMap = redisOperations.opsForHash<String, String>().entries(redisKey)
+            logger.debug("Получены данные из Redis: {}", dataMap)
             
-            // Агрегированный запрос для поиска группы во вложенных документах
-            val pipeline = listOf(
-                Document("\$match", 
-                    Document("institutes.departments.id", studentInfo.departmentName)),
-                Document("\$project", 
-                    Document("name", 1)
-                        .append("institutes", 
-                            Document("\$filter", 
-                                Document("input", "\$institutes")
-                                    .append("as", "institute")
-                                    .append("cond", 
-                                        Document("\$in", listOf(studentInfo.departmentName, "\$\$institute.departments.id"))
-                                    )
-                            )
-                        )
-                )
-            )
-            
-            val result = collection.aggregate(pipeline).first()
-            result?.toMap()
+            return if (dataMap.isNotEmpty()) {
+                val groupName = dataMap["group_name"]
+                logger.debug("Найдены данные в Redis: group_name={}", groupName)
+                RedisData(groupName)
+            } else {
+                logger.warn("В Redis нет данных по ключу: {}", redisKey)
+                null
+            }
+        } catch (e: RedisConnectionFailureException) {
+            logger.error("Ошибка подключения к Redis: {}", e.message, e)
+            throw RedisAccessException("Ошибка подключения к Redis", e)
         } catch (e: Exception) {
-            logger.error("Ошибка при получении данных из MongoDB: ${e.message}")
-            null
+            logger.error("Ошибка при получении данных из Redis: {}", e.message, e)
+            throw RedisAccessException("Ошибка при получении данных из Redis: ${e.message}", e)
         }
     }
 }
 
-/**
- * Класс, представляющий информацию о посещаемости студента
- */
-data class StudentAttendance(
-    val studentNumber: String,
-    val total: Long,
-    val attended: Long,
-    val percentage: Double
-)
 
-/**
- * Класс, представляющий основную информацию о студенте
- */
-data class StudentInfo(
-    val studentNumber: String,
-    val fullName: String,
-    val email: String?,
-    val groupName: String,
-    val departmentName: String,
-    val instituteName: String,
-    val universityName: String,
-    val redisKey: String?,
-    val mongoId: String? = null
-)
 
-/**
- * Класс, представляющий данные из Redis
- */
-data class RedisData(val groupName: String?)
 
-/**
- * Расширение для конвертации результатов поиска в список
- */
-fun SearchHits<LectureMaterial>.toList123(): List<LectureMaterial> {
-    return this.searchHits.map { it.content }
-}

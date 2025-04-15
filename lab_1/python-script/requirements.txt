@@ -2,6 +2,8 @@ psycopg2-binary==2.9.7
 pymongo==4.5.0
 redis==4.6.0
 py2neo
+neo4j
+tqdm
 elasticsearch==7.17.0
 faker==25.2.0
 python-dateutil==2.8.2

@@ -8,10 +8,10 @@ import org.springframework.data.elasticsearch.annotations.Field
 data class LectureMaterial(
     @Id
     val id: String?,
-    @Field("lecture_id")
-    val lectureId: Long,
     @Field("name")
     val name: String,
     @Field("description")
-    val description: String
+    val description: String,
+    @Field("lecture_id")
+    val lectureId: Long
 )

@@ -1,4 +1,4 @@
-package com.cherenkov.lab_1.database.repository
+package com.cherenkov.lab_1.configs
 
 import javax.sql.DataSource
 import org.springframework.context.annotation.Bean

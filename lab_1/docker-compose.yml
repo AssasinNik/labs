@@ -99,22 +99,6 @@ services:
       echo 'Все БД готовы. Запуск скрипта...';
       python ./generate_data.py"
 
-  spring-boot-app:
-    build: .
-    container_name: spring-boot-app
-    depends_on:
-      - redis
-      - mongo
-      - neo4j
-      - elasticsearch
-      - postgres
-    ports:
-      - "8080:8080"
-    environment:
-      - JWT_SECRET_BASE64=RVROX050WUJKQVpGWkFUMDVVV1ZGUE5RSlZWekl4VGtV
-      - MONGODB_CONNECTION_STRING=12345
-    command: sh -c "java -jar /app/lab_1-0.0.1-SNAPSHOT.jar"
-
 volumes:
   redis-data:
   mongo-data:
