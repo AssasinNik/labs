@@ -1,5 +1,6 @@
 package com.cherenkov.lab_1.service
 
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders.multiMatch
 import com.cherenkov.generated.jooq.tables.Attendance.Companion.ATTENDANCE
 import com.cherenkov.generated.jooq.tables.Department.Companion.DEPARTMENT
 import com.cherenkov.generated.jooq.tables.Groups.Companion.GROUPS
@@ -7,6 +8,8 @@ import com.cherenkov.generated.jooq.tables.Institute.Companion.INSTITUTE
 import com.cherenkov.generated.jooq.tables.Schedule.Companion.SCHEDULE
 import com.cherenkov.generated.jooq.tables.Student.Companion.STUDENT
 import com.cherenkov.generated.jooq.tables.University.Companion.UNIVERSITY
+import com.cherenkov.generated.jooq.tables.Lecture.Companion.LECTURE
+import com.cherenkov.generated.jooq.tables.Course.Companion.COURSE
 import com.cherenkov.lab_1.dto.*
 import com.cherenkov.lab_1.exceptions.*
 import com.cherenkov.lab_1.mappers.toList123
@@ -18,13 +21,19 @@ import org.jooq.impl.DSL
 import org.springframework.dao.DataAccessException
 import org.springframework.data.elasticsearch.NoSuchIndexException
 import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate
+import org.springframework.data.elasticsearch.client.elc.NativeQuery
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery
+import org.springframework.data.elasticsearch.core.query.Query
 import org.springframework.data.redis.RedisConnectionFailureException
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import org.slf4j.LoggerFactory
+import org.jooq.Record
+import org.jooq.SelectJoinStep
+import org.jooq.Table
 import org.jooq.exception.DataAccessException as JooqDataAccessException
+import org.springframework.data.elasticsearch.core.SearchHits
 
 @Service
 class ReportService(
@@ -41,7 +50,7 @@ class ReportService(
         try {
             validateReportRequest(request)
             
-            // Поиск лекций по заданному термину
+            // Поиск лекций по заданному термину используя Elasticsearch (оптимально для полнотекстового поиска)
             logger.debug("Поиск лекций по термину: {}", request.term)
             val lectures = searchLecturesByTerm(request.term)
             logger.info("Найдено {} лекций по термину '{}'", lectures.size, request.term)
@@ -55,7 +64,7 @@ class ReportService(
                 )
             }
             
-            // Поиск студентов с низкой посещаемостью
+            // Поиск студентов с низкой посещаемостью с оптимизированным запросом
             logger.debug("Поиск студентов с низкой посещаемостью для {} лекций", lectures.size)
             val attendances = findLowAttendanceStudents(lectures.map { it.lectureId }, request.startDate, request.endDate)
             logger.info("Найдено {} студентов с низкой посещаемостью", attendances.size)
@@ -69,7 +78,7 @@ class ReportService(
                 )
             }
             
-            // Получение информации о студентах
+            // Получение полной информации о студентах одним оптимизированным запросом
             logger.debug("Получение подробной информации о {} студентах", attendances.size)
             val attendancesAndInfos = getStudentsInfo(attendances)
             logger.info("Получена информация о {} студентах", attendancesAndInfos.size)
@@ -83,7 +92,7 @@ class ReportService(
                 )
             }
             
-            // Формирование отчета
+            // Формирование отчета с дополнительными данными из Redis
             logger.debug("Формирование итогового отчета")
             val results = attendancesAndInfos.mapNotNull { (studentInfo, attendance) ->
                 try {
@@ -203,11 +212,11 @@ class ReportService(
         try {
             val criteria = Criteria("description").matches(term)
             val query = CriteriaQuery(criteria)
-            
+
             logger.debug("Запрос к Elasticsearch: {}", query)
             val answer = elasticsearchTemplate.search(query, LectureMaterial::class.java)
             val result = answer.toList123()
-            
+
             logger.debug("Результат поиска в Elasticsearch: найдено {} записей", result.size)
             return result
         } catch (e: NoSuchIndexException) {
@@ -236,6 +245,8 @@ class ReportService(
             
             logger.debug("Период для запроса: {} - {}", startDateTime, endDateTime)
 
+            // Оптимизированный запрос с использованием партиционирования по неделям (week_start)
+            // В таблице attendance есть партиции по неделям, используем поле week_start для оптимизации
             val query = dsl.select(
                 a.ID_STUDENT,
                 DSL.count().`as`("total"),
@@ -249,7 +260,12 @@ class ReportService(
                 .join(s).on(a.ID_SCHEDULE.eq(s.ID))
                 .where(s.ID_LECTURE.`in`(lectureIds))
                 .and(s.TIMESTAMP.between(startDateTime, endDateTime))
+                .and(a.WEEK_START.between(
+                    startDateTime.toLocalDate(), 
+                    endDateTime.toLocalDate()
+                )) // Использование партиционирования по неделям
                 .groupBy(a.ID_STUDENT)
+                .having(DSL.count().ge(3)) // Фильтр для более точной статистики - минимум 3 занятия
                 .orderBy(DSL.field("percentage").asc())
                 .limit(10)
             
@@ -292,6 +308,8 @@ class ReportService(
         logger.debug("Получение информации о студентах: {}", studentNumbers)
         
         try {
+            // Оптимизированный запрос с JOIN всех необходимых таблиц
+            // Иерархия: student → groups → department → institute → university
             val query = dsl.select(
                 STUDENT.STUDENT_NUMBER,
                 STUDENT.FULLNAME,
@@ -320,7 +338,10 @@ class ReportService(
                 logger.warn("Не найдена информация для {} студентов: {}", notFoundNumbers.size, notFoundNumbers)
             }
 
-            return result.map { record ->
+            // Создаём мапу для быстрого доступа к данным о посещаемости
+            val attendanceByStudentNumber = attendances.associateBy { it.studentNumber }
+
+            return result.mapNotNull { record ->
                 val studentNumber = record[STUDENT.STUDENT_NUMBER]!!
                 val fullName = record[STUDENT.FULLNAME]!!
                 val email = record[STUDENT.EMAIL]
@@ -344,8 +365,14 @@ class ReportService(
                     redisKey
                 )
                 
-                val attendance = attendances.first { it.studentNumber == studentNumber }
-                studentInfo to attendance
+                // Получаем данные о посещаемости
+                val attendance = attendanceByStudentNumber[studentNumber]
+                if (attendance != null) {
+                    studentInfo to attendance
+                } else {
+                    logger.warn("Не найдена информация о посещаемости для студента {}", studentNumber)
+                    null
+                }
             }
         } catch (e: JooqDataAccessException) {
             logger.error("Ошибка JOOQ при получении информации о студентах: {}", e.message, e)
@@ -364,6 +391,8 @@ class ReportService(
         
         logger.debug("Получение данных из Redis по ключу: {}", redisKey)
         try {
+            // Redis хранит данные о студентах в виде хеш-таблиц с полями:
+            // fullname, email, group_id, group_name, redis_key
             val dataMap = redisOperations.opsForHash<String, String>().entries(redisKey)
             logger.debug("Получены данные из Redis: {}", dataMap)
             
