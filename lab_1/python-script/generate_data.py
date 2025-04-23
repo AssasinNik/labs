@@ -147,14 +147,9 @@ LECTURE_TOPICS = [
 ##########################################################################
 
 def create_postgres_schema(conn):
-    """
-    Пересоздаёт схему PostgreSQL для таблиц:
-    attendance, schedule, lecture, course, student, groups, department, institute, university.
-    Создаются партиции для attendance на период с сентября 2023 до февраля 2024.
-    """
     logger.info("Начинаю создание схемы PostgreSQL...")
     start_time = time.time()
-    
+
     cur = conn.cursor()
     tables = [
         "attendance",
@@ -167,7 +162,7 @@ def create_postgres_schema(conn):
         "institute",
         "university",
     ]
-    
+
     logger.info("Удаляю существующие таблицы...")
     for i, table in enumerate(tables):
         cur.execute(sql.SQL("DROP TABLE IF EXISTS {} CASCADE;").format(sql.Identifier(table)))
@@ -177,7 +172,6 @@ def create_postgres_schema(conn):
 
     logger.info("Создаю новые таблицы и партиции...")
     schema_sql = """
-    -- Университет
     CREATE TABLE university (
         id SERIAL PRIMARY KEY,
         name VARCHAR(200) NOT NULL,
@@ -185,7 +179,6 @@ def create_postgres_schema(conn):
         updated_at TIMESTAMP DEFAULT NOW()
     );
 
-    -- Институт
     CREATE TABLE institute (
         id SERIAL PRIMARY KEY,
         name VARCHAR(200) NOT NULL,
@@ -195,7 +188,6 @@ def create_postgres_schema(conn):
     );
     CREATE INDEX idx_institute_university ON institute(id_university);
 
-    -- Кафедра
     CREATE TABLE department (
         id SERIAL PRIMARY KEY,
         name VARCHAR(200) NOT NULL,
@@ -205,7 +197,6 @@ def create_postgres_schema(conn):
     );
     CREATE INDEX idx_department_institute ON department(id_institute);
 
-    -- Группа
     CREATE TABLE groups (
         id SERIAL PRIMARY KEY,
         name VARCHAR(200) NOT NULL,
@@ -216,7 +207,6 @@ def create_postgres_schema(conn):
     );
     CREATE INDEX idx_groups_department ON groups(id_department);
 
-    -- Студент
     CREATE TABLE student (
         student_number VARCHAR(100) PRIMARY KEY,
         fullname VARCHAR(200) NOT NULL,
@@ -227,7 +217,6 @@ def create_postgres_schema(conn):
     );
     CREATE INDEX idx_student_group ON student(id_group);
 
-    -- Курс
     CREATE TABLE course (
         id SERIAL PRIMARY KEY,
         name VARCHAR(200) NOT NULL,
@@ -237,7 +226,6 @@ def create_postgres_schema(conn):
     );
     CREATE INDEX idx_course_department ON course(id_department);
 
-    -- Лекция
     CREATE TABLE lecture (
         id SERIAL PRIMARY KEY,
         name VARCHAR(200) NOT NULL,
@@ -249,7 +237,6 @@ def create_postgres_schema(conn):
     );
     CREATE INDEX idx_lecture_course ON lecture(id_course);
 
-    -- Расписание (schedule)
     CREATE TABLE schedule (
         id SERIAL PRIMARY KEY,
         id_lecture INT NOT NULL REFERENCES lecture(id),
@@ -261,7 +248,6 @@ def create_postgres_schema(conn):
     CREATE INDEX idx_schedule_timestamp ON schedule(timestamp);
     CREATE INDEX idx_schedule_lecture_group ON schedule(id_lecture, id_group);
 
-    -- Посещение (attendance) с партиционированием по неделям
     CREATE TABLE attendance (
         id SERIAL,
         timestamp TIMESTAMP NOT NULL,
@@ -274,7 +260,6 @@ def create_postgres_schema(conn):
     CREATE INDEX idx_attendance_student ON attendance(id_student);
     CREATE INDEX idx_attendance_schedule ON attendance(id_schedule);
 
-    -- Триггер для автоматического расчёта week_start по timestamp
     CREATE OR REPLACE FUNCTION set_week_start()
     RETURNS TRIGGER AS $$
     BEGIN
@@ -287,7 +272,6 @@ def create_postgres_schema(conn):
     FOR EACH ROW
     EXECUTE FUNCTION set_week_start();
 
-    -- Создание партиций для attendance
     CREATE TABLE attendance_2023_09 PARTITION OF attendance
         FOR VALUES FROM ('2023-09-01') TO ('2023-10-01');
     CREATE TABLE attendance_2023_10 PARTITION OF attendance
@@ -298,55 +282,45 @@ def create_postgres_schema(conn):
         FOR VALUES FROM ('2023-12-01') TO ('2024-01-01');
     CREATE TABLE attendance_2024_01 PARTITION OF attendance
         FOR VALUES FROM ('2024-01-01') TO ('2024-02-01');
+
+    CREATE TABLE users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(100) NOT NULL,
+        hash_password VARCHAR(255) NOT NULL
+    );
     """
     cur.execute(schema_sql)
     conn.commit()
     cur.close()
-    
+
     elapsed_time = time.time() - start_time
     logger.info(f"Схема PostgreSQL создана успешно за {elapsed_time:.2f} секунд")
 
-##########################################################################
-# Заполнение PostgreSQL данными (University → Institute → Department → Groups → Student,
-# Course → Lecture → Schedule → Attendance)
-##########################################################################
-
 def populate_postgres(conn):
-    """
-    Заполняет PostgreSQL иерархически:
-      - Университеты, институты, кафедры, группы, студенты.
-      - Для каждой кафедры создаются курсы и лекции.
-      - Для каждой лекции для всех групп кафедры создаётся расписание.
-      - Для выборочных студентов добавляются записи посещаемости.
-    Для каждой записи attendance вычисляется week_start на основе времени расписания.
-    """
     logger.info("Начинаю заполнение базы данных PostgreSQL...")
     total_start_time = time.time()
-    
+
     cur = conn.cursor()
 
-    # Задаем параметры генерации
-    num_universities = min(len(UNIVERSITIES), 3)  # Используем не более 3 университетов
+    num_universities = min(len(UNIVERSITIES), 3)
     institutes_per_univ = 4
     departments_per_inst = 5
     groups_per_department = 5
-    students_per_group = 100    # Итог: 3 * 4 * 5 * 5 * 100 ≈ 30000 студентов
-    courses_per_department = 10
-    lectures_per_course = 3
-    
+    students_per_group = 30
+    courses_per_department = 5
+    lectures_per_course = 2
+
     estimated_students = num_universities * institutes_per_univ * departments_per_inst * groups_per_department * students_per_group
     logger.info(f"Планируется создать примерно {estimated_students} студентов")
 
-    # Базовое время для расписания лекций
     base_datetime = datetime.datetime(2023, 9, 4, 9, 0, 0)
 
-    # Списки для контроля вставки
-    universities = []    # (id, name)
-    institutes = {}      # {uni_id: [(inst_id, name), ...]}
-    departments = {}     # {inst_id: [(dept_id, name), ...]}
-    groups = {}          # {dept_id: [(group_id, name), ...]}
+    universities = []
+    institutes = {}
+    departments = {}
+    groups = {}
 
-    # 1. Университеты - используем реальные названия
+    # 1. Университеты
     logger.info("Создаю университеты...")
     start_time = time.time()
     for i in range(num_universities):
@@ -366,19 +340,21 @@ def populate_postgres(conn):
     total_departments = 0
     total_groups = 0
     total_students = 0
-    
+
+    student_batch = []
+    STUDENT_BATCH_SIZE = 1000  # Размер пакета для студентов
+
     for uni_idx, (uni_id, uni_name) in enumerate(universities):
         logger.info(f"[{uni_idx+1}/{len(universities)}] Обрабатываю университет: {uni_name}")
         institutes[uni_id] = []
-        
+
         for j in range(institutes_per_univ):
             inst_name = INSTITUTES[j % len(INSTITUTES)]
             cur.execute("INSERT INTO institute(name, id_university) VALUES (%s, %s) RETURNING id;", (inst_name, uni_id))
             inst_id = cur.fetchone()[0]
             institutes[uni_id].append((inst_id, inst_name))
             total_institutes += 1
-            
-            # Для каждого института создаем кафедры
+
             departments[inst_id] = []
             for k in range(departments_per_inst):
                 dept_name = DEPARTMENTS[k % len(DEPARTMENTS)]
@@ -386,36 +362,28 @@ def populate_postgres(conn):
                 dept_id = cur.fetchone()[0]
                 departments[inst_id].append((dept_id, dept_name))
                 total_departments += 1
-                
-                # Для каждой кафедры создаем группы
+
                 groups[dept_id] = []
                 for g in range(groups_per_department):
-                    # Формируем названия групп в формате БСБО-XX-YY
                     formation_year = random.randint(2015, 2023)
                     year_suffix = str(formation_year)[-2:]
                     group_name = f"БСБО-{random.randint(1, 99):02d}-{year_suffix}"
-                    
+
                     cur.execute("INSERT INTO groups(name, id_department, formation_year) VALUES (%s, %s, %s) RETURNING id;",
                                 (group_name, dept_id, formation_year))
                     group_id = cur.fetchone()[0]
                     groups[dept_id].append((group_id, group_name))
                     total_groups += 1
-                    
-                    # Прогресс-бар для студентов
+
                     logger.info(f"Создаю {students_per_group} студентов для группы {group_name}...")
-                    
-                    # Для каждой группы создаются студенты с реалистичными данными
+
                     for s in range(students_per_group):
                         student_number = f"S{uni_id}{inst_id}{dept_id}{group_id}{s:04d}"
-                        # Генерируем реалистичные ФИО с русскими фамилиями и именами
                         fullname = fake.name()
-                        # Создаем реалистичный email на основе имени
                         name_parts = fullname.split()
                         if len(name_parts) >= 2:
-                            # Транслитерация для создания email
                             email_name = name_parts[0].lower()
                             email_surname = name_parts[1].lower()
-                            # Простая транслитерация для демонстрации
                             translit = {
                                 'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e',
                                 'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm',
@@ -425,26 +393,34 @@ def populate_postgres(conn):
                             }
                             email_name_t = ''.join(translit.get(c, c) for c in email_name.lower())
                             email_surname_t = ''.join(translit.get(c, c) for c in email_surname.lower())
-                            birth_year = formation_year - random.randint(17, 22)  # Примерный год рождения
+                            birth_year = formation_year - random.randint(17, 22)
                             email = f"{email_surname_t}{email_name_t[0]}{birth_year}@edu.mirea.ru"
                         else:
                             email = fake.email()
-                            
+
                         redis_key = f"student:{student_number}"
-                        cur.execute("INSERT INTO student(student_number, fullname, email, id_group, redis_key) VALUES (%s, %s, %s, %s, %s);",
-                                    (student_number, fullname, email, group_id, redis_key))
+                        student_batch.append((student_number, fullname, email, group_id, redis_key))
                         total_students += 1
-                        
-                        # Выводим прогресс каждые 5000 студентов
-                        if total_students % 5000 == 0:
-                            progress = (total_students / estimated_students) * 100
-                            logger.info(f"Прогресс: создано {total_students}/{estimated_students} студентов ({progress:.1f}%)")
-                            conn.commit()  # Промежуточный коммит для сохранения данных
-            
-            # Выводим статистику каждые 2 института
+
+                        if len(student_batch) >= STUDENT_BATCH_SIZE:
+                            values = ','.join(cur.mogrify("(%s, %s, %s, %s, %s)", row).decode('utf-8') for row in student_batch)
+                            sql = f"INSERT INTO student (student_number, fullname, email, id_group, redis_key) VALUES {values}"
+                            cur.execute(sql)
+                            conn.commit()
+                            logger.info(f"Вставлено {total_students} студентов")
+                            student_batch = []
+
             if total_institutes % 2 == 0:
                 logger.info(f"Статистика: институты={total_institutes}, кафедры={total_departments}, группы={total_groups}, студенты={total_students}")
-                
+
+    # Вставляем оставшихся студентов
+    if student_batch:
+        values = ','.join(cur.mogrify("(%s, %s, %s, %s, %s)", row).decode('utf-8') for row in student_batch)
+        sql = f"INSERT INTO student (student_number, fullname, email, id_group, redis_key) VALUES {values}"
+        cur.execute(sql)
+        conn.commit()
+        logger.info(f"Вставлено {total_students} студентов (финальный пакет)")
+
     conn.commit()
     elapsed_time = time.time() - start_time
     logger.info(f"Созданы: {total_institutes} институтов, {total_departments} кафедр, {total_groups} групп, {total_students} студентов за {elapsed_time:.2f} секунд")
@@ -456,34 +432,34 @@ def populate_postgres(conn):
     total_lectures = 0
     total_schedules = 0
     total_attendances = 0
-    
-    # Создаем словарь названий институтов для более информативных логов
+
+    attendance_batch = []
+    ATTENDANCE_BATCH_SIZE = 10000  # Размер пакета для посещаемости
+
     institutes_names = {}
     cur.execute("SELECT id, name FROM institute;")
     for inst_id, inst_name in cur.fetchall():
         institutes_names[inst_id] = inst_name
-    
+
     for inst_id, depts in departments.items():
         inst_name = institutes_names.get(inst_id, f"Институт ID: {inst_id}")
         logger.info(f"Обрабатываю курсы и лекции для института: {inst_name}")
-        
+
         for dept_idx, (dept_id, dept_name) in enumerate(depts):
             logger.info(f"[{dept_idx+1}/{len(depts)}] Кафедра: {dept_name} (ID: {dept_id}, Институт: {inst_name})")
-            
-            # Используем реальные названия курсов
-            available_courses = list(COURSES)  # Копируем список
-            random.shuffle(available_courses)  # Перемешиваем для разнообразия
-            
+
+            available_courses = list(COURSES)
+            random.shuffle(available_courses)
+
             for c in range(min(courses_per_department, len(available_courses))):
                 course_name = available_courses[c]
                 cur.execute("INSERT INTO course(name, id_department) VALUES (%s, %s) RETURNING id;", (course_name, dept_id))
                 course_id = cur.fetchone()[0]
                 total_courses += 1
-                
-                # Для курса создаются лекции с осмысленными названиями
-                available_lectures = list(LECTURE_TOPICS)  # Копируем список
-                random.shuffle(available_lectures)  # Перемешиваем для разнообразия
-                
+
+                available_lectures = list(LECTURE_TOPICS)
+                random.shuffle(available_lectures)
+
                 for l in range(min(lectures_per_course, len(available_lectures))):
                     lecture_name = f"{available_lectures[l]} ({course_name})"
                     tech_equipment = random.choice([True, False])
@@ -491,68 +467,61 @@ def populate_postgres(conn):
                                 (lecture_name, 2, tech_equipment, course_id))
                     lecture_id = cur.fetchone()[0]
                     total_lectures += 1
-                    
-                    # Для каждой лекции создаём расписание для всех групп данной кафедры
+
                     cur.execute("SELECT id, name FROM groups WHERE id_department = %s;", (dept_id,))
                     dept_groups = cur.fetchall()
-                    
+
                     logger.info(f"Создаю расписания и посещаемость для лекции: {lecture_name[:30]}...")
-                    
+
                     for group in dept_groups:
                         group_id, group_name = group
-                        
-                        # Создаем несколько занятий для каждой лекции с разными датами
-                        for week_offset in range(0, 15, 2):  # Каждые две недели
-                            # Вычисляем день недели (1-5, пн-пт) и время (9:00, 11:00, 14:00, 16:00)
-                            weekday = random.randint(1, 5)  # 1-5 (пн-пт)
+
+                        for week_offset in range(0, 15, 2):
+                            weekday = random.randint(1, 5)
                             hour = random.choice([9, 11, 14, 16])
-                            
-                            # Вычисляем конкретную дату
                             schedule_time = base_datetime + datetime.timedelta(weeks=week_offset, days=weekday-1)
                             schedule_time = schedule_time.replace(hour=hour, minute=0, second=0)
-                            
+                            week_start = (schedule_time - datetime.timedelta(days=schedule_time.weekday())).date()
+
                             location = f"А-{random.randint(1, 5)}{random.randint(0, 9)}{random.randint(0, 9)}"
                             cur.execute("INSERT INTO schedule(id_lecture, id_group, timestamp, location) VALUES (%s, %s, %s, %s) RETURNING id;",
                                         (lecture_id, group_id, schedule_time, location))
                             schedule_id = cur.fetchone()[0]
                             total_schedules += 1
-                            
-                            # Создаем записи посещаемости для студентов группы
-                            # С более реалистичным распределением (70-90% посещаемость)
+
                             cur.execute("SELECT student_number FROM student WHERE id_group = %s;", (group_id,))
                             student_numbers = [row[0] for row in cur.fetchall()]
                             for stud_num in student_numbers:
-                                attendance_probability = random.uniform(0.7, 0.9)  # 70-90% вероятность посещения
-                                
-                                if random.random() < attendance_probability:
-                                    attendance_status = True
-                                else:
-                                    attendance_status = False
-                                
-                                # Вычисляем week_start перед вставкой - берем начало недели (понедельник) для текущей даты
-                                # Используем DATE_TRUNC для получения начала недели, что соответствует логике триггера
-                                week_start = (schedule_time - datetime.timedelta(days=schedule_time.weekday())).date()
-                                    
-                                cur.execute(
-                                    "INSERT INTO attendance(timestamp, week_start, id_student, id_schedule, status) VALUES (%s, %s, %s, %s, %s);",
-                                    (schedule_time, week_start, stud_num, schedule_id, attendance_status)
-                                )
+                                attendance_probability = random.uniform(0.7, 0.9)
+                                attendance_status = random.random() < attendance_probability
+
+                                attendance_batch.append((schedule_time, week_start, stud_num, schedule_id, attendance_status))
                                 total_attendances += 1
-                            
-                            # Выводим прогресс создания attendance
-                            if total_attendances % 50000 == 0:
-                                logger.info(f"Прогресс: создано {total_attendances} записей о посещаемости")
-                                conn.commit()  # Промежуточный коммит
-                
-                # Выводим прогресс создания курсов
+
+                                if len(attendance_batch) >= ATTENDANCE_BATCH_SIZE:
+                                    values = ','.join(cur.mogrify("(%s, %s, %s, %s, %s)", row).decode('utf-8') for row in attendance_batch)
+                                    sql = f"INSERT INTO attendance (timestamp, week_start, id_student, id_schedule, status) VALUES {values}"
+                                    cur.execute(sql)
+                                    conn.commit()
+                                    logger.info(f"Вставлено {total_attendances} записей о посещаемости")
+                                    attendance_batch = []
+
                 if total_courses % 20 == 0:
                     logger.info(f"Прогресс: создано {total_courses} курсов, {total_lectures} лекций, {total_schedules} расписаний")
-                    conn.commit()  # Промежуточный коммит
-                    
+                    conn.commit()
+
+    # Вставляем оставшиеся записи посещаемости
+    if attendance_batch:
+        values = ','.join(cur.mogrify("(%s, %s, %s, %s, %s)", row).decode('utf-8') for row in attendance_batch)
+        sql = f"INSERT INTO attendance (timestamp, week_start, id_student, id_schedule, status) VALUES {values}"
+        cur.execute(sql)
+        conn.commit()
+        logger.info(f"Вставлено {total_attendances} записей о посещаемости (финальный пакет)")
+
     conn.commit()
     elapsed_time = time.time() - start_time
     logger.info(f"Созданы: {total_courses} курсов, {total_lectures} лекций, {total_schedules} расписаний, {total_attendances} записей о посещаемости за {elapsed_time:.2f} секунд")
-    
+
     total_elapsed = time.time() - total_start_time
     logger.info(f"Заполнение PostgreSQL завершено за {total_elapsed:.2f} секунд")
     cur.close()
@@ -563,37 +532,35 @@ def populate_postgres(conn):
 
 def populate_mongodb(pg_conn):
     """
-    Извлекает из PostgreSQL данные по университетам, институтам, кафедрам и группам,
+    Извлекает из PostgreSQL данные по университетам, институтам и кафедрам,
     формирует вложенную структуру и загружает в MongoDB.
     """
     logger.info("Начинаю заполнение MongoDB...")
     start_time = time.time()
-    
+
     cur = pg_conn.cursor()
-    
-    # Получаем всю иерархию: университеты -> институты -> кафедры -> группы
+
+    # Получаем иерархию: университеты -> институты -> кафедры
     logger.info("Извлекаю данные из PostgreSQL...")
     cur.execute("""
-        SELECT u.id, u.name, i.id, i.name, d.id, d.name, g.id, g.name, g.formation_year
+        SELECT u.id, u.name, i.id, i.name, d.id, d.name
         FROM university u
         JOIN institute i ON i.id_university = u.id
         JOIN department d ON d.id_institute = i.id
-        JOIN groups g ON g.id_department = d.id
-        ORDER BY u.id, i.id, d.id, g.id;
+        ORDER BY u.id, i.id, d.id;
     """)
     rows = cur.fetchall()
     logger.info(f"Получено {len(rows)} записей из PostgreSQL")
     cur.close()
 
-    # Строим иерархию данных
+    # Строим иерархию данных без групп
     logger.info("Строю иерархические документы для MongoDB...")
     mongo_data = {}
     universities_count = 0
     institutes_count = 0
     departments_count = 0
-    groups_count = 0
-    
-    for u_id, u_name, i_id, i_name, d_id, d_name, g_id, g_name, g_year in rows:
+
+    for u_id, u_name, i_id, i_name, d_id, d_name in rows:
         # Инициализируем университет, если его еще нет
         if u_id not in mongo_data:
             mongo_data[u_id] = {
@@ -602,7 +569,7 @@ def populate_mongodb(pg_conn):
                 "institutes": {}
             }
             universities_count += 1
-        
+
         # Инициализируем институт, если его еще нет в университете
         if i_id not in mongo_data[u_id]["institutes"]:
             mongo_data[u_id]["institutes"][i_id] = {
@@ -611,28 +578,14 @@ def populate_mongodb(pg_conn):
                 "departments": {}
             }
             institutes_count += 1
-        
+
         # Инициализируем кафедру, если ее еще нет в институте
         if d_id not in mongo_data[u_id]["institutes"][i_id]["departments"]:
             mongo_data[u_id]["institutes"][i_id]["departments"][d_id] = {
-                "id": d_id,
-                "name": d_name,
-                "groups": []
+                "departmentId": int(d_id),  # Исправлено с "id" на "departmentId"
+                "name": d_name
             }
             departments_count += 1
-        
-        # Добавляем группу в кафедру
-        mongo_data[u_id]["institutes"][i_id]["departments"][d_id]["groups"].append({
-            "id": g_id,
-            "name": g_name,
-            "formation_year": g_year,
-            "mongo_id": f"mongo_group_{g_id}"
-        })
-        groups_count += 1
-        
-        # Логируем прогресс
-        if groups_count % 100 == 0:
-            logger.info(f"Обработано {groups_count} групп")
 
     # Преобразуем словари в списки для финального JSON
     logger.info("Преобразую структуру данных для записи в MongoDB...")
@@ -655,30 +608,17 @@ def populate_mongodb(pg_conn):
     client = MongoClient(MONGO_CONN_STRING)
     db = client["university"]
     collection = db["universities"]
-    
+
     # Очищаем коллекцию перед загрузкой
     logger.info("Очищаю существующую коллекцию в MongoDB...")
     collection.delete_many({})
-    
+
     if documents:
         collection.insert_many(documents)
         logger.info(f"Загружено {len(documents)} документов в MongoDB")
-    
-    # Обновляем mongo_id в PostgreSQL
-    logger.info("Обновляю mongo_id в PostgreSQL...")
-    update_mongo_ids = """
-    UPDATE groups g
-    SET mongo_id = 'mongo_group_' || g.id
-    WHERE g.mongo_id IS NULL OR g.mongo_id != 'mongo_group_' || g.id;
-    """
-    cur = pg_conn.cursor()
-    cur.execute(update_mongo_ids)
-    pg_conn.commit()
-    cur.close()
-    
-    elapsed_time = time.time() - start_time
-    logger.info(f"MongoDB заполнена успешно: {universities_count} университетов, {institutes_count} институтов, {departments_count} кафедр, {groups_count} групп за {elapsed_time:.2f} секунд")
 
+    elapsed_time = time.time() - start_time
+    logger.info(f"MongoDB заполнена успешно: {universities_count} университетов, {institutes_count} институтов, {departments_count} кафедр за {elapsed_time:.2f} секунд")
 ##########################################################################
 # Neo4j: Полное заполнение: создаются узлы для кафедр, лекций, групп и студентов;
 # устанавливаются отношения:
@@ -701,25 +641,25 @@ def populate_neo4j(pg_conn):
     """
     logger.info("Начинаю заполнение Neo4j...")
     start_time = time.time()
-    
+
     driver = GraphDatabase.driver(NEO4J_URI, auth=NEO4J_AUTH)
     with driver.session() as session:
         # Очищаем базу Neo4j
         logger.info("Очищаю существующие данные в Neo4j...")
         session.run("MATCH (n) DETACH DELETE n")
-        
+
         # 1. Создаем узлы Department
         logger.info("Извлекаю данные о кафедрах из PostgreSQL...")
         cur = pg_conn.cursor()
         cur.execute("SELECT id, name FROM department;")
         depts = cur.fetchall()  # (id, name)
         cur.close()
-        
+
         logger.info(f"Создаю {len(depts)} узлов Department в Neo4j...")
         dept_nodes = [{"id": d[0], "name": d[1], "neo_id": f"neo_dept_{d[0]}"} for d in depts]
         session.run("UNWIND $nodes AS node CREATE (d:Department {id: node.id, name: node.name, neo_id: node.neo_id})", nodes=dept_nodes)
         logger.info(f"Создано {len(dept_nodes)} узлов Department")
-        
+
         # 2. Создаем узлы Lecture и связываем с Department
         logger.info("Извлекаю данные о лекциях из PostgreSQL...")
         cur = pg_conn.cursor()
@@ -729,11 +669,11 @@ def populate_neo4j(pg_conn):
         """)
         lectures = cur.fetchall()  # (lecture_id, name, dept_id)
         cur.close()
-        
+
         logger.info(f"Создаю {len(lectures)} узлов Lecture в Neo4j...")
         lecture_nodes = [{"id": lec[0], "name": lec[1]} for lec in lectures]
         session.run("UNWIND $nodes AS node CREATE (l:Lecture {id: node.id, name: node.name})", nodes=lecture_nodes)
-        
+
         logger.info("Создаю отношения (Lecture)-[:ORIGINATES_FROM]->(Department)...")
         lecture_relations = 0
         for i, lec in enumerate(lectures):
@@ -746,67 +686,67 @@ def populate_neo4j(pg_conn):
             if (i+1) % 100 == 0 or i == len(lectures) - 1:
                 progress = ((i+1) / len(lectures)) * 100
                 logger.info(f"Создано {i+1}/{len(lectures)} отношений для лекций ({progress:.1f}%)")
-        
+
         # 3. Создаем узлы Group
         logger.info("Извлекаю данные о группах из PostgreSQL...")
         cur = pg_conn.cursor()
         cur.execute("SELECT id, name, mongo_id FROM groups;")
         groups = cur.fetchall()  # (id, name, mongo_id)
         cur.close()
-        
+
         logger.info(f"Создаю {len(groups)} узлов Group в Neo4j...")
         group_nodes = [{"id": g[0], "name": g[1], "mongo_id": g[2]} for g in groups]
         session.run("UNWIND $nodes AS node CREATE (g:Group {id: node.id, name: node.name, mongo_id: node.mongo_id})", nodes=group_nodes)
         logger.info(f"Создано {len(group_nodes)} узлов Group")
-        
+
         # 4. Создаем узлы Student и связываем с Group (batch-режим для 30000+ записей)
         logger.info("Извлекаю данные о студентах из PostgreSQL...")
         cur = pg_conn.cursor()
         cur.execute("SELECT student_number, fullname, redis_key, id_group FROM student;")
         students = cur.fetchall()  # (student_number, fullname, redis_key, group_id)
         cur.close()
-        
+
         logger.info(f"Создаю {len(students)} узлов Student в Neo4j (пакетами)...")
         student_nodes = [{"student_number": s[0], "fullname": s[1], "redis_key": s[2], "id_group": s[3]} for s in students]
         batch_size = 1000
         batches_count = (len(student_nodes) + batch_size - 1) // batch_size  # Округление вверх
-        
+
         for i in range(0, len(student_nodes), batch_size):
             batch = student_nodes[i:i+batch_size]
             session.run("""
                 UNWIND $nodes AS node
                 CREATE (st:Student {student_number: node.student_number, fullname: node.fullname, redis_key: node.redis_key})
             """, nodes=batch)
-            
+
             batch_num = (i // batch_size) + 1
             progress = (batch_num / batches_count) * 100
             logger.info(f"Создано узлов Student: пакет {batch_num}/{batches_count} ({progress:.1f}%)")
-        
+
         # Создаем отношения (Student)-[:BELONGS_TO]->(Group)
         logger.info("Создаю отношения (Student)-[:BELONGS_TO]->(Group)...")
         student_relations = 0
-        
+
         for i, s in enumerate(student_nodes):
             session.run("""
                 MATCH (st:Student {student_number: $student_number}), (g:Group {id: $group_id})
                 CREATE (st)-[:BELONGS_TO]->(g)
             """, student_number=s["student_number"], group_id=s["id_group"])
             student_relations += 1
-            
+
             if (i+1) % 5000 == 0 or i == len(student_nodes) - 1:
                 progress = ((i+1) / len(student_nodes)) * 100
                 logger.info(f"Создано {i+1}/{len(student_nodes)} отношений для студентов ({progress:.1f}%)")
-        
+
         # 5. Создаем отношения (Group)-[:HAS_SCHEDULE]->(Lecture) на основании расписания
         logger.info("Извлекаю данные о расписании из PostgreSQL...")
         cur = pg_conn.cursor()
         cur.execute("SELECT DISTINCT id_group, id_lecture FROM schedule;")
         schedule_pairs = cur.fetchall()  # (group_id, lecture_id)
         cur.close()
-        
+
         logger.info(f"Создаю {len(schedule_pairs)} отношений (Group)-[:HAS_SCHEDULE]->(Lecture)...")
         schedule_relations = 0
-        
+
         for i, pair in enumerate(schedule_pairs):
             group_id, lecture_id = pair
             session.run("""
@@ -814,13 +754,13 @@ def populate_neo4j(pg_conn):
                 CREATE (g)-[:HAS_SCHEDULE]->(l)
             """, group_id=group_id, lecture_id=lecture_id)
             schedule_relations += 1
-            
+
             if (i+1) % 1000 == 0 or i == len(schedule_pairs) - 1:
                 progress = ((i+1) / len(schedule_pairs)) * 100
                 logger.info(f"Создано {i+1}/{len(schedule_pairs)} отношений для расписаний ({progress:.1f}%)")
-    
+
     driver.close()
-    
+
     elapsed_time = time.time() - start_time
     logger.info(f"Neo4j заполнен успешно: {len(dept_nodes)} кафедр, {len(lecture_nodes)} лекций, {len(group_nodes)} групп, {len(student_nodes)} студентов, {lecture_relations + student_relations + schedule_relations} отношений за {elapsed_time:.2f} секунд")
 
@@ -835,18 +775,18 @@ def populate_redis(pg_conn):
     """
     logger.info("Начинаю заполнение Redis...")
     start_time = time.time()
-    
+
     r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
-    
+
     # Очистка Redis перед заполнением
     logger.info("Очищаю существующие данные в Redis...")
     r.flushdb()
-    
+
     # Получаем информацию о студентах включая название группы
     logger.info("Извлекаю данные о студентах из PostgreSQL...")
     cur = pg_conn.cursor()
     cur.execute("""
-        SELECT s.student_number, s.fullname, s.email, s.id_group, g.name as group_name, s.redis_key 
+        SELECT s.student_number, s.fullname, s.email, s.id_group, g.name as group_name, s.redis_key
         FROM student s
         JOIN groups g ON s.id_group = g.id
     """)
@@ -857,7 +797,7 @@ def populate_redis(pg_conn):
     # Заполняем Redis
     logger.info(f"Загружаю {len(students)} записей в Redis...")
     records_processed = 0
-    
+
     for stud in students:
         student_number, fullname, email, id_group, group_name, redis_key = stud
         r.hset(redis_key, mapping={
@@ -868,11 +808,11 @@ def populate_redis(pg_conn):
             "redis_key": redis_key
         })
         records_processed += 1
-        
+
         if records_processed % 5000 == 0 or records_processed == len(students):
             progress = (records_processed / len(students)) * 100
             logger.info(f"Загружено {records_processed}/{len(students)} записей в Redis ({progress:.1f}%)")
-    
+
     elapsed_time = time.time() - start_time
     logger.info(f"Redis заполнен успешно: {records_processed} записей за {elapsed_time:.2f} секунд")
 
@@ -887,16 +827,16 @@ def populate_elasticsearch(pg_conn):
     """
     logger.info("Начинаю заполнение Elasticsearch...")
     start_time = time.time()
-    
+
     # Подключаемся к Elasticsearch
     logger.info("Подключаюсь к Elasticsearch...")
     es = Elasticsearch(ES_HOSTS)
-    
+
     # Получаем лекции с информацией о курсе
     logger.info("Извлекаю данные о лекциях из PostgreSQL...")
     cur = pg_conn.cursor()
     cur.execute("""
-        SELECT l.id, l.name, c.name as course_name, l.tech_equipment, l.created_at 
+        SELECT l.id, l.name, c.name as course_name, l.tech_equipment, l.created_at
         FROM lecture l
         JOIN course c ON l.id_course = c.id
     """)
@@ -908,7 +848,7 @@ def populate_elasticsearch(pg_conn):
     if es.indices.exists(index="lectures"):
         logger.info("Удаляю существующий индекс 'lectures'...")
         es.indices.delete(index="lectures")
-    
+
     # Создаем индекс с маппингом
     logger.info("Создаю новый индекс 'lectures' с маппингом...")
     es.indices.create(
@@ -947,27 +887,27 @@ def populate_elasticsearch(pg_conn):
     # Индексируем лекции
     logger.info(f"Индексирую {len(lectures)} лекций в Elasticsearch...")
     records_processed = 0
-    
+
     for lec in lectures:
         lec_id, name, course_name, tech_equipment, created_at = lec
-        
+
         # Генерируем осмысленное описание на основе ключевых слов в названии лекции
         description = ""
         for keyword, template in lecture_descriptions.items():
             if keyword in name or keyword in course_name:
                 description = template
                 break
-        
+
         # Если подходящего шаблона не найдено, используем общее описание с элементами из названия
         if not description:
             description = f"Лекция посвящена теме '{name}' в рамках курса '{course_name}'. "
             description += "Рассматриваются основные концепции, методологии и практические аспекты применения. "
             description += "Студенты получат теоретические знания и практические навыки в данной области."
-        
+
         # Если описание слишком длинное, обрезаем его
         if len(description) > 200:
             description = description[:197] + "..."
-        
+
         doc = {
             "id": lec_id,
             "name": name,
@@ -979,11 +919,11 @@ def populate_elasticsearch(pg_conn):
         }
         es.index(index="lectures", id=lec_id, body=doc)
         records_processed += 1
-        
+
         if records_processed % 100 == 0 or records_processed == len(lectures):
             progress = (records_processed / len(lectures)) * 100
             logger.info(f"Проиндексировано {records_processed}/{len(lectures)} лекций ({progress:.1f}%)")
-    
+
     elapsed_time = time.time() - start_time
     logger.info(f"Elasticsearch заполнен успешно: {records_processed} лекций за {elapsed_time:.2f} секунд")
 
@@ -1000,42 +940,42 @@ def update_postgres_ids(pg_conn):
     """
     logger.info("Начинаю обновление идентификаторов в PostgreSQL...")
     start_time = time.time()
-    
+
     cur = pg_conn.cursor()
-    
+
     logger.info("Обновляю mongo_id для групп...")
     mongo_update_start = time.time()
     cur.execute("UPDATE groups SET mongo_id = 'mongo_group_' || id;")
     mongo_update_time = time.time() - mongo_update_start
     logger.info(f"Обновление mongo_id выполнено за {mongo_update_time:.2f} секунд")
-    
+
     logger.info("Обновляю elasticsearch_id для лекций...")
     es_update_start = time.time()
     cur.execute("UPDATE lecture SET elasticsearch_id = 'elastic_lecture_' || id;")
     es_update_time = time.time() - es_update_start
     logger.info(f"Обновление elasticsearch_id выполнено за {es_update_time:.2f} секунд")
-    
+
     logger.info("Добавляю и обновляю neo_id для кафедр...")
     neo_update_start = time.time()
     # Проверяем существование колонки neo_id
     cur.execute("""
-        SELECT column_name 
-        FROM information_schema.columns 
+        SELECT column_name
+        FROM information_schema.columns
         WHERE table_name = 'department' AND column_name = 'neo_id';
     """)
     column_exists = cur.fetchone()
-    
+
     if not column_exists:
         logger.info("Добавляю колонку neo_id в таблицу department...")
         cur.execute("ALTER TABLE department ADD COLUMN neo_id VARCHAR(100);")
-    
+
     cur.execute("UPDATE department SET neo_id = 'neo_dept_' || id;")
     neo_update_time = time.time() - neo_update_start
     logger.info(f"Обновление neo_id выполнено за {neo_update_time:.2f} секунд")
-    
+
     pg_conn.commit()
     cur.close()
-    
+
     elapsed_time = time.time() - start_time
     logger.info(f"Обновление идентификаторов в PostgreSQL завершено за {elapsed_time:.2f} секунд")
 
@@ -1046,7 +986,7 @@ def update_postgres_ids(pg_conn):
 def main():
     total_start_time = time.time()
     logger.info("=== Начало процесса генерации данных ===")
-    
+
     # Подключение к PostgreSQL
     try:
         logger.info("Подключение к PostgreSQL...")
@@ -1060,10 +1000,10 @@ def main():
     try:
         logger.info("=== Этап 1: Создание и заполнение PostgreSQL ===")
         pg_step_start = time.time()
-        
+
         create_postgres_schema(pg_conn)
         populate_postgres(pg_conn)
-        
+
         pg_step_time = time.time() - pg_step_start
         logger.info(f"Создание и заполнение PostgreSQL завершено за {pg_step_time:.2f} секунд")
     except Exception as e:
@@ -1074,18 +1014,18 @@ def main():
     # Выводим количество записей в таблицах для контроля
     logger.info("Проверка количества созданных записей в PostgreSQL:")
     check_tables = [
-        "university", "institute", "department", "groups", 
+        "university", "institute", "department", "groups",
         "student", "course", "lecture", "schedule", "attendance"
     ]
     cur = pg_conn.cursor()
     total_records = 0
-    
+
     for tbl in check_tables:
         cur.execute(sql.SQL("SELECT COUNT(*) FROM {}").format(sql.Identifier(tbl)))
         count = cur.fetchone()[0]
         total_records += count
         logger.info(f"Таблица {tbl}: {count} записей")
-    
+
     cur.close()
     logger.info(f"Всего в PostgreSQL создано {total_records} записей")
 
@@ -1095,19 +1035,19 @@ def main():
         populate_mongodb(pg_conn)
     except Exception as e:
         logger.error(f"Ошибка при заполнении MongoDB: {e}")
-    
+
     try:
         logger.info("=== Этап 3: Заполнение Neo4j ===")
         populate_neo4j(pg_conn)
     except Exception as e:
         logger.error(f"Ошибка при заполнении Neo4j: {e}")
-    
+
     try:
         logger.info("=== Этап 4: Заполнение Redis ===")
         populate_redis(pg_conn)
     except Exception as e:
         logger.error(f"Ошибка при заполнении Redis: {e}")
-    
+
     try:
         logger.info("=== Этап 5: Заполнение Elasticsearch ===")
         populate_elasticsearch(pg_conn)
@@ -1122,14 +1062,14 @@ def main():
         logger.error(f"Ошибка при обновлении идентификаторов: {e}")
 
     pg_conn.close()
-    
+
     total_elapsed_time = time.time() - total_start_time
     minutes = int(total_elapsed_time // 60)
     seconds = total_elapsed_time % 60
-    
+
     logger.info(f"=== Процесс генерации данных завершен ===")
     logger.info(f"Общее время выполнения: {minutes} мин {seconds:.2f} сек")
-    
+
     # Если все прошло успешно, выводим итоговое сообщение
     if total_records > 30000:
         logger.info(f"УСПЕХ! Сгенерировано более 30000 записей ({total_records})")

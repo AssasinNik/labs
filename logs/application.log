@@ -1,0 +1,512 @@
+2025-04-23 19:32:35.112 [main] INFO  c.cherenkov.lab_1.Lab1ApplicationKt - Starting Lab1ApplicationKt using Java 20.0.1 with PID 21412 (D:\AndroidProjects\labs\lab_1\build\classes\kotlin\main started by Neket in D:\AndroidProjects\labs)
+2025-04-23 19:32:35.114 [main] DEBUG c.cherenkov.lab_1.Lab1ApplicationKt - Running with Spring Boot v3.4.4, Spring v6.2.5
+2025-04-23 19:32:35.114 [main] INFO  c.cherenkov.lab_1.Lab1ApplicationKt - No active profile set, falling back to 1 default profile: "default"
+2025-04-23 19:32:36.774 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-04-23 19:32:36.786 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-04-23 19:32:36.786 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-04-23 19:32:36.846 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-04-23 19:32:36.846 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1673 ms
+2025-04-23 19:32:36.899 [main] DEBUG c.c.l.configs.RequestLoggingFilter - Filter 'requestLoggingFilter' configured for use
+2025-04-23 19:32:36.899 [main] DEBUG c.c.lab_1.configs.JwtAuthFilter - Filter 'jwtAuthFilter' configured for use
+2025-04-23 19:32:36.981 [main] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-04-23 19:32:36.981 [main] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-04-23 19:32:40.029 [main] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.2.1"}, "os": {"type": "Windows", "name": "Windows 11", "architecture": "amd64", "version": "10.0"}, "platform": "Java/Oracle Corporation/20.0.1+9-29"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@3c62c81f, com.mongodb.Jep395RecordCodecProvider@6a4d57b7, com.mongodb.KotlinCodecProvider@a36ff0b]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-04-23 19:32:40.071 [cluster-ClusterId{value='6809162768c42b5ac837386b', description='null'}-localhost:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=56143000, minRoundTripTimeNanos=0}
+2025-04-23 19:32:40.480 [main] INFO  o.n.driver.internal.DriverFactory - Direct driver instance 439513824 created for server address localhost:7687
+2025-04-23 19:32:41.162 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-04-23 19:32:41.176 [main] INFO  c.cherenkov.lab_1.Lab1ApplicationKt - Started Lab1ApplicationKt in 6.591 seconds (process running for 7.43)
+2025-04-23 19:34:57.470 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-04-23 19:34:57.470 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-04-23 19:34:57.470 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2025-04-23 19:34:57.477 [http-nio-8080-exec-1] DEBUG c.cherenkov.lab_1.utils.LoggingUtils - Настроен контекст логирования для запроса 4c104d0f-6f25-4333-abca-12159ca79ab5: пользователь=anonymous, метод=POST, uri=/api/auth/login
+2025-04-23 19:34:57.480 [http-nio-8080-exec-1] INFO  c.c.l.configs.RequestLoggingFilter - >>> {POST} {/api/auth/login}
+2025-04-23 19:34:57.717 [http-nio-8080-exec-1] INFO  c.c.l.configs.RequestLoggingFilter - <<< {org.apache.catalina.connector.ResponseFacade@2773774d} - {200} ({237} мс)
+2025-04-23 19:36:45.150 [http-nio-8080-exec-5] DEBUG c.cherenkov.lab_1.utils.LoggingUtils - Настроен контекст логирования для запроса f0b9f1dc-d38d-42b1-84d3-88bd92c047c7: пользователь=anonymous, метод=POST, uri=/reports/attendance
+2025-04-23 19:36:45.150 [http-nio-8080-exec-5] INFO  c.c.l.configs.RequestLoggingFilter - >>> {POST} {/reports/attendance}
+2025-04-23 19:36:45.210 [http-nio-8080-exec-5] WARN  c.c.l.configs.GlobalExceptionHandler - Ошибка валидации входных данных: JSON parse error: Cannot deserialize value of type `java.time.Instant` from String "2023-12-31T23:59:59:59.000Z": Failed to deserialize java.time.Instant: (java.time.format.DateTimeParseException) Text '2023-12-31T23:59:59:59.000Z' could not be parsed at index 19
+org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.time.Instant` from String "2023-12-31T23:59:59:59.000Z": Failed to deserialize java.time.Instant: (java.time.format.DateTimeParseException) Text '2023-12-31T23:59:59:59.000Z' could not be parsed at index 19
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:409)
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.read(AbstractJackson2HttpMessageConverter.java:357)
+	at org.springframework.web.servlet.mvc.method.annotation.AbstractMessageConverterMethodArgumentResolver.readWithMessageConverters(AbstractMessageConverterMethodArgumentResolver.java:204)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.readWithMessageConverters(RequestResponseBodyMethodProcessor.java:176)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor.resolveArgument(RequestResponseBodyMethodProcessor.java:150)
+	at org.springframework.web.method.support.HandlerMethodArgumentResolverComposite.resolveArgument(HandlerMethodArgumentResolverComposite.java:122)
+	at org.springframework.web.method.support.InvocableHandlerMethod.getMethodArgumentValues(InvocableHandlerMethod.java:227)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:181)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:986)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:891)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:653)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:723)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108)
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:365)
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:101)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at com.cherenkov.lab_1.configs.JwtAuthFilter.doFilterInternal(JwtAuthFilter.kt:64)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82)
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:374)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:243)
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113)
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74)
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:238)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:362)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:278)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at com.cherenkov.lab_1.configs.RequestLoggingFilter.doFilterInternal(RequestLoggingFilter.kt:56)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:397)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1743)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
+	at java.base/java.lang.Thread.run(Thread.java:1623)
+Caused by: com.fasterxml.jackson.databind.exc.InvalidFormatException: Cannot deserialize value of type `java.time.Instant` from String "2023-12-31T23:59:59:59.000Z": Failed to deserialize java.time.Instant: (java.time.format.DateTimeParseException) Text '2023-12-31T23:59:59:59.000Z' could not be parsed at index 19
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 4, column: 16] (through reference chain: com.cherenkov.lab_1.dto.ReportRequest["endDate"])
+	at com.fasterxml.jackson.databind.exc.InvalidFormatException.from(InvalidFormatException.java:67)
+	at com.fasterxml.jackson.databind.DeserializationContext.weirdStringException(DeserializationContext.java:1959)
+	at com.fasterxml.jackson.databind.DeserializationContext.handleWeirdStringValue(DeserializationContext.java:1245)
+	at com.fasterxml.jackson.datatype.jsr310.deser.JSR310DeserializerBase._handleDateTimeException(JSR310DeserializerBase.java:176)
+	at com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer._fromString(InstantDeserializer.java:452)
+	at com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer.deserialize(InstantDeserializer.java:355)
+	at com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer.deserialize(InstantDeserializer.java:54)
+	at com.fasterxml.jackson.databind.deser.SettableBeanProperty.deserialize(SettableBeanProperty.java:543)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeWithErrorWrapping(BeanDeserializer.java:585)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer._deserializeUsingPropertyBased(BeanDeserializer.java:447)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializerBase.deserializeFromObjectUsingNonDefault(BeanDeserializerBase.java:1497)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserializeFromObject(BeanDeserializer.java:348)
+	at com.fasterxml.jackson.databind.deser.BeanDeserializer.deserialize(BeanDeserializer.java:185)
+	at com.fasterxml.jackson.databind.deser.DefaultDeserializationContext.readRootValue(DefaultDeserializationContext.java:342)
+	at com.fasterxml.jackson.databind.ObjectReader._bindAndClose(ObjectReader.java:2131)
+	at com.fasterxml.jackson.databind.ObjectReader.readValue(ObjectReader.java:1501)
+	at org.springframework.http.converter.json.AbstractJackson2HttpMessageConverter.readJavaType(AbstractJackson2HttpMessageConverter.java:398)
+	... 105 common frames omitted
+Caused by: java.time.format.DateTimeParseException: Text '2023-12-31T23:59:59:59.000Z' could not be parsed at index 19
+	at java.base/java.time.format.DateTimeFormatter.parseResolved0(DateTimeFormatter.java:2106)
+	at java.base/java.time.format.DateTimeFormatter.parse(DateTimeFormatter.java:1934)
+	at com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer._fromString(InstantDeserializer.java:446)
+	... 117 common frames omitted
+2025-04-23 19:36:45.234 [http-nio-8080-exec-5] INFO  c.c.l.configs.RequestLoggingFilter - <<< {org.apache.catalina.connector.ResponseFacade@6c6c9205} - {400} ({84} мс)
+2025-04-23 19:36:45.236 [http-nio-8080-exec-5] WARN  c.c.l.configs.RequestLoggingFilter - Ответ с ошибкой {400}: {{"error":"ÐÑÐ¸Ð±ÐºÐ° Ð²Ð°Ð»Ð¸Ð´Ð°ÑÐ¸Ð¸","message":"ÐÐµÐºÐ¾ÑÑÐµÐºÑÐ½ÑÐ¹ ÑÐ¾ÑÐ¼Ð°Ñ Ð·Ð°Ð¿ÑÐ¾ÑÐ°: JSON parse error: Cannot deserialize value of type `java.time.Instant` from String \"2023-12-31T23:59:59:59.000Z\": Failed to deserialize java.time.Instant: (java.time.format.DateTimeParseException) Text '2023-12-31T23:59:59:59.000Z' could not be parsed at index 19"}}
+2025-04-23 19:37:02.084 [http-nio-8080-exec-7] DEBUG c.cherenkov.lab_1.utils.LoggingUtils - Настроен контекст логирования для запроса 8963f932-1a73-4b5b-a4ce-0f2a949422f3: пользователь=anonymous, метод=POST, uri=/reports/attendance
+2025-04-23 19:37:02.086 [http-nio-8080-exec-7] INFO  c.c.l.configs.RequestLoggingFilter - >>> {POST} {/reports/attendance}
+2025-04-23 19:37:02.090 [http-nio-8080-exec-7] INFO  c.c.l.controllers.ReportController - Получен запрос на формирование отчета о посещаемости: term=Docker, startDate=2023-09-01T00:00:00Z, endDate=2023-12-31T23:59:59Z
+2025-04-23 19:37:02.090 [http-nio-8080-exec-7] INFO  c.c.lab_1.service.ReportService - Начало генерации отчета с параметрами: term=Docker, startDate=2023-09-01T00:00:00Z, endDate=2023-12-31T23:59:59Z
+2025-04-23 19:37:02.090 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Валидация параметров запроса отчета
+2025-04-23 19:37:02.090 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Валидация параметров запроса отчета успешно пройдена
+2025-04-23 19:37:02.090 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Поиск лекций по термину: Docker
+2025-04-23 19:37:02.090 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Выполнение поиска в Elasticsearch по термину: Docker
+2025-04-23 19:37:02.095 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Запрос к Elasticsearch: org.springframework.data.elasticsearch.core.query.CriteriaQuery@29a57d08
+2025-04-23 19:37:02.213 [http-nio-8080-exec-7] WARN  org.elasticsearch.client.RestClient - request [POST http://localhost:9200/lectures/_search?search_type=query_then_fetch&typed_keys=true] returned 1 warnings: [299 Elasticsearch-7.17.0-bee86328705acaa9a6daede7140defd4d9ec56bd "Elasticsearch built-in security features are not enabled. Without authentication, your cluster could be accessible to anyone. See https://www.elastic.co/guide/en/elasticsearch/reference/7.17/security-minimal-setup.html to enable security."]
+2025-04-23 19:37:02.394 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Результат поиска в Elasticsearch: найдено 32 записей
+2025-04-23 19:37:02.394 [http-nio-8080-exec-7] INFO  c.c.lab_1.service.ReportService - Найдено 32 лекций по термину 'Docker'
+2025-04-23 19:37:02.394 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Поиск студентов с низкой посещаемостью для 32 лекций
+2025-04-23 19:37:02.394 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Поиск студентов с низкой посещаемостью. Лекции: [13, 30, 37, 108, 110, 111, 115, 117, 121, 129, 131, 155, 163, 209, 220, 267, 277, 298, 306, 308, 322, 363, 379, 383, 389, 403, 416, 422, 493, 547, 565, 581], период: 2023-09-01T00:00:00Z - 2023-12-31T23:59:59Z
+2025-04-23 19:37:02.427 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Период для запроса: 2023-09-01T03:00 - 2024-01-01T02:59:59
+2025-04-23 19:37:02.686 [http-nio-8080-exec-7] INFO  org.jooq.Constants - 
+                                      
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@  @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@  @@  @@    @@@@@@@@@@
+@@@@@@@@@@  @@@@  @@  @@    @@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@    @@  @@  @@@@  @@@@@@@@@@
+@@@@@@@@@@    @@  @@  @@@@  @@@@@@@@@@
+@@@@@@@@@@        @@  @  @  @@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  Thank you for using jOOQ 3.19.21 (Build date: 2025-03-11T08:47:49Z)
+                                      
+2025-04-23 19:37:02.686 [http-nio-8080-exec-7] INFO  org.jooq.Constants - 
+
+jOOQ tip of the day: Multi tenancy is best implemented in jOOQ using runtime schema and table mapping: https://www.jooq.org/doc/latest/manual/sql-building/dsl-context/custom-settings/settings-render-mapping/
+
+2025-04-23 19:37:02.680 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Выполнение SQL-запроса для поиска посещаемости: select
+  "a"."id_student",
+  count(*) as "total",
+  sum(case
+    when "a"."status" then 1
+    else 0
+  end) as "attended",
+  ((sum(case
+    when "a"."status" then 1
+    else 0
+  end) * cast(1E2 as double precision)) / count(*)) as "percentage"
+from "public"."attendance" as "a"
+  join "public"."schedule" as "s"
+    on "a"."id_schedule" = "s"."id"
+where (
+  "s"."id_lecture" in (
+    13, 30, 37, 108, 110, 111, 115, 117, 121, 129, 131, 155, 163, 209, 220, 267, 
+    277, 298, 306, 308, 322, 363, 379, 383, 389, 403, 416, 422, 493, 547, 565, 581
+  )
+  and "s"."timestamp" between timestamp '2023-09-01 03:00:00.0' and timestamp '2024-01-01 02:59:59.0'
+  and "a"."week_start" between date '2023-09-01' and date '2024-01-01'
+)
+group by "a"."id_student"
+having count(*) >= 3
+order by percentage asc
+fetch next 10 rows only
+2025-04-23 19:37:02.761 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener - Executing query          : select "a"."id_student", count(*) as "total", sum(case when "a"."status" then ? else ? end) as "attended", ((sum(case when "a"."status" then ? else ? end) * cast(? as double precision)) / count(*)) as "percentage" from "public"."attendance" as "a" join "public"."schedule" as "s" on "a"."id_schedule" = "s"."id" where ("s"."id_lecture" in (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) and "s"."timestamp" between cast(? as timestamp(6)) and cast(? as timestamp(6)) and "a"."week_start" between cast(? as date) and cast(? as date)) group by "a"."id_student" having count(*) >= ? order by percentage asc fetch next ? rows only
+2025-04-23 19:37:02.763 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener - -> with bind values      : select "a"."id_student", count(*) as "total", sum(case when "a"."status" then 1 else 0 end) as "attended", ((sum(case when "a"."status" then 1 else 0 end) * cast(1E2 as double precision)) / count(*)) as "percentage" from "public"."attendance" as "a" join "public"."schedule" as "s" on "a"."id_schedule" = "s"."id" where ("s"."id_lecture" in (13, 30, 37, 108, 110, 111, 115, 117, 121, 129, 131, 155, 163, 209, 220, 267, 277, 298, 306, 308, 322, 363, 379, 383, 389, 403, 416, 422, 493, 547, 565, 581) and "s"."timestamp" between timestamp '2023-09-01 03:00:00.0' and timestamp '2024-01-01 02:59:59.0' and "a"."week_start" between date '2023-09-01' and date '2024-01-01') group by "a"."id_student" having count(*) >= 3 order by percentage asc fetch next 10 rows only
+2025-04-23 19:37:02.764 [http-nio-8080-exec-7] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-04-23 19:37:02.887 [http-nio-8080-exec-7] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@288931c0
+2025-04-23 19:37:02.888 [http-nio-8080-exec-7] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-04-23 19:37:02.895 [http-nio-8080-exec-7] INFO  o.j.i.D.logVersionSupport - Version                  : Database version is supported by dialect POSTGRES: 17.4 (Debian 17.4-1.pgdg120+2)
+2025-04-23 19:37:02.994 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener - Fetched result           : +------------+-----+--------+----------+
+2025-04-23 19:37:02.994 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : |id_student  |total|attended|percentage|
+2025-04-23 19:37:02.994 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : +------------+-----+--------+----------+
+2025-04-23 19:37:02.994 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : |S28371820028|    8|       0|       0  |
+2025-04-23 19:37:02.994 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : |S1417830017 |    8|       3|      37.5|
+2025-04-23 19:37:02.994 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : |S114170017  |    8|       3|      37.5|
+2025-04-23 19:37:02.994 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : |S1314700011 |    8|       3|      37.5|
+2025-04-23 19:37:02.994 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : |S1416790026 |    8|       3|      37.5|
+2025-04-23 19:37:02.994 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : +------------+-----+--------+----------+
+2025-04-23 19:37:02.994 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : |...record(s) truncated...
+2025-04-23 19:37:02.994 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener - Fetched row(s)           : 10
+2025-04-23 19:37:02.997 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент S28371820028: всего занятий 8, посещено 0, процент 0.0%
+2025-04-23 19:37:02.998 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент S1417830017: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:02.999 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент S114170017: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:03.000 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент S1314700011: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:03.000 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент S1416790026: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:03.000 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент S1417820015: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:03.000 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент S114200006: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:03.000 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент S114180013: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:03.000 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент S1314690004: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:03.000 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент S1416760010: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:03.000 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Найдено 10 студентов с низкой посещаемостью
+2025-04-23 19:37:03.001 [http-nio-8080-exec-7] INFO  c.c.lab_1.service.ReportService - Найдено 10 студентов с низкой посещаемостью
+2025-04-23 19:37:03.001 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получение подробной информации о 10 студентах
+2025-04-23 19:37:03.001 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получение информации о студентах: [S28371820028, S1417830017, S114170017, S1314700011, S1416790026, S1417820015, S114200006, S114180013, S1314690004, S1416760010]
+2025-04-23 19:37:03.017 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Выполнение SQL-запроса для получения информации о студентах: select
+  "public"."student"."student_number",
+  "public"."student"."fullname",
+  "public"."student"."email",
+  "public"."groups"."name" as "group_name",
+  "public"."department"."name" as "department_name",
+  "public"."institute"."name" as "institute_name",
+  "public"."university"."name" as "university_name",
+  "public"."student"."redis_key"
+from "public"."student"
+  join "public"."groups"
+    on "public"."student"."id_group" = "public"."groups"."id"
+  join "public"."department"
+    on "public"."groups"."id_department" = "public"."department"."id"
+  join "public"."institute"
+    on "public"."department"."id_institute" = "public"."institute"."id"
+  join "public"."university"
+    on "public"."institute"."id_university" = "public"."university"."id"
+where "public"."student"."student_number" in (
+  'S28371820028', 'S1417830017', 'S114170017', 'S1314700011', 'S1416790026', 'S1417820015', 
+  'S114200006', 'S114180013', 'S1314690004', 'S1416760010'
+)
+2025-04-23 19:37:03.021 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener - Executing query          : select "public"."student"."student_number", "public"."student"."fullname", "public"."student"."email", "public"."groups"."name" as "group_name", "public"."department"."name" as "department_name", "public"."institute"."name" as "institute_name", "public"."university"."name" as "university_name", "public"."student"."redis_key" from "public"."student" join "public"."groups" on "public"."student"."id_group" = "public"."groups"."id" join "public"."department" on "public"."groups"."id_department" = "public"."department"."id" join "public"."institute" on "public"."department"."id_institute" = "public"."institute"."id" join "public"."university" on "public"."institute"."id_university" = "public"."university"."id" where "public"."student"."student_number" in (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-04-23 19:37:03.023 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener - -> with bind values      : select "public"."student"."student_number", "public"."student"."fullname", "public"."student"."email", "public"."groups"."name" as "group_name", "public"."department"."name" as "department_name", "public"."institute"."name" as "institute_name", "public"."university"."name" as "university_name", "public"."student"."redis_key" from "public"."student" join "public"."groups" on "public"."student"."id_group" = "public"."groups"."id" join "public"."department" on "public"."groups"."id_department" = "public"."department"."id" join "public"."institute" on "public"."department"."id_institute" = "public"."institute"."id" join "public"."university" on "public"."institute"."id_university" = "public"."university"."id" where "public"."student"."student_number" in ('S28371820028', 'S1417830017', 'S114170017', 'S1314700011', 'S1416790026', 'S1417820015', 'S114200006', 'S114180013', 'S1314690004', 'S1416760010')
+2025-04-23 19:37:03.029 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener - Fetched result           : +--------------+-------------------------------+----------------------------+----------+--------------------------+----------------------------------+---------------+-------------------+
+2025-04-23 19:37:03.030 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : |student_number|fullname                       |email                       |group_name|department_name           |institute_name                    |university_name|redis_key          |
+2025-04-23 19:37:03.030 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : +--------------+-------------------------------+----------------------------+----------+--------------------------+----------------------------------+---------------+-------------------+
+2025-04-23 19:37:03.030 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : |S114170017    |Молчанов Андроник Исидорович   |andronikm1997@edu.mirea.ru  |БСБО-52-18|Кафедра системного анализа|Институт информационных технологий|РТУ МИРЭА      |student:S114170017 |
+2025-04-23 19:37:03.030 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : |S114180013    |Григорьева Маргарита Кирилловна|margaritag2001@edu.mirea.ru |БСБО-46-22|Кафедра системного анализа|Институт информационных технологий|РТУ МИРЭА      |student:S114180013 |
+2025-04-23 19:37:03.030 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : |S114200006    |Фаина Григорьевна Новикова     |grigorevnaf1997@edu.mirea.ru|БСБО-20-19|Кафедра системного анализа|Институт информационных технологий|РТУ МИРЭА      |student:S114200006 |
+2025-04-23 19:37:03.030 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : |S1314690004   |Суворова Анастасия Артемовна   |anastasiyas2000@edu.mirea.ru|БСБО-28-18|Кафедра системного анализа|Институт экономики и управления   |РТУ МИРЭА      |student:S1314690004|
+2025-04-23 19:37:03.030 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : |S1314700011   |Кабанов Пимен Евсеевич         |pimenk2003@edu.mirea.ru     |БСБО-02-21|Кафедра системного анализа|Институт экономики и управления   |РТУ МИРЭА      |student:S1314700011|
+2025-04-23 19:37:03.030 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : +--------------+-------------------------------+----------------------------+----------+--------------------------+----------------------------------+---------------+-------------------+
+2025-04-23 19:37:03.030 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener -                          : |...record(s) truncated...
+2025-04-23 19:37:03.030 [http-nio-8080-exec-7] DEBUG org.jooq.tools.LoggerListener - Fetched row(s)           : 10
+2025-04-23 19:37:03.030 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получены данные о 10 студентах из базы данных
+2025-04-23 19:37:03.030 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент: Молчанов Андроник Исидорович, группа: БСБО-52-18, кафедра: Кафедра системного анализа, институт: Институт информационных технологий, университет: РТУ МИРЭА
+2025-04-23 19:37:03.032 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент: Григорьева Маргарита Кирилловна, группа: БСБО-46-22, кафедра: Кафедра системного анализа, институт: Институт информационных технологий, университет: РТУ МИРЭА
+2025-04-23 19:37:03.032 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент: Фаина Григорьевна Новикова, группа: БСБО-20-19, кафедра: Кафедра системного анализа, институт: Институт информационных технологий, университет: РТУ МИРЭА
+2025-04-23 19:37:03.032 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент: Суворова Анастасия Артемовна, группа: БСБО-28-18, кафедра: Кафедра системного анализа, институт: Институт экономики и управления, университет: РТУ МИРЭА
+2025-04-23 19:37:03.032 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент: Кабанов Пимен Евсеевич, группа: БСБО-02-21, кафедра: Кафедра системного анализа, институт: Институт экономики и управления, университет: РТУ МИРЭА
+2025-04-23 19:37:03.032 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент: Корнилова Елизавета Даниловна, группа: БСБО-71-23, кафедра: Кафедра информатики, институт: Институт тонких химических технологий, университет: РТУ МИРЭА
+2025-04-23 19:37:03.033 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент: Бобылева Нина Леонидовна, группа: БСБО-12-15, кафедра: Кафедра информатики, институт: Институт тонких химических технологий, университет: РТУ МИРЭА
+2025-04-23 19:37:03.033 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент: Мартын Ильясович Наумов, группа: БСБО-30-15, кафедра: Кафедра кибербезопасности, институт: Институт тонких химических технологий, университет: РТУ МИРЭА
+2025-04-23 19:37:03.033 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент: Ирина Болеславовна Шарова, группа: БСБО-73-17, кафедра: Кафедра кибербезопасности, институт: Институт тонких химических технологий, университет: РТУ МИРЭА
+2025-04-23 19:37:03.033 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Студент: Мария Харитоновна Игнатова, группа: БСБО-67-19, кафедра: Кафедра кибербезопасности, институт: Институт тонких химических технологий, университет: МГУ им. М.В. Ломоносова
+2025-04-23 19:37:03.033 [http-nio-8080-exec-7] INFO  c.c.lab_1.service.ReportService - Получена информация о 10 студентах
+2025-04-23 19:37:03.033 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Формирование итогового отчета
+2025-04-23 19:37:03.033 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S114170017
+2025-04-23 19:37:03.352 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Молчанов Андроник Исидорович, email=andronikm1997@edu.mirea.ru, group_id=17, group_name=БСБО-52-18, redis_key=student:S114170017}
+2025-04-23 19:37:03.353 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-52-18
+2025-04-23 19:37:03.354 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Молчанов Андроник Исидорович, посещаемость: 37.5%
+2025-04-23 19:37:03.354 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S114180013
+2025-04-23 19:37:03.355 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Григорьева Маргарита Кирилловна, email=margaritag2001@edu.mirea.ru, group_id=18, group_name=БСБО-46-22, redis_key=student:S114180013}
+2025-04-23 19:37:03.355 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-46-22
+2025-04-23 19:37:03.355 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Григорьева Маргарита Кирилловна, посещаемость: 37.5%
+2025-04-23 19:37:03.355 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S114200006
+2025-04-23 19:37:03.357 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Фаина Григорьевна Новикова, email=grigorevnaf1997@edu.mirea.ru, group_id=20, group_name=БСБО-20-19, redis_key=student:S114200006}
+2025-04-23 19:37:03.357 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-20-19
+2025-04-23 19:37:03.357 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Фаина Григорьевна Новикова, посещаемость: 37.5%
+2025-04-23 19:37:03.357 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S1314690004
+2025-04-23 19:37:03.358 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Суворова Анастасия Артемовна, email=anastasiyas2000@edu.mirea.ru, group_id=69, group_name=БСБО-28-18, redis_key=student:S1314690004}
+2025-04-23 19:37:03.358 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-28-18
+2025-04-23 19:37:03.358 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Суворова Анастасия Артемовна, посещаемость: 37.5%
+2025-04-23 19:37:03.358 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S1314700011
+2025-04-23 19:37:03.359 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Кабанов Пимен Евсеевич, email=pimenk2003@edu.mirea.ru, group_id=70, group_name=БСБО-02-21, redis_key=student:S1314700011}
+2025-04-23 19:37:03.359 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-02-21
+2025-04-23 19:37:03.359 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Кабанов Пимен Евсеевич, посещаемость: 37.5%
+2025-04-23 19:37:03.360 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S1416760010
+2025-04-23 19:37:03.360 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Корнилова Елизавета Даниловна, email=elizavetak2001@edu.mirea.ru, group_id=76, group_name=БСБО-71-23, redis_key=student:S1416760010}
+2025-04-23 19:37:03.360 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-71-23
+2025-04-23 19:37:03.360 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Корнилова Елизавета Даниловна, посещаемость: 37.5%
+2025-04-23 19:37:03.360 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S1416790026
+2025-04-23 19:37:03.361 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Бобылева Нина Леонидовна, email=ninab1994@edu.mirea.ru, group_id=79, group_name=БСБО-12-15, redis_key=student:S1416790026}
+2025-04-23 19:37:03.361 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-12-15
+2025-04-23 19:37:03.361 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Бобылева Нина Леонидовна, посещаемость: 37.5%
+2025-04-23 19:37:03.361 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S1417820015
+2025-04-23 19:37:03.362 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Мартын Ильясович Наумов, email=ilyasovichm1993@edu.mirea.ru, group_id=82, group_name=БСБО-30-15, redis_key=student:S1417820015}
+2025-04-23 19:37:03.362 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-30-15
+2025-04-23 19:37:03.362 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Мартын Ильясович Наумов, посещаемость: 37.5%
+2025-04-23 19:37:03.362 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S1417830017
+2025-04-23 19:37:03.363 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Ирина Болеславовна Шарова, email=boleslavovnai1998@edu.mirea.ru, group_id=83, group_name=БСБО-73-17, redis_key=student:S1417830017}
+2025-04-23 19:37:03.363 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-73-17
+2025-04-23 19:37:03.363 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Ирина Болеславовна Шарова, посещаемость: 37.5%
+2025-04-23 19:37:03.363 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S28371820028
+2025-04-23 19:37:03.364 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Мария Харитоновна Игнатова, email=haritonovnam1997@edu.mirea.ru, group_id=182, group_name=БСБО-67-19, redis_key=student:S28371820028}
+2025-04-23 19:37:03.365 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-67-19
+2025-04-23 19:37:03.365 [http-nio-8080-exec-7] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Мария Харитоновна Игнатова, посещаемость: 0.0%
+2025-04-23 19:37:03.365 [http-nio-8080-exec-7] INFO  c.c.lab_1.service.ReportService - Отчет успешно сформирован, количество записей: 10
+2025-04-23 19:37:03.365 [http-nio-8080-exec-7] INFO  c.c.l.controllers.ReportController - Отчет успешно сформирован, записей: 10
+2025-04-23 19:37:03.379 [http-nio-8080-exec-7] INFO  c.c.l.configs.RequestLoggingFilter - <<< {org.apache.catalina.connector.ResponseFacade@1881c461} - {200} ({1295} мс)
+2025-04-23 19:37:21.378 [http-nio-8080-exec-8] DEBUG c.cherenkov.lab_1.utils.LoggingUtils - Настроен контекст логирования для запроса 2380ba87-1cfc-42fe-9e65-f3b054244666: пользователь=anonymous, метод=POST, uri=/reports/attendance
+2025-04-23 19:37:21.378 [http-nio-8080-exec-8] INFO  c.c.l.configs.RequestLoggingFilter - >>> {POST} {/reports/attendance}
+2025-04-23 19:37:21.382 [http-nio-8080-exec-8] INFO  c.c.l.controllers.ReportController - Получен запрос на формирование отчета о посещаемости: term=Api, startDate=2023-09-01T00:00:00Z, endDate=2023-12-31T23:59:59Z
+2025-04-23 19:37:21.382 [http-nio-8080-exec-8] INFO  c.c.lab_1.service.ReportService - Начало генерации отчета с параметрами: term=Api, startDate=2023-09-01T00:00:00Z, endDate=2023-12-31T23:59:59Z
+2025-04-23 19:37:21.383 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Валидация параметров запроса отчета
+2025-04-23 19:37:21.383 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Валидация параметров запроса отчета успешно пройдена
+2025-04-23 19:37:21.383 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Поиск лекций по термину: Api
+2025-04-23 19:37:21.383 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Выполнение поиска в Elasticsearch по термину: Api
+2025-04-23 19:37:21.383 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Запрос к Elasticsearch: org.springframework.data.elasticsearch.core.query.CriteriaQuery@5778517d
+2025-04-23 19:37:21.393 [http-nio-8080-exec-8] WARN  org.elasticsearch.client.RestClient - request [POST http://localhost:9200/lectures/_search?search_type=query_then_fetch&typed_keys=true] returned 1 warnings: [299 Elasticsearch-7.17.0-bee86328705acaa9a6daede7140defd4d9ec56bd "Elasticsearch built-in security features are not enabled. Without authentication, your cluster could be accessible to anyone. See https://www.elastic.co/guide/en/elasticsearch/reference/7.17/security-minimal-setup.html to enable security."]
+2025-04-23 19:37:21.399 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Результат поиска в Elasticsearch: найдено 35 записей
+2025-04-23 19:37:21.400 [http-nio-8080-exec-8] INFO  c.c.lab_1.service.ReportService - Найдено 35 лекций по термину 'Api'
+2025-04-23 19:37:21.400 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Поиск студентов с низкой посещаемостью для 35 лекций
+2025-04-23 19:37:21.400 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Поиск студентов с низкой посещаемостью. Лекции: [1, 15, 106, 60, 114, 118, 122, 133, 184, 195, 203, 207, 219, 242, 302, 324, 331, 339, 378, 386, 390, 402, 405, 430, 431, 468, 516, 518, 524, 527, 558, 568, 579, 589, 592], период: 2023-09-01T00:00:00Z - 2023-12-31T23:59:59Z
+2025-04-23 19:37:21.400 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Период для запроса: 2023-09-01T03:00 - 2024-01-01T02:59:59
+2025-04-23 19:37:21.400 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Выполнение SQL-запроса для поиска посещаемости: select
+  "a"."id_student",
+  count(*) as "total",
+  sum(case
+    when "a"."status" then 1
+    else 0
+  end) as "attended",
+  ((sum(case
+    when "a"."status" then 1
+    else 0
+  end) * cast(1E2 as double precision)) / count(*)) as "percentage"
+from "public"."attendance" as "a"
+  join "public"."schedule" as "s"
+    on "a"."id_schedule" = "s"."id"
+where (
+  "s"."id_lecture" in (
+    1, 15, 106, 60, 114, 118, 122, 133, 184, 195, 203, 207, 219, 242, 302, 324, 
+    331, 339, 378, 386, 390, 402, 405, 430, 431, 468, 516, 518, 524, 527, 558, 568, 
+    579, 589, 592
+  )
+  and "s"."timestamp" between timestamp '2023-09-01 03:00:00.0' and timestamp '2024-01-01 02:59:59.0'
+  and "a"."week_start" between date '2023-09-01' and date '2024-01-01'
+)
+group by "a"."id_student"
+having count(*) >= 3
+order by percentage asc
+fetch next 10 rows only
+2025-04-23 19:37:21.403 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener - Executing query          : select "a"."id_student", count(*) as "total", sum(case when "a"."status" then ? else ? end) as "attended", ((sum(case when "a"."status" then ? else ? end) * cast(? as double precision)) / count(*)) as "percentage" from "public"."attendance" as "a" join "public"."schedule" as "s" on "a"."id_schedule" = "s"."id" where ("s"."id_lecture" in (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) and "s"."timestamp" between cast(? as timestamp(6)) and cast(? as timestamp(6)) and "a"."week_start" between cast(? as date) and cast(? as date)) group by "a"."id_student" having count(*) >= ? order by percentage asc fetch next ? rows only
+2025-04-23 19:37:21.404 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener - -> with bind values      : select "a"."id_student", count(*) as "total", sum(case when "a"."status" then 1 else 0 end) as "attended", ((sum(case when "a"."status" then 1 else 0 end) * cast(1E2 as double precision)) / count(*)) as "percentage" from "public"."attendance" as "a" join "public"."schedule" as "s" on "a"."id_schedule" = "s"."id" where ("s"."id_lecture" in (1, 15, 106, 60, 114, 118, 122, 133, 184, 195, 203, 207, 219, 242, 302, 324, 331, 339, 378, 386, 390, 402, 405, 430, 431, 468, 516, 518, 524, 527, 558, 568, 579, 589, 592) and "s"."timestamp" between timestamp '2023-09-01 03:00:00.0' and timestamp '2024-01-01 02:59:59.0' and "a"."week_start" between date '2023-09-01' and date '2024-01-01') group by "a"."id_student" having count(*) >= 3 order by percentage asc fetch next 10 rows only
+2025-04-23 19:37:21.459 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener - Fetched result           : +-------------+-----+--------+----------+
+2025-04-23 19:37:21.459 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : |id_student   |total|attended|percentage|
+2025-04-23 19:37:21.459 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : +-------------+-----+--------+----------+
+2025-04-23 19:37:21.459 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : |S310472350007|    8|       1|      12.5|
+2025-04-23 19:37:21.459 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : |S126280019   |    8|       2|      25  |
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : |S27311510024 |    8|       2|      25  |
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : |S1419920004  |    8|       3|      37.5|
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : |S1314700022  |    8|       3|      37.5|
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : +-------------+-----+--------+----------+
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : |...record(s) truncated...
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener - Fetched row(s)           : 10
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент S310472350007: всего занятий 8, посещено 1, процент 12.5%
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент S126280019: всего занятий 8, посещено 2, процент 25.0%
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент S27311510024: всего занятий 8, посещено 2, процент 25.0%
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент S1419920004: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент S1314700022: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент S1419910003: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент S1314670013: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент S11120015: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент S11140014: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент S1314690021: всего занятий 8, посещено 3, процент 37.5%
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Найдено 10 студентов с низкой посещаемостью
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] INFO  c.c.lab_1.service.ReportService - Найдено 10 студентов с низкой посещаемостью
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получение подробной информации о 10 студентах
+2025-04-23 19:37:21.460 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получение информации о студентах: [S310472350007, S126280019, S27311510024, S1419920004, S1314700022, S1419910003, S1314670013, S11120015, S11140014, S1314690021]
+2025-04-23 19:37:21.461 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Выполнение SQL-запроса для получения информации о студентах: select
+  "public"."student"."student_number",
+  "public"."student"."fullname",
+  "public"."student"."email",
+  "public"."groups"."name" as "group_name",
+  "public"."department"."name" as "department_name",
+  "public"."institute"."name" as "institute_name",
+  "public"."university"."name" as "university_name",
+  "public"."student"."redis_key"
+from "public"."student"
+  join "public"."groups"
+    on "public"."student"."id_group" = "public"."groups"."id"
+  join "public"."department"
+    on "public"."groups"."id_department" = "public"."department"."id"
+  join "public"."institute"
+    on "public"."department"."id_institute" = "public"."institute"."id"
+  join "public"."university"
+    on "public"."institute"."id_university" = "public"."university"."id"
+where "public"."student"."student_number" in (
+  'S310472350007', 'S126280019', 'S27311510024', 'S1419920004', 'S1314700022', 'S1419910003', 
+  'S1314670013', 'S11120015', 'S11140014', 'S1314690021'
+)
+2025-04-23 19:37:21.462 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener - Executing query          : select "public"."student"."student_number", "public"."student"."fullname", "public"."student"."email", "public"."groups"."name" as "group_name", "public"."department"."name" as "department_name", "public"."institute"."name" as "institute_name", "public"."university"."name" as "university_name", "public"."student"."redis_key" from "public"."student" join "public"."groups" on "public"."student"."id_group" = "public"."groups"."id" join "public"."department" on "public"."groups"."id_department" = "public"."department"."id" join "public"."institute" on "public"."department"."id_institute" = "public"."institute"."id" join "public"."university" on "public"."institute"."id_university" = "public"."university"."id" where "public"."student"."student_number" in (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+2025-04-23 19:37:21.462 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener - -> with bind values      : select "public"."student"."student_number", "public"."student"."fullname", "public"."student"."email", "public"."groups"."name" as "group_name", "public"."department"."name" as "department_name", "public"."institute"."name" as "institute_name", "public"."university"."name" as "university_name", "public"."student"."redis_key" from "public"."student" join "public"."groups" on "public"."student"."id_group" = "public"."groups"."id" join "public"."department" on "public"."groups"."id_department" = "public"."department"."id" join "public"."institute" on "public"."department"."id_institute" = "public"."institute"."id" join "public"."university" on "public"."institute"."id_university" = "public"."university"."id" where "public"."student"."student_number" in ('S310472350007', 'S126280019', 'S27311510024', 'S1419920004', 'S1314700022', 'S1419910003', 'S1314670013', 'S11120015', 'S11140014', 'S1314690021')
+2025-04-23 19:37:21.466 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener - Fetched result           : +--------------+-------------------------------+----------------------------+----------+--------------------------+----------------------------------+---------------+-------------------+
+2025-04-23 19:37:21.466 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : |student_number|fullname                       |email                       |group_name|department_name           |institute_name                    |university_name|redis_key          |
+2025-04-23 19:37:21.466 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : +--------------+-------------------------------+----------------------------+----------+--------------------------+----------------------------------+---------------+-------------------+
+2025-04-23 19:37:21.466 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : |S11120015     |Ксения Аскольдовна Евсеева     |askoldovnak2002@edu.mirea.ru|БСБО-47-19|Кафедра информатики       |Институт информационных технологий|РТУ МИРЭА      |student:S11120015  |
+2025-04-23 19:37:21.466 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : |S11140014     |Ферапонт Федосьевич Никифоров  |fedosevichf2001@edu.mirea.ru|БСБО-73-20|Кафедра информатики       |Институт информационных технологий|РТУ МИРЭА      |student:S11140014  |
+2025-04-23 19:37:21.466 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : |S126280019    |Медведева Анжела Святославовна |anzhelam2003@edu.mirea.ru   |БСБО-09-20|Кафедра информатики       |Институт кибербезопасности        |РТУ МИРЭА      |student:S126280019 |
+2025-04-23 19:37:21.466 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : |S1314670013   |Евфросиния Степановна Капустина|stepanovnae2004@edu.mirea.ru|БСБО-57-23|Кафедра системного анализа|Институт экономики и управления   |РТУ МИРЭА      |student:S1314670013|
+2025-04-23 19:37:21.466 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : |S1314690021   |Вишняков Аверкий Аксёнович     |averkiyv1996@edu.mirea.ru   |БСБО-28-18|Кафедра системного анализа|Институт экономики и управления   |РТУ МИРЭА      |student:S1314690021|
+2025-04-23 19:37:21.466 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : +--------------+-------------------------------+----------------------------+----------+--------------------------+----------------------------------+---------------+-------------------+
+2025-04-23 19:37:21.466 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener -                          : |...record(s) truncated...
+2025-04-23 19:37:21.466 [http-nio-8080-exec-8] DEBUG org.jooq.tools.LoggerListener - Fetched row(s)           : 10
+2025-04-23 19:37:21.466 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получены данные о 10 студентах из базы данных
+2025-04-23 19:37:21.466 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент: Ксения Аскольдовна Евсеева, группа: БСБО-47-19, кафедра: Кафедра информатики, институт: Институт информационных технологий, университет: РТУ МИРЭА
+2025-04-23 19:37:21.466 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент: Ферапонт Федосьевич Никифоров, группа: БСБО-73-20, кафедра: Кафедра информатики, институт: Институт информационных технологий, университет: РТУ МИРЭА
+2025-04-23 19:37:21.467 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент: Медведева Анжела Святославовна, группа: БСБО-09-20, кафедра: Кафедра информатики, институт: Институт кибербезопасности, университет: РТУ МИРЭА
+2025-04-23 19:37:21.467 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент: Евфросиния Степановна Капустина, группа: БСБО-57-23, кафедра: Кафедра системного анализа, институт: Институт экономики и управления, университет: РТУ МИРЭА
+2025-04-23 19:37:21.467 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент: Вишняков Аверкий Аксёнович, группа: БСБО-28-18, кафедра: Кафедра системного анализа, институт: Институт экономики и управления, университет: РТУ МИРЭА
+2025-04-23 19:37:21.467 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент: г-жа Брагина Дарья Алексеевна, группа: БСБО-02-21, кафедра: Кафедра системного анализа, институт: Институт экономики и управления, университет: РТУ МИРЭА
+2025-04-23 19:37:21.467 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент: Фока Антипович Дьячков, группа: БСБО-72-16, кафедра: Кафедра системного анализа, институт: Институт тонких химических технологий, университет: РТУ МИРЭА
+2025-04-23 19:37:21.467 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент: Евдокимов Селиван Бориславович, группа: БСБО-26-19, кафедра: Кафедра системного анализа, институт: Институт тонких химических технологий, университет: РТУ МИРЭА
+2025-04-23 19:37:21.467 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент: Каллистрат Давыдович Анисимов, группа: БСБО-09-20, кафедра: Кафедра информатики, институт: Институт экономики и управления, университет: МГУ им. М.В. Ломоносова
+2025-04-23 19:37:21.467 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Студент: Спиридон Фёдорович Некрасов, группа: БСБО-36-18, кафедра: Кафедра кибербезопасности, институт: Институт кибербезопасности, университет: МГТУ им. Н.Э. Баумана
+2025-04-23 19:37:21.467 [http-nio-8080-exec-8] INFO  c.c.lab_1.service.ReportService - Получена информация о 10 студентах
+2025-04-23 19:37:21.467 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Формирование итогового отчета
+2025-04-23 19:37:21.467 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S11120015
+2025-04-23 19:37:21.469 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Ксения Аскольдовна Евсеева, email=askoldovnak2002@edu.mirea.ru, group_id=2, group_name=БСБО-47-19, redis_key=student:S11120015}
+2025-04-23 19:37:21.469 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-47-19
+2025-04-23 19:37:21.469 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Ксения Аскольдовна Евсеева, посещаемость: 37.5%
+2025-04-23 19:37:21.469 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S11140014
+2025-04-23 19:37:21.470 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Ферапонт Федосьевич Никифоров, email=fedosevichf2001@edu.mirea.ru, group_id=4, group_name=БСБО-73-20, redis_key=student:S11140014}
+2025-04-23 19:37:21.470 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-73-20
+2025-04-23 19:37:21.470 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Ферапонт Федосьевич Никифоров, посещаемость: 37.5%
+2025-04-23 19:37:21.470 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S126280019
+2025-04-23 19:37:21.472 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Медведева Анжела Святославовна, email=anzhelam2003@edu.mirea.ru, group_id=28, group_name=БСБО-09-20, redis_key=student:S126280019}
+2025-04-23 19:37:21.472 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-09-20
+2025-04-23 19:37:21.472 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Медведева Анжела Святославовна, посещаемость: 25.0%
+2025-04-23 19:37:21.472 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S1314670013
+2025-04-23 19:37:21.473 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Евфросиния Степановна Капустина, email=stepanovnae2004@edu.mirea.ru, group_id=67, group_name=БСБО-57-23, redis_key=student:S1314670013}
+2025-04-23 19:37:21.473 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-57-23
+2025-04-23 19:37:21.473 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Евфросиния Степановна Капустина, посещаемость: 37.5%
+2025-04-23 19:37:21.473 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S1314690021
+2025-04-23 19:37:21.475 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Вишняков Аверкий Аксёнович, email=averkiyv1996@edu.mirea.ru, group_id=69, group_name=БСБО-28-18, redis_key=student:S1314690021}
+2025-04-23 19:37:21.475 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-28-18
+2025-04-23 19:37:21.475 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Вишняков Аверкий Аксёнович, посещаемость: 37.5%
+2025-04-23 19:37:21.475 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S1314700022
+2025-04-23 19:37:21.477 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=г-жа Брагина Дарья Алексеевна, email=braginag1999@edu.mirea.ru, group_id=70, group_name=БСБО-02-21, redis_key=student:S1314700022}
+2025-04-23 19:37:21.477 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-02-21
+2025-04-23 19:37:21.477 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: г-жа Брагина Дарья Алексеевна, посещаемость: 37.5%
+2025-04-23 19:37:21.477 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S1419910003
+2025-04-23 19:37:21.478 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Фока Антипович Дьячков, email=antipovichf1998@edu.mirea.ru, group_id=91, group_name=БСБО-72-16, redis_key=student:S1419910003}
+2025-04-23 19:37:21.478 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-72-16
+2025-04-23 19:37:21.478 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Фока Антипович Дьячков, посещаемость: 37.5%
+2025-04-23 19:37:21.478 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S1419920004
+2025-04-23 19:37:21.479 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Евдокимов Селиван Бориславович, email=selivane1998@edu.mirea.ru, group_id=92, group_name=БСБО-26-19, redis_key=student:S1419920004}
+2025-04-23 19:37:21.479 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-26-19
+2025-04-23 19:37:21.479 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Евдокимов Селиван Бориславович, посещаемость: 37.5%
+2025-04-23 19:37:21.480 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S27311510024
+2025-04-23 19:37:21.481 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Каллистрат Давыдович Анисимов, email=davydovichk2002@edu.mirea.ru, group_id=151, group_name=БСБО-09-20, redis_key=student:S27311510024}
+2025-04-23 19:37:21.481 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-09-20
+2025-04-23 19:37:21.481 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Каллистрат Давыдович Анисимов, посещаемость: 25.0%
+2025-04-23 19:37:21.481 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получение данных из Redis по ключу: student:S310472350007
+2025-04-23 19:37:21.482 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Получены данные из Redis: {fullname=Спиридон Фёдорович Некрасов, email=fedorovichs1999@edu.mirea.ru, group_id=235, group_name=БСБО-36-18, redis_key=student:S310472350007}
+2025-04-23 19:37:21.483 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Найдены данные в Redis: group_name=БСБО-36-18
+2025-04-23 19:37:21.483 [http-nio-8080-exec-8] DEBUG c.c.lab_1.service.ReportService - Создан отчет для студента: Спиридон Фёдорович Некрасов, посещаемость: 12.5%
+2025-04-23 19:37:21.483 [http-nio-8080-exec-8] INFO  c.c.lab_1.service.ReportService - Отчет успешно сформирован, количество записей: 10
+2025-04-23 19:37:21.483 [http-nio-8080-exec-8] INFO  c.c.l.controllers.ReportController - Отчет успешно сформирован, записей: 10
+2025-04-23 19:37:21.485 [http-nio-8080-exec-8] INFO  c.c.l.configs.RequestLoggingFilter - <<< {org.apache.catalina.connector.ResponseFacade@59bfa5e2} - {200} ({107} мс)
+2025-04-23 19:37:53.105 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-04-23 19:37:53.181 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-04-23 19:37:53.315 [SpringApplicationShutdownHook] INFO  o.n.driver.internal.InternalDriver - Closing driver instance 439513824
+2025-04-23 19:37:53.569 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-04-23 19:37:53.572 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

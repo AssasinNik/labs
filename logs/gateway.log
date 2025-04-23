@@ -1,0 +1,438 @@
+2025-04-23T20:04:12.840+03:00  INFO 12400 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.1 with PID 12400 (D:\AndroidProjects\labs\gateway\build\classes\kotlin\main started by Neket in D:\AndroidProjects\labs)
+2025-04-23T20:04:12.842+03:00 DEBUG 12400 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Running with Spring Boot v3.4.4, Spring v6.2.5
+2025-04-23T20:04:12.842+03:00  INFO 12400 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-04-23T20:04:13.824+03:00  INFO 12400 --- [gateway] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-04-23T20:04:13.826+03:00  INFO 12400 --- [gateway] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-04-23T20:04:13.853+03:00  INFO 12400 --- [gateway] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 15 ms. Found 0 Redis repository interfaces.
+2025-04-23T20:04:14.098+03:00  INFO 12400 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=9eda6cde-9bb3-3e8e-b158-f925867b524a
+2025-04-23T20:04:14.731+03:00  INFO 12400 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: fd007cff-6c99-4855-bc75-5bb0118180dc
+
+2025-04-23T20:04:14.830+03:00 DEBUG 12400 --- [gateway] [main] s.w.r.r.m.a.RequestMappingHandlerMapping : 10 mappings in 'requestMappingHandlerMapping'
+2025-04-23T20:04:14.986+03:00 DEBUG 12400 --- [gateway] [main] o.s.c.gateway.config.GatewayProperties   : Routes supplied from Gateway Properties: [RouteDefinition{id='lab-1-service', predicates=[PredicateDefinition{name='Path', args={_genkey_0=/api/lab1/**}}], filters=[FilterDefinition{name='RewritePath', args={_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}}}, FilterDefinition{name='RemoveRequestHeader', args={_genkey_0=Cookie}}, FilterDefinition{name='name', args={_genkey_0=CircuitBreaker, _genkey_1=args.name=lab1ServiceBreaker, _genkey_2=args.fallbackUri=forward:/fallback/lab1}}, FilterDefinition{name='name', args={_genkey_0=RequestRateLimiter, _genkey_1=args.redis-rate-limiter.replenishRate=50, _genkey_2=args.redis-rate-limiter.burstCapacity=100, _genkey_3=args.key-resolver=#{@ipKeyResolver}}}], uri=http://localhost:8081, order=0, metadata={}}]
+2025-04-23T20:04:15.067+03:00  WARN 12400 --- [gateway] [main] onfigReactiveWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'webHandler' defined in org.springframework.web.reactive.config.DelegatingWebFluxConfiguration: Error creating bean with name 'routePredicateHandlerMapping' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routePredicateHandlerMapping' parameter 1: Error creating bean with name 'cachedCompositeRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'cachedCompositeRouteLocator' parameter 0: Error creating bean with name 'routeDefinitionRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routeDefinitionRouteLocator' parameter 1: Error creating bean with name 'requestRateLimiterGatewayFilterFactory' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'requestRateLimiterGatewayFilterFactory' parameter 0: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: expected single matching bean but found 2: generalApiLimiter,authApiLimiter
+2025-04-23T20:04:15.092+03:00  INFO 12400 --- [gateway] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-04-23T20:04:15.104+03:00 ERROR 12400 --- [gateway] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of method requestRateLimiterGatewayFilterFactory in org.springframework.cloud.gateway.config.GatewayAutoConfiguration required a single bean, but 2 were found:
+	- generalApiLimiter: defined by method 'generalApiLimiter' in class path resource [com/cherenkov/gateway/config/RateLimitConfig.class]
+	- authApiLimiter: defined by method 'authApiLimiter' in class path resource [com/cherenkov/gateway/config/RateLimitConfig.class]
+
+This may be due to missing parameter name information
+
+Action:
+
+Consider marking one of the beans as @Primary, updating the consumer to accept multiple beans, or using @Qualifier to identify the bean that should be consumed
+
+Ensure that your compiler is configured to use the '-parameters' flag.
+You may need to update both your build tool settings as well as your IDE.
+(See https://github.com/spring-projects/spring-framework/wiki/Upgrading-to-Spring-Framework-6.x#parameter-name-retention)
+
+
+2025-04-23T20:06:13.851+03:00  INFO 6524 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.1 with PID 6524 (D:\AndroidProjects\labs\gateway\build\classes\kotlin\main started by Neket in D:\AndroidProjects\labs)
+2025-04-23T20:06:13.852+03:00 DEBUG 6524 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Running with Spring Boot v3.4.4, Spring v6.2.5
+2025-04-23T20:06:13.853+03:00  INFO 6524 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-04-23T20:06:14.944+03:00  INFO 6524 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=7f71d816-8a23-353d-b67d-f34527a6bc03
+2025-04-23T20:06:15.501+03:00  INFO 6524 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: b300ab52-51f4-46fe-9138-756acbdec698
+
+2025-04-23T20:06:15.597+03:00 DEBUG 6524 --- [gateway] [main] s.w.r.r.m.a.RequestMappingHandlerMapping : 10 mappings in 'requestMappingHandlerMapping'
+2025-04-23T20:06:15.747+03:00 DEBUG 6524 --- [gateway] [main] o.s.c.gateway.config.GatewayProperties   : Routes supplied from Gateway Properties: [RouteDefinition{id='lab-1-service', predicates=[PredicateDefinition{name='Path', args={_genkey_0=/api/lab1/**}}], filters=[FilterDefinition{name='RewritePath', args={_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}}}, FilterDefinition{name='RemoveRequestHeader', args={_genkey_0=Cookie}}, FilterDefinition{name='name', args={_genkey_0=CircuitBreaker, _genkey_1=args.name=lab1ServiceBreaker, _genkey_2=args.fallbackUri=forward:/fallback/lab1}}, FilterDefinition{name='name', args={_genkey_0=RequestRateLimiter, _genkey_1=args.redis-rate-limiter.replenishRate=50, _genkey_2=args.redis-rate-limiter.burstCapacity=100, _genkey_3=args.key-resolver=#{@ipKeyResolver}}}], uri=http://localhost:8081, order=0, metadata={}}]
+2025-04-23T20:06:15.831+03:00  WARN 6524 --- [gateway] [main] onfigReactiveWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'webHandler' defined in org.springframework.web.reactive.config.DelegatingWebFluxConfiguration: Error creating bean with name 'routePredicateHandlerMapping' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routePredicateHandlerMapping' parameter 1: Error creating bean with name 'cachedCompositeRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'cachedCompositeRouteLocator' parameter 0: Error creating bean with name 'routeDefinitionRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routeDefinitionRouteLocator' parameter 1: Error creating bean with name 'requestRateLimiterGatewayFilterFactory' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'requestRateLimiterGatewayFilterFactory' parameter 0: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: more than one 'primary' bean found among candidates: [generalApiLimiter, authApiLimiter, fallbackRateLimiter]
+2025-04-23T20:06:15.853+03:00  INFO 6524 --- [gateway] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-04-23T20:06:15.867+03:00 ERROR 6524 --- [gateway] [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'webHandler' defined in org.springframework.web.reactive.config.DelegatingWebFluxConfiguration: Error creating bean with name 'routePredicateHandlerMapping' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routePredicateHandlerMapping' parameter 1: Error creating bean with name 'cachedCompositeRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'cachedCompositeRouteLocator' parameter 0: Error creating bean with name 'routeDefinitionRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routeDefinitionRouteLocator' parameter 1: Error creating bean with name 'requestRateLimiterGatewayFilterFactory' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'requestRateLimiterGatewayFilterFactory' parameter 0: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: more than one 'primary' bean found among candidates: [generalApiLimiter, authApiLimiter, fallbackRateLimiter]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:608) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:347) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1155) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1121) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1056) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext.refresh(ReactiveWebServerApplicationContext.java:66) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.4.4.jar:3.4.4]
+	at com.cherenkov.gateway.GatewayApplicationKt.main(GatewayApplication.kt:41) ~[main/:na]
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'routePredicateHandlerMapping' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routePredicateHandlerMapping' parameter 1: Error creating bean with name 'cachedCompositeRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'cachedCompositeRouteLocator' parameter 0: Error creating bean with name 'routeDefinitionRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routeDefinitionRouteLocator' parameter 1: Error creating bean with name 'requestRateLimiterGatewayFilterFactory' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'requestRateLimiterGatewayFilterFactory' parameter 0: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: more than one 'primary' bean found among candidates: [generalApiLimiter, authApiLimiter, fallbackRateLimiter]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1361) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:347) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeansOfType(DefaultListableBeanFactory.java:721) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.getBeansOfType(AbstractApplicationContext.java:1426) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.BeanFactoryUtils.beansOfTypeIncludingAncestors(BeanFactoryUtils.java:372) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.web.reactive.DispatcherHandler.initStrategies(DispatcherHandler.java:120) ~[spring-webflux-6.2.5.jar:6.2.5]
+	at org.springframework.web.reactive.DispatcherHandler.setApplicationContext(DispatcherHandler.java:115) ~[spring-webflux-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.ApplicationContextAwareProcessor.invokeAwareInterfaces(ApplicationContextAwareProcessor.java:110) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.ApplicationContextAwareProcessor.postProcessBeforeInitialization(ApplicationContextAwareProcessor.java:85) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInitialization(AbstractAutowireCapableBeanFactory.java:423) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1804) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:601) ~[spring-beans-6.2.5.jar:6.2.5]
+	... 15 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'cachedCompositeRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'cachedCompositeRouteLocator' parameter 0: Error creating bean with name 'routeDefinitionRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routeDefinitionRouteLocator' parameter 1: Error creating bean with name 'requestRateLimiterGatewayFilterFactory' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'requestRateLimiterGatewayFilterFactory' parameter 0: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: more than one 'primary' bean found among candidates: [generalApiLimiter, authApiLimiter, fallbackRateLimiter]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1361) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:347) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1667) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1555) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791) ~[spring-beans-6.2.5.jar:6.2.5]
+	... 34 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'routeDefinitionRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routeDefinitionRouteLocator' parameter 1: Error creating bean with name 'requestRateLimiterGatewayFilterFactory' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'requestRateLimiterGatewayFilterFactory' parameter 0: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: more than one 'primary' bean found among candidates: [generalApiLimiter, authApiLimiter, fallbackRateLimiter]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1361) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:347) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.addCandidateEntry(DefaultListableBeanFactory.java:1919) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1883) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveMultipleBeanCollection(DefaultListableBeanFactory.java:1773) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveMultipleBeans(DefaultListableBeanFactory.java:1741) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1616) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1555) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791) ~[spring-beans-6.2.5.jar:6.2.5]
+	... 48 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'requestRateLimiterGatewayFilterFactory' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'requestRateLimiterGatewayFilterFactory' parameter 0: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: more than one 'primary' bean found among candidates: [generalApiLimiter, authApiLimiter, fallbackRateLimiter]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1361) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:347) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.addCandidateEntry(DefaultListableBeanFactory.java:1919) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1883) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveMultipleBeanCollection(DefaultListableBeanFactory.java:1773) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveMultipleBeans(DefaultListableBeanFactory.java:1741) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1616) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1555) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791) ~[spring-beans-6.2.5.jar:6.2.5]
+	... 66 common frames omitted
+Caused by: org.springframework.beans.factory.NoUniqueBeanDefinitionException: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: more than one 'primary' bean found among candidates: [generalApiLimiter, authApiLimiter, fallbackRateLimiter]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.determinePrimaryCandidate(DefaultListableBeanFactory.java:2010) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.determineAutowireCandidate(DefaultListableBeanFactory.java:1946) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1640) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1555) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791) ~[spring-beans-6.2.5.jar:6.2.5]
+	... 84 common frames omitted
+
+2025-04-23T20:07:45.692+03:00  INFO 16368 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.1 with PID 16368 (D:\AndroidProjects\labs\gateway\build\classes\kotlin\main started by Neket in D:\AndroidProjects\labs)
+2025-04-23T20:07:45.693+03:00 DEBUG 16368 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Running with Spring Boot v3.4.4, Spring v6.2.5
+2025-04-23T20:07:45.694+03:00  INFO 16368 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-04-23T20:07:46.859+03:00  INFO 16368 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=7f71d816-8a23-353d-b67d-f34527a6bc03
+2025-04-23T20:07:47.437+03:00  INFO 16368 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d595aa81-f448-4676-9181-f35756a77f66
+
+2025-04-23T20:07:47.525+03:00 DEBUG 16368 --- [gateway] [main] s.w.r.r.m.a.RequestMappingHandlerMapping : 10 mappings in 'requestMappingHandlerMapping'
+2025-04-23T20:07:47.669+03:00 DEBUG 16368 --- [gateway] [main] o.s.c.gateway.config.GatewayProperties   : Routes supplied from Gateway Properties: [RouteDefinition{id='lab-1-service', predicates=[PredicateDefinition{name='Path', args={_genkey_0=/api/lab1/**}}], filters=[FilterDefinition{name='RewritePath', args={_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}}}, FilterDefinition{name='RemoveRequestHeader', args={_genkey_0=Cookie}}, FilterDefinition{name='name', args={_genkey_0=CircuitBreaker, _genkey_1=args.name=lab1ServiceBreaker, _genkey_2=args.fallbackUri=forward:/fallback/lab1}}, FilterDefinition{name='name', args={_genkey_0=RequestRateLimiter, _genkey_1=args.redis-rate-limiter.replenishRate=50, _genkey_2=args.redis-rate-limiter.burstCapacity=100, _genkey_3=args.key-resolver=#{@ipKeyResolver}}}], uri=http://localhost:8081, order=0, metadata={}}]
+2025-04-23T20:07:47.752+03:00  WARN 16368 --- [gateway] [main] onfigReactiveWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'webHandler' defined in org.springframework.web.reactive.config.DelegatingWebFluxConfiguration: Error creating bean with name 'routePredicateHandlerMapping' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routePredicateHandlerMapping' parameter 1: Error creating bean with name 'cachedCompositeRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'cachedCompositeRouteLocator' parameter 0: Error creating bean with name 'routeDefinitionRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routeDefinitionRouteLocator' parameter 1: Error creating bean with name 'requestRateLimiterGatewayFilterFactory' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'requestRateLimiterGatewayFilterFactory' parameter 0: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: more than one 'primary' bean found among candidates: [generalApiLimiter, authApiLimiter, fallbackRateLimiter]
+2025-04-23T20:07:47.774+03:00  INFO 16368 --- [gateway] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-04-23T20:07:47.787+03:00 ERROR 16368 --- [gateway] [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'webHandler' defined in org.springframework.web.reactive.config.DelegatingWebFluxConfiguration: Error creating bean with name 'routePredicateHandlerMapping' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routePredicateHandlerMapping' parameter 1: Error creating bean with name 'cachedCompositeRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'cachedCompositeRouteLocator' parameter 0: Error creating bean with name 'routeDefinitionRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routeDefinitionRouteLocator' parameter 1: Error creating bean with name 'requestRateLimiterGatewayFilterFactory' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'requestRateLimiterGatewayFilterFactory' parameter 0: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: more than one 'primary' bean found among candidates: [generalApiLimiter, authApiLimiter, fallbackRateLimiter]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:608) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:347) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1155) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1121) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1056) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext.refresh(ReactiveWebServerApplicationContext.java:66) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.4.4.jar:3.4.4]
+	at com.cherenkov.gateway.GatewayApplicationKt.main(GatewayApplication.kt:41) ~[main/:na]
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'routePredicateHandlerMapping' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routePredicateHandlerMapping' parameter 1: Error creating bean with name 'cachedCompositeRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'cachedCompositeRouteLocator' parameter 0: Error creating bean with name 'routeDefinitionRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routeDefinitionRouteLocator' parameter 1: Error creating bean with name 'requestRateLimiterGatewayFilterFactory' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'requestRateLimiterGatewayFilterFactory' parameter 0: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: more than one 'primary' bean found among candidates: [generalApiLimiter, authApiLimiter, fallbackRateLimiter]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1361) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:347) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.getBeansOfType(DefaultListableBeanFactory.java:721) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.getBeansOfType(AbstractApplicationContext.java:1426) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.BeanFactoryUtils.beansOfTypeIncludingAncestors(BeanFactoryUtils.java:372) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.web.reactive.DispatcherHandler.initStrategies(DispatcherHandler.java:120) ~[spring-webflux-6.2.5.jar:6.2.5]
+	at org.springframework.web.reactive.DispatcherHandler.setApplicationContext(DispatcherHandler.java:115) ~[spring-webflux-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.ApplicationContextAwareProcessor.invokeAwareInterfaces(ApplicationContextAwareProcessor.java:110) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.ApplicationContextAwareProcessor.postProcessBeforeInitialization(ApplicationContextAwareProcessor.java:85) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInitialization(AbstractAutowireCapableBeanFactory.java:423) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1804) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:601) ~[spring-beans-6.2.5.jar:6.2.5]
+	... 15 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'cachedCompositeRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'cachedCompositeRouteLocator' parameter 0: Error creating bean with name 'routeDefinitionRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routeDefinitionRouteLocator' parameter 1: Error creating bean with name 'requestRateLimiterGatewayFilterFactory' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'requestRateLimiterGatewayFilterFactory' parameter 0: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: more than one 'primary' bean found among candidates: [generalApiLimiter, authApiLimiter, fallbackRateLimiter]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1361) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:347) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1667) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1555) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791) ~[spring-beans-6.2.5.jar:6.2.5]
+	... 34 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'routeDefinitionRouteLocator' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'routeDefinitionRouteLocator' parameter 1: Error creating bean with name 'requestRateLimiterGatewayFilterFactory' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'requestRateLimiterGatewayFilterFactory' parameter 0: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: more than one 'primary' bean found among candidates: [generalApiLimiter, authApiLimiter, fallbackRateLimiter]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1361) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:347) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.addCandidateEntry(DefaultListableBeanFactory.java:1919) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1883) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveMultipleBeanCollection(DefaultListableBeanFactory.java:1773) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveMultipleBeans(DefaultListableBeanFactory.java:1741) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1616) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1555) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791) ~[spring-beans-6.2.5.jar:6.2.5]
+	... 48 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'requestRateLimiterGatewayFilterFactory' defined in class path resource [org/springframework/cloud/gateway/config/GatewayAutoConfiguration.class]: Unsatisfied dependency expressed through method 'requestRateLimiterGatewayFilterFactory' parameter 0: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: more than one 'primary' bean found among candidates: [generalApiLimiter, authApiLimiter, fallbackRateLimiter]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:546) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1361) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1191) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:563) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:523) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:347) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.addCandidateEntry(DefaultListableBeanFactory.java:1919) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1883) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveMultipleBeanCollection(DefaultListableBeanFactory.java:1773) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveMultipleBeans(DefaultListableBeanFactory.java:1741) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1616) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1555) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791) ~[spring-beans-6.2.5.jar:6.2.5]
+	... 66 common frames omitted
+Caused by: org.springframework.beans.factory.NoUniqueBeanDefinitionException: No qualifying bean of type 'org.springframework.cloud.gateway.filter.ratelimit.RateLimiter<?>' available: more than one 'primary' bean found among candidates: [generalApiLimiter, authApiLimiter, fallbackRateLimiter]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.determinePrimaryCandidate(DefaultListableBeanFactory.java:2010) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.determineAutowireCandidate(DefaultListableBeanFactory.java:1946) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1640) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1555) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791) ~[spring-beans-6.2.5.jar:6.2.5]
+	... 84 common frames omitted
+
+2025-04-23T20:08:57.662+03:00  INFO 21828 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.1 with PID 21828 (D:\AndroidProjects\labs\gateway\build\classes\kotlin\main started by Neket in D:\AndroidProjects\labs)
+2025-04-23T20:08:57.663+03:00 DEBUG 21828 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Running with Spring Boot v3.4.4, Spring v6.2.5
+2025-04-23T20:08:57.664+03:00  INFO 21828 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-04-23T20:08:58.740+03:00  INFO 21828 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=3ed2515b-8b20-3282-b10e-555fec8bdcaa
+2025-04-23T20:08:59.088+03:00  INFO 21828 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 5744aaba-f0b1-4f52-9d2d-39e4866345f9
+
+2025-04-23T20:08:59.183+03:00 DEBUG 21828 --- [gateway] [main] s.w.r.r.m.a.RequestMappingHandlerMapping : 10 mappings in 'requestMappingHandlerMapping'
+2025-04-23T20:08:59.317+03:00 DEBUG 21828 --- [gateway] [main] o.s.c.gateway.config.GatewayProperties   : Routes supplied from Gateway Properties: [RouteDefinition{id='lab-1-service', predicates=[PredicateDefinition{name='Path', args={_genkey_0=/api/lab1/**}}], filters=[FilterDefinition{name='RewritePath', args={_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}}}, FilterDefinition{name='RemoveRequestHeader', args={_genkey_0=Cookie}}, FilterDefinition{name='name', args={_genkey_0=CircuitBreaker, _genkey_1=args.name=lab1ServiceBreaker, _genkey_2=args.fallbackUri=forward:/fallback/lab1}}, FilterDefinition{name='name', args={_genkey_0=RequestRateLimiter, _genkey_1=args.redis-rate-limiter.replenishRate=50, _genkey_2=args.redis-rate-limiter.burstCapacity=100, _genkey_3=args.key-resolver=#{@ipKeyResolver}}}], uri=http://localhost:8081, order=0, metadata={}}]
+2025-04-23T20:08:59.728+03:00  INFO 21828 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-04-23T20:08:59.728+03:00  INFO 21828 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-04-23T20:08:59.728+03:00  INFO 21828 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-04-23T20:08:59.728+03:00  INFO 21828 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-04-23T20:08:59.728+03:00  INFO 21828 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-04-23T20:08:59.728+03:00  INFO 21828 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-04-23T20:08:59.729+03:00  INFO 21828 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-04-23T20:08:59.729+03:00  INFO 21828 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-04-23T20:08:59.729+03:00  INFO 21828 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-04-23T20:08:59.729+03:00  INFO 21828 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-04-23T20:08:59.729+03:00  INFO 21828 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-04-23T20:08:59.729+03:00  INFO 21828 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-04-23T20:08:59.729+03:00  INFO 21828 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-04-23T20:08:59.729+03:00  INFO 21828 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-04-23T20:09:00.064+03:00  INFO 21828 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoints beneath base path '/actuator'
+2025-04-23T20:09:00.111+03:00 DEBUG 21828 --- [gateway] [main] o.s.w.r.r.m.a.ControllerMethodResolver   : ControllerAdvice beans: none
+2025-04-23T20:09:00.419+03:00  WARN 21828 --- [gateway] [main] onfigReactiveWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'compositeCompatibilityVerifier' defined in class path resource [org/springframework/cloud/configuration/CompatibilityVerifierAutoConfiguration.class]: Failed to instantiate [org.springframework.cloud.configuration.CompositeCompatibilityVerifier]: Factory method 'compositeCompatibilityVerifier' threw exception with message: Spring Cloud/ Spring Boot version compatibility checks have failed: [[VerificationResult@3ef914f5 description = 'Spring Boot [3.4.4] is not compatible with this Spring Cloud release train', action = 'Change Spring Boot version to one of the following versions [3.2.x] .
+You can find the latest Spring Boot versions here [https://spring.io/projects/spring-boot#learn]. 
+If you want to learn more about the Spring Cloud Release train compatibility, you can visit this page [https://spring.io/projects/spring-cloud#overview] and check the [Release Trains] section.
+If you want to disable this check, just set the property [spring.cloud.compatibility-verifier.enabled=false]']]
+2025-04-23T20:09:00.453+03:00  INFO 21828 --- [gateway] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-04-23T20:09:00.467+03:00 ERROR 21828 --- [gateway] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Your project setup is incompatible with our requirements due to following reasons:
+
+- Spring Boot [3.4.4] is not compatible with this Spring Cloud release train
+
+
+Action:
+
+Consider applying the following actions:
+
+- Change Spring Boot version to one of the following versions [3.2.x] .
+You can find the latest Spring Boot versions here [https://spring.io/projects/spring-boot#learn]. 
+If you want to learn more about the Spring Cloud Release train compatibility, you can visit this page [https://spring.io/projects/spring-cloud#overview] and check the [Release Trains] section.
+If you want to disable this check, just set the property [spring.cloud.compatibility-verifier.enabled=false]
+
+
+2025-04-23T20:11:18.385+03:00  INFO 16844 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.1 with PID 16844 (D:\AndroidProjects\labs\gateway\build\classes\kotlin\main started by Neket in D:\AndroidProjects\labs)
+2025-04-23T20:11:18.386+03:00 DEBUG 16844 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Running with Spring Boot v3.4.4, Spring v6.2.5
+2025-04-23T20:11:18.387+03:00  INFO 16844 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-04-23T20:11:19.388+03:00  INFO 16844 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=f6b00d30-d688-390e-a518-c442513e9da0
+2025-04-23T20:11:19.732+03:00  INFO 16844 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 4b1181c5-56c1-4184-a6d7-0a2a96c181f2
+
+2025-04-23T20:11:19.822+03:00 DEBUG 16844 --- [gateway] [main] s.w.r.r.m.a.RequestMappingHandlerMapping : 10 mappings in 'requestMappingHandlerMapping'
+2025-04-23T20:11:19.963+03:00 DEBUG 16844 --- [gateway] [main] o.s.c.gateway.config.GatewayProperties   : Routes supplied from Gateway Properties: [RouteDefinition{id='lab-1-service', predicates=[PredicateDefinition{name='Path', args={_genkey_0=/api/lab1/**}}], filters=[FilterDefinition{name='RewritePath', args={_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}}}, FilterDefinition{name='RemoveRequestHeader', args={_genkey_0=Cookie}}, FilterDefinition{name='name', args={_genkey_0=CircuitBreaker, _genkey_1=args.name=lab1ServiceBreaker, _genkey_2=args.fallbackUri=forward:/fallback/lab1}}, FilterDefinition{name='name', args={_genkey_0=RequestRateLimiter, _genkey_1=args.redis-rate-limiter.replenishRate=50, _genkey_2=args.redis-rate-limiter.burstCapacity=100, _genkey_3=args.key-resolver=#{@ipKeyResolver}}}], uri=http://localhost:8081, order=0, metadata={}, enabled=true}]
+2025-04-23T20:11:20.138+03:00  INFO 16844 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-04-23T20:11:20.138+03:00  INFO 16844 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-04-23T20:11:20.138+03:00  INFO 16844 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-04-23T20:11:20.138+03:00  INFO 16844 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-04-23T20:11:20.138+03:00  INFO 16844 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-04-23T20:11:20.138+03:00  INFO 16844 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-04-23T20:11:20.138+03:00  INFO 16844 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-04-23T20:11:20.138+03:00  INFO 16844 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-04-23T20:11:20.138+03:00  INFO 16844 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-04-23T20:11:20.138+03:00  INFO 16844 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-04-23T20:11:20.139+03:00  INFO 16844 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-04-23T20:11:20.139+03:00  INFO 16844 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-04-23T20:11:20.139+03:00  INFO 16844 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-04-23T20:11:20.139+03:00  INFO 16844 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-04-23T20:11:20.359+03:00  INFO 16844 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoints beneath base path '/actuator'
+2025-04-23T20:11:20.387+03:00 DEBUG 16844 --- [gateway] [main] o.s.w.r.r.m.a.ControllerMethodResolver   : ControllerAdvice beans: none
+2025-04-23T20:11:20.576+03:00  WARN 16844 --- [gateway] [main] onfigReactiveWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'org.springframework.cloud.gateway.config.SimpleUrlHandlerMappingGlobalCorsAutoConfiguration': Unsatisfied dependency expressed through field 'simpleUrlHandlerMapping': No qualifying bean of type 'org.springframework.web.reactive.handler.SimpleUrlHandlerMapping' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+2025-04-23T20:11:20.593+03:00  INFO 16844 --- [gateway] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-04-23T20:11:20.606+03:00 ERROR 16844 --- [gateway] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field simpleUrlHandlerMapping in org.springframework.cloud.gateway.config.SimpleUrlHandlerMappingGlobalCorsAutoConfiguration required a bean of type 'org.springframework.web.reactive.handler.SimpleUrlHandlerMapping' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'org.springframework.web.reactive.handler.SimpleUrlHandlerMapping' in your configuration.
+
+2025-04-23T20:16:04.661+03:00  INFO 12404 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.1 with PID 12404 (D:\AndroidProjects\labs\gateway\build\classes\kotlin\main started by Neket in D:\AndroidProjects\labs)
+2025-04-23T20:16:04.663+03:00 DEBUG 12404 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Running with Spring Boot v3.4.4, Spring v6.2.5
+2025-04-23T20:16:04.665+03:00  INFO 12404 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-04-23T20:16:05.690+03:00  INFO 12404 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=f6b00d30-d688-390e-a518-c442513e9da0
+2025-04-23T20:16:06.041+03:00  INFO 12404 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 92938f7d-4b9f-4a9c-9379-63114dff0beb
+
+2025-04-23T20:16:06.130+03:00 DEBUG 12404 --- [gateway] [main] s.w.r.r.m.a.RequestMappingHandlerMapping : 10 mappings in 'requestMappingHandlerMapping'
+2025-04-23T20:16:06.261+03:00 DEBUG 12404 --- [gateway] [main] o.s.c.gateway.config.GatewayProperties   : Routes supplied from Gateway Properties: [RouteDefinition{id='lab-1-service', predicates=[PredicateDefinition{name='Path', args={_genkey_0=/api/lab1/**}}], filters=[FilterDefinition{name='RewritePath', args={_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}}}, FilterDefinition{name='RemoveRequestHeader', args={_genkey_0=Cookie}}, FilterDefinition{name='name', args={_genkey_0=CircuitBreaker, _genkey_1=args.name=lab1ServiceBreaker, _genkey_2=args.fallbackUri=forward:/fallback/lab1}}, FilterDefinition{name='name', args={_genkey_0=RequestRateLimiter, _genkey_1=args.redis-rate-limiter.replenishRate=50, _genkey_2=args.redis-rate-limiter.burstCapacity=100, _genkey_3=args.key-resolver=#{@ipKeyResolver}}}], uri=http://localhost:8081, order=0, metadata={}, enabled=true}]
+2025-04-23T20:16:06.423+03:00  INFO 12404 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-04-23T20:16:06.423+03:00  INFO 12404 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-04-23T20:16:06.423+03:00  INFO 12404 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-04-23T20:16:06.423+03:00  INFO 12404 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-04-23T20:16:06.424+03:00  INFO 12404 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-04-23T20:16:06.424+03:00  INFO 12404 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-04-23T20:16:06.424+03:00  INFO 12404 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-04-23T20:16:06.424+03:00  INFO 12404 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-04-23T20:16:06.424+03:00  INFO 12404 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-04-23T20:16:06.424+03:00  INFO 12404 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-04-23T20:16:06.424+03:00  INFO 12404 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-04-23T20:16:06.424+03:00  INFO 12404 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-04-23T20:16:06.424+03:00  INFO 12404 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-04-23T20:16:06.424+03:00  INFO 12404 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-04-23T20:16:06.647+03:00  INFO 12404 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoints beneath base path '/actuator'
+2025-04-23T20:16:06.675+03:00 DEBUG 12404 --- [gateway] [main] o.s.w.r.r.m.a.ControllerMethodResolver   : ControllerAdvice beans: none
+2025-04-23T20:16:06.863+03:00  WARN 12404 --- [gateway] [main] onfigReactiveWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'org.springframework.cloud.gateway.config.SimpleUrlHandlerMappingGlobalCorsAutoConfiguration': Unsatisfied dependency expressed through field 'simpleUrlHandlerMapping': No qualifying bean of type 'org.springframework.web.reactive.handler.SimpleUrlHandlerMapping' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+2025-04-23T20:16:06.880+03:00  INFO 12404 --- [gateway] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-04-23T20:16:06.895+03:00 ERROR 12404 --- [gateway] [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field simpleUrlHandlerMapping in org.springframework.cloud.gateway.config.SimpleUrlHandlerMappingGlobalCorsAutoConfiguration required a bean of type 'org.springframework.web.reactive.handler.SimpleUrlHandlerMapping' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+
+Action:
+
+Consider defining a bean of type 'org.springframework.web.reactive.handler.SimpleUrlHandlerMapping' in your configuration.
+
