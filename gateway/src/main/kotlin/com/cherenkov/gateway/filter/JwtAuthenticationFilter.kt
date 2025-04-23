@@ -21,24 +21,36 @@ class JwtAuthenticationFilter(
 ) : WebFilter {
 
     private val logger = LoggerFactory.getLogger(JwtAuthenticationFilter::class.java)
-
+    
     @Value("\${gateway.auth.exclude-paths}")
     private lateinit var excludePaths: List<String>
+    
+    @Value("\${gateway.auth.header-name:X-Gateway-Auth}")
+    private lateinit var gatewayHeaderName: String
+    
+    @Value("\${gateway.auth.header-value:true}")
+    private lateinit var gatewayHeaderValue: String
 
     override fun filter(exchange: ServerWebExchange, chain: WebFilterChain): Mono<Void> {
         val request = exchange.request
         val path = request.path.toString()
 
-        // Проверяем, нужна ли аутентификация для этого пути
+        // Логирование пути
+        logger.debug("Processing request with path: $path")
+        
+        // Проверяем, является ли путь исключением
         if (isPathExcluded(path)) {
             logger.debug("Path excluded from JWT validation: $path")
-            return chain.filter(exchange)
+            // Добавляем заголовок Gateway для путей исключений
+            val modifiedRequest = addGatewayAuthHeader(request)
+            val modifiedExchange = exchange.mutate().request(modifiedRequest).build()
+            return chain.filter(modifiedExchange)
         }
 
         val authHeader = request.headers.getFirst(HttpHeaders.AUTHORIZATION)
         
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            logger.debug("No valid Authorization header found for path: $path")
+            logger.warn("No valid Authorization header found for path: $path")
             exchange.response.statusCode = HttpStatus.UNAUTHORIZED
             return exchange.response.setComplete()
         }
@@ -47,7 +59,7 @@ class JwtAuthenticationFilter(
         
         return validateToken(jwt)
             .flatMap { username ->
-                logger.debug("JWT validated for user: $username on path: $path")
+                logger.info("JWT validated for user: $username on path: $path")
                 val authorities = listOf(SimpleGrantedAuthority("ROLE_USER"))
                 val authentication = UsernamePasswordAuthenticationToken(username, null, authorities)
                 
@@ -60,7 +72,7 @@ class JwtAuthenticationFilter(
                     .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authentication))
             }
             .onErrorResume { e ->
-                logger.error("JWT validation failed: ${e.message}")
+                logger.error("JWT validation failed: ${e.message}", e)
                 exchange.response.statusCode = HttpStatus.UNAUTHORIZED
                 exchange.response.setComplete()
             }
@@ -72,21 +84,37 @@ class JwtAuthenticationFilter(
             if (jwtService.isTokenValid(token)) {
                 Mono.just(username)
             } else {
+                logger.warn("JWT token is invalid")
                 Mono.error(RuntimeException("Invalid JWT token"))
             }
         } catch (e: Exception) {
-            logger.error("Error validating JWT: ${e.message}")
+            logger.error("Error validating JWT: ${e.message}", e)
             Mono.error(e)
         }
     }
-
+    
     private fun isPathExcluded(path: String): Boolean {
-        return excludePaths.any { path.startsWith(it) }
+        return excludePaths.any { excludePath ->
+            // Проверяем точное соответствие или шаблоны с /**
+            if (excludePath.endsWith("/**")) {
+                val basePattern = excludePath.dropLast(3)
+                path == basePattern || path.startsWith("$basePattern/")
+            } else {
+                path == excludePath || path.startsWith("$excludePath/") || path.startsWith("$excludePath?")
+            }
+        }
     }
 
     private fun addUserInfoToRequest(request: ServerHttpRequest, username: String): ServerHttpRequest {
         return request.mutate()
             .header("X-Auth-User", username)
+            .header(gatewayHeaderName, gatewayHeaderValue)
+            .build()
+    }
+    
+    private fun addGatewayAuthHeader(request: ServerHttpRequest): ServerHttpRequest {
+        return request.mutate()
+            .header(gatewayHeaderName, gatewayHeaderValue)
             .build()
     }
 } 

@@ -19,29 +19,7 @@ class WebClientConfig {
 
     @Bean
     fun webClient(): WebClient {
-        // Увеличиваем размер буфера для обмена данными
-        val exchangeStrategies = ExchangeStrategies.builder()
-            .codecs { configurer ->
-                configurer
-                    .defaultCodecs()
-                    .maxInMemorySize(16 * 1024 * 1024) // 16MB
-            }
-            .build()
-
-        // Настраиваем HTTP клиент с таймаутами
-        val httpClient = HttpClient.create()
-            .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
-            .responseTimeout(Duration.ofSeconds(10))
-            .doOnConnected { conn ->
-                conn.addHandlerLast(ReadTimeoutHandler(10, TimeUnit.SECONDS))
-                conn.addHandlerLast(WriteTimeoutHandler(10, TimeUnit.SECONDS))
-            }
-
-        return WebClient.builder()
-            .clientConnector(ReactorClientHttpConnector(httpClient))
-            .exchangeStrategies(exchangeStrategies)
-            .filter(logRequest())
-            .build()
+        return WebClient.builder().build()
     }
 
     // Логгер для WebClient запросов

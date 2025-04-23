@@ -1,6 +1,7 @@
 package com.cherenkov.gateway.config
 
 import com.cherenkov.gateway.filter.JwtAuthenticationFilter
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -18,21 +19,37 @@ class SecurityConfig(
     private val jwtAuthenticationFilter: JwtAuthenticationFilter
 ) {
 
+    private val logger = LoggerFactory.getLogger(SecurityConfig::class.java)
+
     @Value("\${gateway.auth.exclude-paths}")
     private lateinit var excludePaths: List<String>
 
     @Bean
     fun securityWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
+        logger.info("Configuring security with exclude paths: $excludePaths")
+        
         return http
             .csrf { it.disable() }
             .cors { it.configurationSource(corsConfigurationSource()) }
             .authorizeExchange {
-                it.pathMatchers(*excludePaths.toTypedArray()).permitAll()
+                // Явное разрешение для путей авторизации
+                it.pathMatchers("/api/auth/login", "/api/auth/register", "/api/auth/refresh-token").permitAll()
+                it.pathMatchers("/actuator/**").permitAll()
+                it.pathMatchers("/fallback/**").permitAll()
+                
+                // Для всех остальных запросов требуется аутентификация
                 it.anyExchange().authenticated()
             }
             .addFilterAt(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION)
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
+            .exceptionHandling {
+                it.authenticationEntryPoint { exchange, ex ->
+                    logger.warn("Authentication failure: {} for path: {}", ex.message, exchange.request.uri.path)
+                    exchange.response.statusCode = org.springframework.http.HttpStatus.UNAUTHORIZED
+                    exchange.response.setComplete()
+                }
+            }
             .build()
     }
 
@@ -46,6 +63,7 @@ class SecurityConfig(
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
+        logger.debug("CORS configuration applied")
         return source
     }
 } 

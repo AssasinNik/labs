@@ -5,6 +5,7 @@ import org.slf4j.MDC
 import org.springframework.cloud.gateway.filter.GatewayFilterChain
 import org.springframework.cloud.gateway.filter.GlobalFilter
 import org.springframework.core.Ordered
+import org.springframework.http.HttpStatus
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerWebExchange
@@ -71,6 +72,8 @@ class LoggingGlobalFilter : GlobalFilter, Ordered {
     private fun logRequest(request: ServerHttpRequest, correlationId: String) {
         val method = request.method
         val uri = request.uri
+        val path = request.path.toString()
+        val queryParams = sanitizeQueryParams(request)
         val headers = sanitizeHeaders(request)
         
         logger.info(
@@ -81,6 +84,12 @@ class LoggingGlobalFilter : GlobalFilter, Ordered {
             request.remoteAddress?.address?.hostAddress ?: "unknown"
         )
         
+        // Добавляем путь и параметры для лучшей отладки
+        logger.debug("REQUEST PATH [{}]: {}", correlationId, path)
+        if (queryParams.isNotEmpty()) {
+            logger.debug("REQUEST PARAMS [{}]: {}", correlationId, queryParams)
+        }
+        
         if (logger.isDebugEnabled) {
             logger.debug("REQUEST HEADERS [{}]: {}", correlationId, headers)
         }
@@ -88,14 +97,40 @@ class LoggingGlobalFilter : GlobalFilter, Ordered {
     
     private fun logResponse(exchange: ServerWebExchange, correlationId: String, duration: Long) {
         val response = exchange.response
-        val statusCode = response.statusCode
+        val statusCode = response.statusCode ?: HttpStatus.INTERNAL_SERVER_ERROR
         
-        logger.info(
-            "RESPONSE [{}]: Status={}, Duration={}ms",
-            correlationId,
-            statusCode,
-            duration
-        )
+        val message = if (statusCode.is2xxSuccessful) {
+            "RESPONSE [{}]: Status={}, Duration={}ms"
+        } else {
+            "ERROR RESPONSE [{}]: Status={}, Duration={}ms"
+        }
+        
+        if (statusCode.is2xxSuccessful) {
+            logger.info(message, correlationId, statusCode, duration)
+        } else {
+            // Для ошибок логируем на уровне WARN или ERROR
+            if (statusCode.is4xxClientError) {
+                logger.warn(message, correlationId, statusCode, duration)
+                
+                // Детальное логирование для ошибки 401 Unauthorized
+                if (statusCode == HttpStatus.UNAUTHORIZED) {
+                    val path = exchange.request.path.toString()
+                    logger.warn(
+                        "UNAUTHORIZED ACCESS [{}]: Path={}, Headers={}",
+                        correlationId,
+                        path,
+                        sanitizeHeaders(exchange.request)
+                    )
+                }
+            } else {
+                logger.error(message, correlationId, statusCode, duration)
+            }
+        }
+        
+        // Логируем заголовки ответа при детальной отладке
+        if (logger.isDebugEnabled) {
+            logger.debug("RESPONSE HEADERS [{}]: {}", correlationId, response.headers)
+        }
     }
     
     private fun sanitizeHeaders(request: ServerHttpRequest): Map<String, String> {
@@ -107,6 +142,24 @@ class LoggingGlobalFilter : GlobalFilter, Ordered {
                 name.equals("Authorization", ignoreCase = true) -> "Bearer [MASKED]"
                 name.equals("Cookie", ignoreCase = true) -> "[MASKED]"
                 name.equals("Set-Cookie", ignoreCase = true) -> "[MASKED]"
+                else -> values.joinToString(", ")
+            }
+            result[name] = value
+        }
+        
+        return result
+    }
+    
+    private fun sanitizeQueryParams(request: ServerHttpRequest): Map<String, String> {
+        val result = mutableMapOf<String, String>()
+        
+        request.queryParams.forEach { (name, values) ->
+            // Маскируем конфиденциальные данные в параметрах запроса
+            val value = when {
+                name.equals("password", ignoreCase = true) -> "[MASKED]"
+                name.equals("token", ignoreCase = true) -> "[MASKED]"
+                name.equals("access_token", ignoreCase = true) -> "[MASKED]"
+                name.equals("refresh_token", ignoreCase = true) -> "[MASKED]"
                 else -> values.joinToString(", ")
             }
             result[name] = value

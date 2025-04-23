@@ -23,8 +23,6 @@ class GatewayAuthFilter : OncePerRequestFilter() {
     @Value("\${security.gateway.header.name:X-Auth-User}")
     private lateinit var gatewayHeaderName: String
 
-    @Value("\${security.gateway.public-paths:/api/auth/login,/api/auth/register,/api/auth/refresh-token}")
-    private lateinit var publicPaths: List<String>
 
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -33,28 +31,30 @@ class GatewayAuthFilter : OncePerRequestFilter() {
     ) {
         val requestPath = request.requestURI
 
-        // Пропускаем публичные пути без проверки
-        if (isPublicPath(requestPath)) {
-            logger.debug("Публичный путь, пропускаем без проверки Gateway: $requestPath")
+        // Пропускаем запросы на аутентификацию без проверки Gateway
+        if (requestPath.startsWith("/api/auth/")) {
+            logger.debug("Пропускаем запрос на аутентификацию без проверки Gateway: $requestPath")
             filterChain.doFilter(request, response)
             return
         }
+        
+        // Проверяем только запросы к отчетам и посещаемости
+        if (requestPath.startsWith("/reports/") || requestPath.contains("/attendance")) {
+            // Получаем заголовок X-Auth-User
+            val gatewayAuthHeader = request.getHeader(gatewayHeaderName)
 
-        // Получаем заголовок X-Auth-User
-        val gatewayAuthHeader = request.getHeader(gatewayHeaderName)
+            if (gatewayAuthHeader == null) {
+                logger.warn("Попытка прямого доступа к защищенному ресурсу без Gateway: $requestPath")
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Доступ к сервису разрешен только через API Gateway")
+                return
+            }
 
-        if (gatewayAuthHeader == null) {
-            logger.warn("Попытка прямого доступа к защищенному ресурсу без Gateway: $requestPath")
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Доступ к сервису разрешен только через API Gateway")
-            return
+            // Если заголовок есть, значит запрос пришел через Gateway - пропускаем дальше
+            logger.debug("Запрос от Gateway для пользователя: $gatewayAuthHeader на путь: $requestPath")
+        } else {
+            logger.debug("Пропускаем запрос к незащищенному ресурсу: $requestPath")
         }
-
-        // Если заголовок есть, значит запрос пришел через Gateway - пропускаем дальше
-        logger.debug("Запрос от Gateway для пользователя: $gatewayAuthHeader на путь: $requestPath")
+        
         filterChain.doFilter(request, response)
-    }
-
-    private fun isPublicPath(path: String): Boolean {
-        return publicPaths.any { path.startsWith(it) || path == "/" }
     }
 } 

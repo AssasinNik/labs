@@ -1,0 +1,422 @@
+2025-04-23T20:30:51.719+03:00  INFO 1798 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 17.0.14 with PID 1798 (/Users/nikitacerenkov/Documents/GitHub/labs/gateway/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs/gateway)
+2025-04-23T20:30:51.720+03:00 DEBUG 1798 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Running with Spring Boot v3.4.4, Spring v6.2.5
+2025-04-23T20:30:51.721+03:00  INFO 1798 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-04-23T20:30:52.486+03:00  INFO 1798 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=813e16da-e337-3bc8-a3aa-a6f38bc99048
+2025-04-23T20:30:52.776+03:00  INFO 1798 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 06134acf-f475-4f9e-a78c-ce45c42b6659
+
+2025-04-23T20:30:52.863+03:00 DEBUG 1798 --- [gateway] [main] s.w.r.r.m.a.RequestMappingHandlerMapping : 10 mappings in 'requestMappingHandlerMapping'
+2025-04-23T20:30:52.978+03:00 DEBUG 1798 --- [gateway] [main] o.s.c.gateway.config.GatewayProperties   : Routes supplied from Gateway Properties: [RouteDefinition{id='lab-1-service', predicates=[PredicateDefinition{name='Path', args={_genkey_0=/api/lab1/**}}], filters=[FilterDefinition{name='RewritePath', args={_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}}}, FilterDefinition{name='RemoveRequestHeader', args={_genkey_0=Cookie}}, FilterDefinition{name='name', args={_genkey_0=CircuitBreaker, _genkey_1=args.name=lab1ServiceBreaker, _genkey_2=args.fallbackUri=forward:/fallback/lab1}}, FilterDefinition{name='name', args={_genkey_0=RequestRateLimiter, _genkey_1=args.redis-rate-limiter.replenishRate=50, _genkey_2=args.redis-rate-limiter.burstCapacity=100, _genkey_3=args.key-resolver=#{@ipKeyResolver}}}], uri=http://localhost:8081, order=0, metadata={}, enabled=true}]
+2025-04-23T20:30:53.117+03:00  INFO 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-04-23T20:30:53.117+03:00  INFO 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-04-23T20:30:53.117+03:00  INFO 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-04-23T20:30:53.117+03:00  INFO 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-04-23T20:30:53.117+03:00  INFO 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-04-23T20:30:53.117+03:00  INFO 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-04-23T20:30:53.117+03:00  INFO 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-04-23T20:30:53.117+03:00  INFO 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-04-23T20:30:53.117+03:00  INFO 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-04-23T20:30:53.117+03:00  INFO 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-04-23T20:30:53.117+03:00  INFO 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-04-23T20:30:53.117+03:00  INFO 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-04-23T20:30:53.117+03:00  INFO 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-04-23T20:30:53.117+03:00  INFO 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-04-23T20:30:53.222+03:00  INFO 1798 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoints beneath base path '/actuator'
+2025-04-23T20:30:53.248+03:00 DEBUG 1798 --- [gateway] [main] o.s.w.r.r.m.a.ControllerMethodResolver   : ControllerAdvice beans: none
+2025-04-23T20:30:53.397+03:00 DEBUG 1798 --- [gateway] [main] reactor.netty.tcp.TcpResources           : [http] resources will use the default LoopResources: DefaultLoopResources {prefix=reactor-http, daemon=true, selectCount=8, workerCount=8}
+2025-04-23T20:30:53.398+03:00 DEBUG 1798 --- [gateway] [main] reactor.netty.tcp.TcpResources           : [http] resources will use the default ConnectionProvider: reactor.netty.resources.DefaultPooledConnectionProvider@69f69078
+2025-04-23T20:30:53.405+03:00 DEBUG 1798 --- [gateway] [main] r.netty.resources.DefaultLoopIOUring     : Default io_uring support : false
+2025-04-23T20:30:53.414+03:00 DEBUG 1798 --- [gateway] [main] r.netty.resources.DefaultLoopEpoll       : Default Epoll support : false
+2025-04-23T20:30:53.414+03:00 DEBUG 1798 --- [gateway] [main] r.netty.resources.DefaultLoopKQueue      : Default KQueue support : false
+2025-04-23T20:30:53.475+03:00 DEBUG 1798 --- [gateway] [reactor-http-nio-1] r.netty.transport.ServerTransport        : [83b69299, L:/[0:0:0:0:0:0:0:0]:8080] Bound new server
+2025-04-23T20:30:53.476+03:00  INFO 1798 --- [gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
+2025-04-23T20:30:53.503+03:00 DEBUG 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying {_genkey_0=/api/lab1/**} to Path
+2025-04-23T20:30:53.511+03:00 DEBUG 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}} to RewritePath
+2025-04-23T20:30:53.516+03:00 DEBUG 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=Cookie} to RemoveRequestHeader
+2025-04-23T20:30:53.519+03:00 ERROR 1798 --- [gateway] [main] o.s.c.gateway.route.CachingRouteLocator  : Refresh routes error !!!
+
+java.lang.IllegalArgumentException: Unable to find GatewayFilterFactory with name name
+	at org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator.loadGatewayFilters(RouteDefinitionRouteLocator.java:145) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator.getFilters(RouteDefinitionRouteLocator.java:192) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator.convertToRoute(RouteDefinitionRouteLocator.java:132) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at reactor.core.publisher.FluxMap$MapSubscriber.onNext(FluxMap.java:106) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.tryEmitScalar(FluxFlatMap.java:492) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.onNext(FluxFlatMap.java:424) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.drain(FluxMergeSequential.java:439) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.innerNext(FluxMergeSequential.java:304) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialInner.onNext(FluxMergeSequential.java:578) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.tryOnNext(FluxFilterFuseable.java:148) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscriptionConditional.slowPath(FluxIterable.java:664) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscriptionConditional.request(FluxIterable.java:623) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.request(FluxFilterFuseable.java:191) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialInner.onSubscribe(FluxMergeSequential.java:571) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.onSubscribe(FluxFilterFuseable.java:87) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:179) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Flux.subscribe(Flux.java:8891) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onNext(FluxMergeSequential.java:237) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.slowPath(FluxIterable.java:335) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:294) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onSubscribe(FluxMergeSequential.java:198) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:201) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Flux.subscribe(Flux.java:8891) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onNext(FluxMergeSequential.java:237) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.slowPath(FluxIterable.java:335) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:294) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onSubscribe(FluxMergeSequential.java:198) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:201) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Mono.subscribeWith(Mono.java:4641) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4542) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4478) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4450) ~[reactor-core-3.7.4.jar:3.7.4]
+	at org.springframework.cloud.gateway.route.CachingRouteLocator.onApplicationEvent(CachingRouteLocator.java:98) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.cloud.gateway.route.CachingRouteLocator.onApplicationEvent(CachingRouteLocator.java:42) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:185) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:178) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:156) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:454) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:387) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.cloud.gateway.route.RouteRefreshListener.reset(RouteRefreshListener.java:78) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.cloud.gateway.route.RouteRefreshListener.onApplicationEvent(RouteRefreshListener.java:55) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:185) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:178) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:156) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:454) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:387) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.finishRefresh(AbstractApplicationContext.java:1009) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:630) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext.refresh(ReactiveWebServerApplicationContext.java:66) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.4.4.jar:3.4.4]
+	at com.cherenkov.gateway.GatewayApplicationKt.main(GatewayApplication.kt:39) ~[main/:na]
+
+2025-04-23T20:30:53.523+03:00 DEBUG 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying {_genkey_0=/api/lab1/**} to Path
+2025-04-23T20:30:53.523+03:00 DEBUG 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}} to RewritePath
+2025-04-23T20:30:53.524+03:00 DEBUG 1798 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=Cookie} to RemoveRequestHeader
+2025-04-23T20:30:53.524+03:00  WARN 1798 --- [gateway] [main] onfigReactiveWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: java.lang.IllegalArgumentException: Unable to find GatewayFilterFactory with name name
+2025-04-23T20:30:53.529+03:00 DEBUG 1798 --- [gateway] [main] r.netty.transport.ServerTransport        : [83b69299, L:/[0:0:0:0:0:0:0:0]:8080] Server is about to be disposed with timeout: PT3S
+2025-04-23T20:30:53.531+03:00  INFO 1798 --- [gateway] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-04-23T20:30:53.549+03:00 ERROR 1798 --- [gateway] [main] o.s.boot.SpringApplication               : Application run failed
+
+java.lang.IllegalArgumentException: Unable to find GatewayFilterFactory with name name
+	at org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator.loadGatewayFilters(RouteDefinitionRouteLocator.java:145) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator.getFilters(RouteDefinitionRouteLocator.java:192) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator.convertToRoute(RouteDefinitionRouteLocator.java:132) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at reactor.core.publisher.FluxMap$MapSubscriber.onNext(FluxMap.java:106) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.tryEmitScalar(FluxFlatMap.java:492) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.onNext(FluxFlatMap.java:424) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.drain(FluxMergeSequential.java:439) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.innerNext(FluxMergeSequential.java:304) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialInner.onNext(FluxMergeSequential.java:578) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.tryOnNext(FluxFilterFuseable.java:148) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscriptionConditional.slowPath(FluxIterable.java:664) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscriptionConditional.request(FluxIterable.java:623) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.request(FluxFilterFuseable.java:191) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialInner.onSubscribe(FluxMergeSequential.java:571) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.onSubscribe(FluxFilterFuseable.java:87) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:179) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Flux.subscribe(Flux.java:8891) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onNext(FluxMergeSequential.java:237) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.slowPath(FluxIterable.java:335) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:294) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onSubscribe(FluxMergeSequential.java:198) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:201) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Flux.subscribe(Flux.java:8891) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onNext(FluxMergeSequential.java:237) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.slowPath(FluxIterable.java:335) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:294) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onSubscribe(FluxMergeSequential.java:198) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:201) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalFluxOperator.subscribe(InternalFluxOperator.java:68) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxDefer.subscribe(FluxDefer.java:54) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Flux.subscribe(Flux.java:8891) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Flux.blockLast(Flux.java:2816) ~[reactor-core-3.7.4.jar:3.7.4]
+	at org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter.lambda$onApplicationEvent$3(WeightCalculatorWebFilter.java:156) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory$DependencyObjectProvider.ifAvailable(DefaultListableBeanFactory.java:2466) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter.onApplicationEvent(WeightCalculatorWebFilter.java:156) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:185) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:178) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:156) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:454) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:387) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.cloud.gateway.route.RouteRefreshListener.reset(RouteRefreshListener.java:78) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.cloud.gateway.route.RouteRefreshListener.onApplicationEvent(RouteRefreshListener.java:55) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:185) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:178) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:156) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:454) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:387) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.finishRefresh(AbstractApplicationContext.java:1009) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:630) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext.refresh(ReactiveWebServerApplicationContext.java:66) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.4.4.jar:3.4.4]
+	at com.cherenkov.gateway.GatewayApplicationKt.main(GatewayApplication.kt:39) ~[main/:na]
+	Suppressed: java.lang.Exception: #block terminated with an error
+		at reactor.core.publisher.BlockingSingleSubscriber.blockingGet(BlockingSingleSubscriber.java:104) ~[reactor-core-3.7.4.jar:3.7.4]
+		at reactor.core.publisher.Flux.blockLast(Flux.java:2817) ~[reactor-core-3.7.4.jar:3.7.4]
+		... 22 common frames omitted
+
+2025-04-23T20:31:39.157+03:00  INFO 1841 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 17.0.14 with PID 1841 (/Users/nikitacerenkov/Documents/GitHub/labs/gateway/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs/gateway)
+2025-04-23T20:31:39.158+03:00 DEBUG 1841 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Running with Spring Boot v3.4.4, Spring v6.2.5
+2025-04-23T20:31:39.158+03:00  INFO 1841 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-04-23T20:31:39.897+03:00  INFO 1841 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=813e16da-e337-3bc8-a3aa-a6f38bc99048
+2025-04-23T20:31:40.181+03:00  INFO 1841 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 27587046-bbda-46f9-9d7c-ce3b8959998d
+
+2025-04-23T20:31:40.264+03:00 DEBUG 1841 --- [gateway] [main] s.w.r.r.m.a.RequestMappingHandlerMapping : 10 mappings in 'requestMappingHandlerMapping'
+2025-04-23T20:31:40.375+03:00 DEBUG 1841 --- [gateway] [main] o.s.c.gateway.config.GatewayProperties   : Routes supplied from Gateway Properties: [RouteDefinition{id='lab-1-service', predicates=[PredicateDefinition{name='Path', args={_genkey_0=/api/lab1/**}}], filters=[FilterDefinition{name='RewritePath', args={_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}}}, FilterDefinition{name='RemoveRequestHeader', args={_genkey_0=Cookie}}, FilterDefinition{name='CircuitBreaker', args={_genkey_0=lab1ServiceBreaker, _genkey_1=forward:/fallback/lab1}}, FilterDefinition{name='RequestRateLimiter', args={_genkey_0=50, _genkey_1=100, _genkey_2=#{@ipKeyResolver}}}], uri=http://localhost:8081, order=0, metadata={}, enabled=true}]
+2025-04-23T20:31:40.500+03:00  INFO 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-04-23T20:31:40.501+03:00  INFO 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-04-23T20:31:40.501+03:00  INFO 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-04-23T20:31:40.501+03:00  INFO 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-04-23T20:31:40.501+03:00  INFO 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-04-23T20:31:40.501+03:00  INFO 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-04-23T20:31:40.501+03:00  INFO 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-04-23T20:31:40.501+03:00  INFO 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-04-23T20:31:40.501+03:00  INFO 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-04-23T20:31:40.501+03:00  INFO 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-04-23T20:31:40.501+03:00  INFO 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-04-23T20:31:40.501+03:00  INFO 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-04-23T20:31:40.501+03:00  INFO 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-04-23T20:31:40.501+03:00  INFO 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-04-23T20:31:40.567+03:00  INFO 1841 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoints beneath base path '/actuator'
+2025-04-23T20:31:40.591+03:00 DEBUG 1841 --- [gateway] [main] o.s.w.r.r.m.a.ControllerMethodResolver   : ControllerAdvice beans: none
+2025-04-23T20:31:40.769+03:00 DEBUG 1841 --- [gateway] [main] reactor.netty.tcp.TcpResources           : [http] resources will use the default LoopResources: DefaultLoopResources {prefix=reactor-http, daemon=true, selectCount=8, workerCount=8}
+2025-04-23T20:31:40.771+03:00 DEBUG 1841 --- [gateway] [main] reactor.netty.tcp.TcpResources           : [http] resources will use the default ConnectionProvider: reactor.netty.resources.DefaultPooledConnectionProvider@432a6a69
+2025-04-23T20:31:40.778+03:00 DEBUG 1841 --- [gateway] [main] r.netty.resources.DefaultLoopIOUring     : Default io_uring support : false
+2025-04-23T20:31:40.785+03:00 DEBUG 1841 --- [gateway] [main] r.netty.resources.DefaultLoopEpoll       : Default Epoll support : false
+2025-04-23T20:31:40.785+03:00 DEBUG 1841 --- [gateway] [main] r.netty.resources.DefaultLoopKQueue      : Default KQueue support : false
+2025-04-23T20:31:40.840+03:00 DEBUG 1841 --- [gateway] [reactor-http-nio-1] r.netty.transport.ServerTransport        : [41aadd23, L:/[0:0:0:0:0:0:0:0]:8080] Bound new server
+2025-04-23T20:31:40.841+03:00  INFO 1841 --- [gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
+2025-04-23T20:31:40.869+03:00 DEBUG 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying {_genkey_0=/api/lab1/**} to Path
+2025-04-23T20:31:40.878+03:00 DEBUG 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}} to RewritePath
+2025-04-23T20:31:40.883+03:00 DEBUG 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=Cookie} to RemoveRequestHeader
+2025-04-23T20:31:40.883+03:00 DEBUG 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=lab1ServiceBreaker, _genkey_1=forward:/fallback/lab1} to CircuitBreaker
+2025-04-23T20:31:40.888+03:00 ERROR 1841 --- [gateway] [main] o.s.c.gateway.route.CachingRouteLocator  : Refresh routes error !!!
+
+java.lang.IllegalArgumentException: Unable to find GatewayFilterFactory with name RequestRateLimiter
+	at org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator.loadGatewayFilters(RouteDefinitionRouteLocator.java:145) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator.getFilters(RouteDefinitionRouteLocator.java:192) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator.convertToRoute(RouteDefinitionRouteLocator.java:132) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at reactor.core.publisher.FluxMap$MapSubscriber.onNext(FluxMap.java:106) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.tryEmitScalar(FluxFlatMap.java:492) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.onNext(FluxFlatMap.java:424) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.drain(FluxMergeSequential.java:439) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.innerNext(FluxMergeSequential.java:304) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialInner.onNext(FluxMergeSequential.java:578) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.tryOnNext(FluxFilterFuseable.java:148) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscriptionConditional.slowPath(FluxIterable.java:664) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscriptionConditional.request(FluxIterable.java:623) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.request(FluxFilterFuseable.java:191) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialInner.onSubscribe(FluxMergeSequential.java:571) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.onSubscribe(FluxFilterFuseable.java:87) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:179) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Flux.subscribe(Flux.java:8891) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onNext(FluxMergeSequential.java:237) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.slowPath(FluxIterable.java:335) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:294) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onSubscribe(FluxMergeSequential.java:198) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:201) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Flux.subscribe(Flux.java:8891) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onNext(FluxMergeSequential.java:237) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.slowPath(FluxIterable.java:335) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:294) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onSubscribe(FluxMergeSequential.java:198) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:201) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Mono.subscribeWith(Mono.java:4641) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4542) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4478) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4450) ~[reactor-core-3.7.4.jar:3.7.4]
+	at org.springframework.cloud.gateway.route.CachingRouteLocator.onApplicationEvent(CachingRouteLocator.java:98) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.cloud.gateway.route.CachingRouteLocator.onApplicationEvent(CachingRouteLocator.java:42) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:185) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:178) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:156) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:454) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:387) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.cloud.gateway.route.RouteRefreshListener.reset(RouteRefreshListener.java:78) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.cloud.gateway.route.RouteRefreshListener.onApplicationEvent(RouteRefreshListener.java:55) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:185) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:178) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:156) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:454) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:387) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.finishRefresh(AbstractApplicationContext.java:1009) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:630) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext.refresh(ReactiveWebServerApplicationContext.java:66) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.4.4.jar:3.4.4]
+	at com.cherenkov.gateway.GatewayApplicationKt.main(GatewayApplication.kt:39) ~[main/:na]
+
+2025-04-23T20:31:40.892+03:00 DEBUG 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying {_genkey_0=/api/lab1/**} to Path
+2025-04-23T20:31:40.893+03:00 DEBUG 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}} to RewritePath
+2025-04-23T20:31:40.893+03:00 DEBUG 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=Cookie} to RemoveRequestHeader
+2025-04-23T20:31:40.893+03:00 DEBUG 1841 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=lab1ServiceBreaker, _genkey_1=forward:/fallback/lab1} to CircuitBreaker
+2025-04-23T20:31:40.894+03:00  WARN 1841 --- [gateway] [main] onfigReactiveWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: java.lang.IllegalArgumentException: Unable to find GatewayFilterFactory with name RequestRateLimiter
+2025-04-23T20:31:40.898+03:00 DEBUG 1841 --- [gateway] [main] r.netty.transport.ServerTransport        : [41aadd23, L:/[0:0:0:0:0:0:0:0]:8080] Server is about to be disposed with timeout: PT3S
+2025-04-23T20:31:40.900+03:00  INFO 1841 --- [gateway] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-04-23T20:31:40.909+03:00 ERROR 1841 --- [gateway] [main] o.s.boot.SpringApplication               : Application run failed
+
+java.lang.IllegalArgumentException: Unable to find GatewayFilterFactory with name RequestRateLimiter
+	at org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator.loadGatewayFilters(RouteDefinitionRouteLocator.java:145) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator.getFilters(RouteDefinitionRouteLocator.java:192) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator.convertToRoute(RouteDefinitionRouteLocator.java:132) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at reactor.core.publisher.FluxMap$MapSubscriber.onNext(FluxMap.java:106) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.tryEmitScalar(FluxFlatMap.java:492) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFlatMap$FlatMapMain.onNext(FluxFlatMap.java:424) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.drain(FluxMergeSequential.java:439) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.innerNext(FluxMergeSequential.java:304) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialInner.onNext(FluxMergeSequential.java:578) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.tryOnNext(FluxFilterFuseable.java:148) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscriptionConditional.slowPath(FluxIterable.java:664) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscriptionConditional.request(FluxIterable.java:623) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.request(FluxFilterFuseable.java:191) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialInner.onSubscribe(FluxMergeSequential.java:571) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterFuseable$FilterFuseableSubscriber.onSubscribe(FluxFilterFuseable.java:87) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:179) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Flux.subscribe(Flux.java:8891) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onNext(FluxMergeSequential.java:237) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.slowPath(FluxIterable.java:335) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:294) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onSubscribe(FluxMergeSequential.java:198) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:201) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Flux.subscribe(Flux.java:8891) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onNext(FluxMergeSequential.java:237) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.slowPath(FluxIterable.java:335) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:294) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMergeSequential$MergeSequentialMain.onSubscribe(FluxMergeSequential.java:198) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:201) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalFluxOperator.subscribe(InternalFluxOperator.java:68) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxDefer.subscribe(FluxDefer.java:54) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Flux.subscribe(Flux.java:8891) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Flux.blockLast(Flux.java:2816) ~[reactor-core-3.7.4.jar:3.7.4]
+	at org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter.lambda$onApplicationEvent$3(WeightCalculatorWebFilter.java:156) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory$DependencyObjectProvider.ifAvailable(DefaultListableBeanFactory.java:2466) ~[spring-beans-6.2.5.jar:6.2.5]
+	at org.springframework.cloud.gateway.filter.WeightCalculatorWebFilter.onApplicationEvent(WeightCalculatorWebFilter.java:156) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:185) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:178) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:156) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:454) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:387) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.cloud.gateway.route.RouteRefreshListener.reset(RouteRefreshListener.java:78) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.cloud.gateway.route.RouteRefreshListener.onApplicationEvent(RouteRefreshListener.java:55) ~[spring-cloud-gateway-server-4.2.1.jar:4.2.1]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.doInvokeListener(SimpleApplicationEventMulticaster.java:185) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:178) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:156) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:454) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:387) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.finishRefresh(AbstractApplicationContext.java:1009) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:630) ~[spring-context-6.2.5.jar:6.2.5]
+	at org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext.refresh(ReactiveWebServerApplicationContext.java:66) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:752) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:439) ~[spring-boot-3.4.4.jar:3.4.4]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:318) ~[spring-boot-3.4.4.jar:3.4.4]
+	at com.cherenkov.gateway.GatewayApplicationKt.main(GatewayApplication.kt:39) ~[main/:na]
+	Suppressed: java.lang.Exception: #block terminated with an error
+		at reactor.core.publisher.BlockingSingleSubscriber.blockingGet(BlockingSingleSubscriber.java:104) ~[reactor-core-3.7.4.jar:3.7.4]
+		at reactor.core.publisher.Flux.blockLast(Flux.java:2817) ~[reactor-core-3.7.4.jar:3.7.4]
+		... 22 common frames omitted
+
+2025-04-23T20:32:30.422+03:00  INFO 1880 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 17.0.14 with PID 1880 (/Users/nikitacerenkov/Documents/GitHub/labs/gateway/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs/gateway)
+2025-04-23T20:32:30.423+03:00 DEBUG 1880 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Running with Spring Boot v3.4.4, Spring v6.2.5
+2025-04-23T20:32:30.423+03:00  INFO 1880 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-04-23T20:32:31.179+03:00  INFO 1880 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=813e16da-e337-3bc8-a3aa-a6f38bc99048
+2025-04-23T20:32:31.467+03:00  INFO 1880 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 8ae189a8-42a9-47a5-afbf-8af738719485
+
+2025-04-23T20:32:31.543+03:00 DEBUG 1880 --- [gateway] [main] s.w.r.r.m.a.RequestMappingHandlerMapping : 10 mappings in 'requestMappingHandlerMapping'
+2025-04-23T20:32:31.663+03:00 DEBUG 1880 --- [gateway] [main] o.s.c.gateway.config.GatewayProperties   : Routes supplied from Gateway Properties: [RouteDefinition{id='lab-1-service', predicates=[PredicateDefinition{name='Path', args={_genkey_0=/api/lab1/**}}], filters=[FilterDefinition{name='RewritePath', args={_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}}}, FilterDefinition{name='RemoveRequestHeader', args={_genkey_0=Cookie}}, FilterDefinition{name='CircuitBreaker', args={_genkey_0=lab1ServiceBreaker, _genkey_1=forward:/fallback/lab1}}], uri=http://localhost:8081, order=0, metadata={}, enabled=true}]
+2025-04-23T20:32:31.784+03:00  INFO 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-04-23T20:32:31.785+03:00  INFO 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-04-23T20:32:31.785+03:00  INFO 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-04-23T20:32:31.785+03:00  INFO 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-04-23T20:32:31.785+03:00  INFO 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-04-23T20:32:31.785+03:00  INFO 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-04-23T20:32:31.785+03:00  INFO 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-04-23T20:32:31.785+03:00  INFO 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-04-23T20:32:31.785+03:00  INFO 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-04-23T20:32:31.785+03:00  INFO 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-04-23T20:32:31.785+03:00  INFO 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-04-23T20:32:31.785+03:00  INFO 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-04-23T20:32:31.785+03:00  INFO 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-04-23T20:32:31.785+03:00  INFO 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-04-23T20:32:31.893+03:00  INFO 1880 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoints beneath base path '/actuator'
+2025-04-23T20:32:31.916+03:00 DEBUG 1880 --- [gateway] [main] o.s.w.r.r.m.a.ControllerMethodResolver   : ControllerAdvice beans: none
+2025-04-23T20:32:32.064+03:00 DEBUG 1880 --- [gateway] [main] reactor.netty.tcp.TcpResources           : [http] resources will use the default LoopResources: DefaultLoopResources {prefix=reactor-http, daemon=true, selectCount=8, workerCount=8}
+2025-04-23T20:32:32.065+03:00 DEBUG 1880 --- [gateway] [main] reactor.netty.tcp.TcpResources           : [http] resources will use the default ConnectionProvider: reactor.netty.resources.DefaultPooledConnectionProvider@7c206b14
+2025-04-23T20:32:32.072+03:00 DEBUG 1880 --- [gateway] [main] r.netty.resources.DefaultLoopIOUring     : Default io_uring support : false
+2025-04-23T20:32:32.080+03:00 DEBUG 1880 --- [gateway] [main] r.netty.resources.DefaultLoopEpoll       : Default Epoll support : false
+2025-04-23T20:32:32.080+03:00 DEBUG 1880 --- [gateway] [main] r.netty.resources.DefaultLoopKQueue      : Default KQueue support : false
+2025-04-23T20:32:32.135+03:00 DEBUG 1880 --- [gateway] [reactor-http-nio-1] r.netty.transport.ServerTransport        : [2b09d588, L:/[0:0:0:0:0:0:0:0]:8080] Bound new server
+2025-04-23T20:32:32.135+03:00  INFO 1880 --- [gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
+2025-04-23T20:32:32.166+03:00 DEBUG 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying {_genkey_0=/api/lab1/**} to Path
+2025-04-23T20:32:32.174+03:00 DEBUG 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}} to RewritePath
+2025-04-23T20:32:32.179+03:00 DEBUG 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=Cookie} to RemoveRequestHeader
+2025-04-23T20:32:32.181+03:00 DEBUG 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=lab1ServiceBreaker, _genkey_1=forward:/fallback/lab1} to CircuitBreaker
+2025-04-23T20:32:32.184+03:00 DEBUG 1880 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition matched: lab-1-service
+2025-04-23T20:32:32.186+03:00 DEBUG 1880 --- [gateway] [main] o.s.c.g.filter.GatewayMetricsFilter      : New routes count: 1
+2025-04-23T20:32:32.187+03:00  INFO 1880 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Started GatewayApplicationKt in 2.019 seconds (process running for 2.295)
+2025-04-23T20:34:47.487+03:00  INFO 1880 --- [gateway] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
+2025-04-23T20:34:47.489+03:00 DEBUG 1880 --- [gateway] [netty-shutdown] r.netty.transport.ServerTransport        : [2b09d588, L:/[0:0:0:0:0:0:0:0]:8080] Server is about to be disposed with timeout: PT2562047H47M16.854775807S
+2025-04-23T20:34:47.492+03:00  INFO 1880 --- [gateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
+2025-04-23T20:34:47.493+03:00 DEBUG 1880 --- [gateway] [SpringApplicationShutdownHook] r.netty.transport.ServerTransport        : [2b09d588, L:/[0:0:0:0:0:0:0:0]:8080] Server has been disposed
+2025-04-23T20:50:14.931+03:00  INFO 2420 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 17.0.14 with PID 2420 (/Users/nikitacerenkov/Documents/GitHub/labs/gateway/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs/gateway)
+2025-04-23T20:50:14.932+03:00 DEBUG 2420 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Running with Spring Boot v3.4.4, Spring v6.2.5
+2025-04-23T20:50:14.932+03:00  INFO 2420 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-04-23T20:50:15.703+03:00  INFO 2420 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=813e16da-e337-3bc8-a3aa-a6f38bc99048
+2025-04-23T20:50:15.995+03:00  INFO 2420 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: c522fa07-389d-49a1-a36a-9afaf0813b08
+
+2025-04-23T20:50:16.082+03:00 DEBUG 2420 --- [gateway] [main] s.w.r.r.m.a.RequestMappingHandlerMapping : 10 mappings in 'requestMappingHandlerMapping'
+2025-04-23T20:50:16.191+03:00 DEBUG 2420 --- [gateway] [main] o.s.c.gateway.config.GatewayProperties   : Routes supplied from Gateway Properties: [RouteDefinition{id='lab-1-service', predicates=[PredicateDefinition{name='Path', args={_genkey_0=/api/lab1/**}}], filters=[FilterDefinition{name='RewritePath', args={_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}}}, FilterDefinition{name='RemoveRequestHeader', args={_genkey_0=Cookie}}, FilterDefinition{name='CircuitBreaker', args={_genkey_0=lab1ServiceBreaker, _genkey_1=forward:/fallback/lab1}}], uri=http://localhost:8081, order=0, metadata={}, enabled=true}]
+2025-04-23T20:50:16.315+03:00  INFO 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-04-23T20:50:16.315+03:00  INFO 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-04-23T20:50:16.315+03:00  INFO 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-04-23T20:50:16.316+03:00  INFO 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-04-23T20:50:16.316+03:00  INFO 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-04-23T20:50:16.316+03:00  INFO 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-04-23T20:50:16.316+03:00  INFO 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-04-23T20:50:16.316+03:00  INFO 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-04-23T20:50:16.316+03:00  INFO 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-04-23T20:50:16.316+03:00  INFO 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-04-23T20:50:16.316+03:00  INFO 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-04-23T20:50:16.316+03:00  INFO 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-04-23T20:50:16.316+03:00  INFO 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-04-23T20:50:16.316+03:00  INFO 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-04-23T20:50:16.436+03:00  INFO 2420 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoints beneath base path '/actuator'
+2025-04-23T20:50:16.462+03:00 DEBUG 2420 --- [gateway] [main] o.s.w.r.r.m.a.ControllerMethodResolver   : ControllerAdvice beans: none
+2025-04-23T20:50:16.680+03:00  INFO 2420 --- [gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
+2025-04-23T20:50:16.711+03:00 DEBUG 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying {_genkey_0=/api/lab1/**} to Path
+2025-04-23T20:50:16.727+03:00 DEBUG 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=/api/lab1/(?<segment>.*), _genkey_1=/api/${segment}} to RewritePath
+2025-04-23T20:50:16.732+03:00 DEBUG 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=Cookie} to RemoveRequestHeader
+2025-04-23T20:50:16.733+03:00 DEBUG 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition lab-1-service applying filter {_genkey_0=lab1ServiceBreaker, _genkey_1=forward:/fallback/lab1} to CircuitBreaker
+2025-04-23T20:50:16.737+03:00 DEBUG 2420 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : RouteDefinition matched: lab-1-service
+2025-04-23T20:50:16.740+03:00 DEBUG 2420 --- [gateway] [main] o.s.c.g.filter.GatewayMetricsFilter      : New routes count: 1
+2025-04-23T20:50:16.740+03:00  INFO 2420 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Started GatewayApplicationKt in 2.074 seconds (process running for 2.394)
+2025-04-23T20:50:47.782+03:00  INFO 2420 --- [gateway] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
+2025-04-23T20:50:47.787+03:00  INFO 2420 --- [gateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete

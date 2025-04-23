@@ -1166,3 +1166,42 @@ where "public"."student"."student_number" in (
 2025-04-16 13:02:07.495 [http-nio-8080-exec-5] INFO  c.c.lab_1.service.ReportService - Отчет успешно сформирован, количество записей: 10
 2025-04-16 13:02:07.495 [http-nio-8080-exec-5] INFO  c.c.l.controllers.ReportController - Отчет успешно сформирован, записей: 10
 2025-04-16 13:02:07.497 [http-nio-8080-exec-5] INFO  c.c.l.configs.RequestLoggingFilter - <<< {org.apache.catalina.connector.ResponseFacade@7fc128ea} - {200} ({1044} мс)
+2025-04-16 13:04:11.745 [cluster-ClusterId{value='67ff7e0dbb55ca2bfb0407d5', description='null'}-localhost:27017] INFO  org.mongodb.driver.cluster - Exception in monitor thread while connecting to server localhost:27017
+com.mongodb.MongoNodeIsRecoveringException: Command failed with error 11600 (InterruptedAtShutdown): 'interrupted at shutdown' on server localhost:27017. The full response is {"ok": 0.0, "errmsg": "interrupted at shutdown", "code": 11600, "codeName": "InterruptedAtShutdown"}
+	at com.mongodb.internal.connection.ProtocolHelper.createSpecialException(ProtocolHelper.java:264)
+	at com.mongodb.internal.connection.ProtocolHelper.getCommandFailureException(ProtocolHelper.java:206)
+	at com.mongodb.internal.connection.InternalStreamConnection.receiveCommandMessageResponse(InternalStreamConnection.java:520)
+	at com.mongodb.internal.connection.InternalStreamConnection.receive(InternalStreamConnection.java:469)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.lookupServerDescription(DefaultServerMonitor.java:249)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.run(DefaultServerMonitor.java:176)
+2025-04-16 13:04:11.942 [lettuce-eventExecutorLoop-1-1] INFO  o.n.d.i.l.c.p.ConnectionWatchdog - Reconnecting, last destination was localhost/127.0.0.1:6379
+2025-04-16 13:04:11.958 [lettuce-nioEventLoop-7-2] WARN  o.n.d.i.l.c.p.ConnectionWatchdog - Cannot reconnect to [localhost/<unresolved>:6379]: Connection reset
+java.net.SocketException: Connection reset
+2025-04-16 13:04:21.035 [lettuce-eventExecutorLoop-1-5] INFO  o.n.d.i.l.c.p.ConnectionWatchdog - Reconnecting, last destination was localhost/<unresolved>:6379
+2025-04-16 13:04:21.039 [lettuce-nioEventLoop-7-6] WARN  o.n.d.i.l.c.p.ConnectionWatchdog - Cannot reconnect to [localhost/<unresolved>:6379]: Connection refused: localhost/127.0.0.1:6379
+2025-04-16 13:04:21.761 [cluster-ClusterId{value='67ff7e0dbb55ca2bfb0407d5', description='null'}-localhost:27017] INFO  org.mongodb.driver.cluster - Exception in monitor thread while connecting to server localhost:27017
+com.mongodb.MongoSocketOpenException: Exception opening socket
+	at com.mongodb.internal.connection.SocketStream.lambda$open$0(SocketStream.java:85)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at com.mongodb.internal.connection.SocketStream.open(SocketStream.java:85)
+	at com.mongodb.internal.connection.InternalStreamConnection.open(InternalStreamConnection.java:233)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.lookupServerDescription(DefaultServerMonitor.java:219)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.run(DefaultServerMonitor.java:176)
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:673)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:540)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:590)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:666)
+	at com.mongodb.internal.connection.SocketStreamHelper.initialize(SocketStreamHelper.java:76)
+	at com.mongodb.internal.connection.SocketStream.initializeSocket(SocketStream.java:104)
+	at com.mongodb.internal.connection.SocketStream.open(SocketStream.java:79)
+	... 3 common frames omitted
+2025-04-16 13:04:29.337 [lettuce-eventExecutorLoop-1-6] INFO  o.n.d.i.l.c.p.ConnectionWatchdog - Reconnecting, last destination was localhost/<unresolved>:6379
+2025-04-16 13:04:29.339 [lettuce-nioEventLoop-7-7] WARN  o.n.d.i.l.c.p.ConnectionWatchdog - Cannot reconnect to [localhost/<unresolved>:6379]: Connection refused: localhost/127.0.0.1:6379
+2025-04-16 13:04:42.940 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-04-16 13:04:42.942 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-04-16 13:04:43.065 [SpringApplicationShutdownHook] INFO  o.n.driver.internal.InternalDriver - Closing driver instance 1803439542
+2025-04-16 13:04:43.288 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-04-16 13:04:43.289 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
