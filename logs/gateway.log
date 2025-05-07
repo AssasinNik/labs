@@ -3558,3 +3558,407 @@ Using generated security password: 2f13d91e-3760-4b02-b8ba-c86798d04711
 2025-04-23T21:56:20.904+03:00  INFO 4167 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [d4351ef0-5d05-4cd0-8d17-94415272e9ce]: Status=200 OK, Duration=1210ms
 2025-04-23T21:56:30.320+03:00  INFO 4167 --- [gateway] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
 2025-04-23T21:56:30.321+03:00  INFO 4167 --- [gateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
+2025-05-07T16:57:01.321+03:00  INFO 2554 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.2.1 with PID 2554 (/Users/nikitacerenkov/Documents/GitHub/labs/gateway/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs)
+2025-05-07T16:57:01.322+03:00  INFO 2554 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-05-07T16:57:02.233+03:00  INFO 2554 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=64ea6394-4c94-3868-9140-610789fb9bfa
+2025-05-07T16:57:02.516+03:00  INFO 2554 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: ee837d4a-949b-44fd-b466-8d24413e52e5
+
+2025-05-07T16:57:02.558+03:00  INFO 2554 --- [gateway] [main] c.c.gateway.config.SecurityConfig        : Configuring security with exclude paths: [/api/auth/login, /api/auth/register, /api/auth/refresh-token, /actuator/**, /fallback/**]
+2025-05-07T16:57:02.798+03:00  INFO 2554 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-05-07T16:57:02.798+03:00  INFO 2554 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-05-07T16:57:02.798+03:00  INFO 2554 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-05-07T16:57:02.798+03:00  INFO 2554 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-05-07T16:57:02.798+03:00  INFO 2554 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-05-07T16:57:02.798+03:00  INFO 2554 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-05-07T16:57:02.798+03:00  INFO 2554 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-05-07T16:57:02.798+03:00  INFO 2554 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-05-07T16:57:02.798+03:00  INFO 2554 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-05-07T16:57:02.798+03:00  INFO 2554 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-05-07T16:57:02.798+03:00  INFO 2554 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-05-07T16:57:02.798+03:00  INFO 2554 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-05-07T16:57:02.798+03:00  INFO 2554 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-05-07T16:57:02.798+03:00  INFO 2554 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-05-07T16:57:02.900+03:00  INFO 2554 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoints beneath base path '/actuator'
+2025-05-07T16:57:03.103+03:00  INFO 2554 --- [gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
+2025-05-07T16:57:03.142+03:00  INFO 2554 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Started GatewayApplicationKt in 2.046 seconds (process running for 2.408)
+2025-05-07T16:57:36.066+03:00  INFO 2554 --- [gateway] [parallel-1] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [7658add5-f0af-4c81-9d6b-586ece0c68b9]: POST http://localhost:8080/api/auth/login from 0:0:0:0:0:0:0:1
+2025-05-07T16:57:36.068+03:00  INFO 2554 --- [gateway] [parallel-1] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [5af68a65-95fd-46fc-a887-bfcc276034d1]: POST http://localhost:8080/api/auth/login {Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=cf7d4702-4dd4-45a2-b7ac-21e3a30797c2, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=50, X-Gateway-Auth=true, X-Correlation-ID=7658add5-f0af-4c81-9d6b-586ece0c68b9}
+2025-05-07T16:57:36.106+03:00 ERROR 2554 --- [gateway] [parallel-1] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2025-05-07T16:57:36.337+03:00  INFO 2554 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [5af68a65-95fd-46fc-a887-bfcc276034d1]: Status=200 OK
+2025-05-07T16:57:36.339+03:00  INFO 2554 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [7658add5-f0af-4c81-9d6b-586ece0c68b9]: Status=200 OK, Duration=275ms
+2025-05-07T16:57:50.795+03:00  INFO 2554 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T16:57:50.800+03:00  INFO 2554 --- [gateway] [parallel-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T16:57:50.801+03:00  INFO 2554 --- [gateway] [parallel-3] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [99bbcf91-dd0e-49ad-b983-329a1246a227]: POST http://localhost:8080/reports/attendance from 0:0:0:0:0:0:0:1
+2025-05-07T16:57:50.801+03:00  INFO 2554 --- [gateway] [parallel-3] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [bfd42682-fc9f-45c8-8be1-f0edb9de77ed]: POST http://localhost:8080/reports/attendance {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=f7c31f67-56c5-4cfe-8bb5-302121e8509f, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=110, X-Auth-User=test, X-Gateway-Auth=true, X-Correlation-ID=99bbcf91-dd0e-49ad-b983-329a1246a227}
+2025-05-07T16:57:50.977+03:00  INFO 2554 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [bfd42682-fc9f-45c8-8be1-f0edb9de77ed]: Status=500 INTERNAL_SERVER_ERROR
+2025-05-07T16:57:50.978+03:00 ERROR 2554 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : ERROR RESPONSE [99bbcf91-dd0e-49ad-b983-329a1246a227]: Status=500 INTERNAL_SERVER_ERROR, Duration=178ms
+2025-05-07T16:59:22.102+03:00  INFO 2554 --- [gateway] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-07T16:59:22.105+03:00  INFO 2554 --- [gateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
+2025-05-07T17:05:25.477+03:00  INFO 3052 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.2.1 with PID 3052 (/Users/nikitacerenkov/Documents/GitHub/labs/gateway/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs)
+2025-05-07T17:05:25.479+03:00  INFO 3052 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-05-07T17:05:26.125+03:00  INFO 3052 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=64ea6394-4c94-3868-9140-610789fb9bfa
+2025-05-07T17:05:26.374+03:00  INFO 3052 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: f5f56376-9408-4de0-862b-3c98dcd91d54
+
+2025-05-07T17:05:26.410+03:00  INFO 3052 --- [gateway] [main] c.c.gateway.config.SecurityConfig        : Configuring security with exclude paths: [/api/auth/login, /api/auth/register, /api/auth/refresh-token, /actuator/**, /fallback/**]
+2025-05-07T17:05:26.626+03:00  INFO 3052 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-05-07T17:05:26.626+03:00  INFO 3052 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-05-07T17:05:26.626+03:00  INFO 3052 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-05-07T17:05:26.626+03:00  INFO 3052 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-05-07T17:05:26.626+03:00  INFO 3052 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-05-07T17:05:26.627+03:00  INFO 3052 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-05-07T17:05:26.627+03:00  INFO 3052 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-05-07T17:05:26.627+03:00  INFO 3052 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-05-07T17:05:26.627+03:00  INFO 3052 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-05-07T17:05:26.627+03:00  INFO 3052 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-05-07T17:05:26.627+03:00  INFO 3052 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-05-07T17:05:26.627+03:00  INFO 3052 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-05-07T17:05:26.627+03:00  INFO 3052 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-05-07T17:05:26.627+03:00  INFO 3052 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-05-07T17:05:26.735+03:00  INFO 3052 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoints beneath base path '/actuator'
+2025-05-07T17:05:26.954+03:00  INFO 3052 --- [gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
+2025-05-07T17:05:26.993+03:00  INFO 3052 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Started GatewayApplicationKt in 1.733 seconds (process running for 2.091)
+2025-05-07T17:05:46.371+03:00  INFO 3052 --- [gateway] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-07T17:05:46.373+03:00  INFO 3052 --- [gateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
+2025-05-07T17:07:33.327+03:00  INFO 3223 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.2.1 with PID 3223 (/Users/nikitacerenkov/Documents/GitHub/labs/gateway/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs)
+2025-05-07T17:07:33.328+03:00  INFO 3223 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-05-07T17:07:33.991+03:00  INFO 3223 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=64ea6394-4c94-3868-9140-610789fb9bfa
+2025-05-07T17:07:34.223+03:00  INFO 3223 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 490925b6-45d9-4bf9-ae8b-8c2fc062efcc
+
+2025-05-07T17:07:34.259+03:00  INFO 3223 --- [gateway] [main] c.c.gateway.config.SecurityConfig        : Configuring security with exclude paths: [/api/auth/login, /api/auth/register, /api/auth/refresh-token, /actuator/**, /fallback/**]
+2025-05-07T17:07:34.478+03:00  INFO 3223 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-05-07T17:07:34.478+03:00  INFO 3223 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-05-07T17:07:34.478+03:00  INFO 3223 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-05-07T17:07:34.478+03:00  INFO 3223 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-05-07T17:07:34.478+03:00  INFO 3223 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-05-07T17:07:34.478+03:00  INFO 3223 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-05-07T17:07:34.478+03:00  INFO 3223 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-05-07T17:07:34.478+03:00  INFO 3223 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-05-07T17:07:34.478+03:00  INFO 3223 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-05-07T17:07:34.478+03:00  INFO 3223 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-05-07T17:07:34.478+03:00  INFO 3223 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-05-07T17:07:34.478+03:00  INFO 3223 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-05-07T17:07:34.478+03:00  INFO 3223 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-05-07T17:07:34.478+03:00  INFO 3223 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-05-07T17:07:34.588+03:00  INFO 3223 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoints beneath base path '/actuator'
+2025-05-07T17:07:34.800+03:00  INFO 3223 --- [gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
+2025-05-07T17:07:34.840+03:00  INFO 3223 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Started GatewayApplicationKt in 1.709 seconds (process running for 2.028)
+2025-05-07T17:07:43.171+03:00  INFO 3223 --- [gateway] [parallel-1] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [6cb20adb-933e-4d4f-bf7c-a96e95a8e80e]: POST http://localhost:8080/api/auth/login from 0:0:0:0:0:0:0:1
+2025-05-07T17:07:43.174+03:00  INFO 3223 --- [gateway] [parallel-1] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [54951267-df21-48eb-9983-aa41e4586539]: POST http://localhost:8080/api/auth/login {Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=07a1de5a-b0d6-46af-a963-7f09498af68c, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=50, X-Gateway-Auth=true, X-Correlation-ID=6cb20adb-933e-4d4f-bf7c-a96e95a8e80e}
+2025-05-07T17:07:43.211+03:00 ERROR 3223 --- [gateway] [parallel-1] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2025-05-07T17:07:43.457+03:00  INFO 3223 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [54951267-df21-48eb-9983-aa41e4586539]: Status=200 OK
+2025-05-07T17:07:43.459+03:00  INFO 3223 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [6cb20adb-933e-4d4f-bf7c-a96e95a8e80e]: Status=200 OK, Duration=290ms
+2025-05-07T17:07:56.347+03:00  INFO 3223 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T17:07:56.351+03:00  INFO 3223 --- [gateway] [parallel-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T17:07:56.352+03:00  INFO 3223 --- [gateway] [parallel-3] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [bc71169e-4d91-4b41-a4c6-38e964f825eb]: POST http://localhost:8080/reports/attendance from 0:0:0:0:0:0:0:1
+2025-05-07T17:07:56.352+03:00  INFO 3223 --- [gateway] [parallel-3] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [2a05ef8b-45a0-47e8-bd28-927ace4cbe52]: POST http://localhost:8080/reports/attendance {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=6f0e07b0-8e0e-4970-868d-4b57219785e4, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=110, X-Auth-User=test, X-Gateway-Auth=true, X-Correlation-ID=bc71169e-4d91-4b41-a4c6-38e964f825eb}
+2025-05-07T17:07:56.540+03:00  INFO 3223 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [2a05ef8b-45a0-47e8-bd28-927ace4cbe52]: Status=500 INTERNAL_SERVER_ERROR
+2025-05-07T17:07:56.540+03:00 ERROR 3223 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : ERROR RESPONSE [bc71169e-4d91-4b41-a4c6-38e964f825eb]: Status=500 INTERNAL_SERVER_ERROR, Duration=188ms
+2025-05-07T17:08:08.839+03:00  INFO 3223 --- [gateway] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-07T17:08:08.840+03:00  INFO 3223 --- [gateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
+2025-05-07T17:09:19.381+03:00  INFO 3335 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.2.1 with PID 3335 (/Users/nikitacerenkov/Documents/GitHub/labs/gateway/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs)
+2025-05-07T17:09:19.382+03:00  INFO 3335 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-05-07T17:09:19.996+03:00  INFO 3335 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=64ea6394-4c94-3868-9140-610789fb9bfa
+2025-05-07T17:09:20.255+03:00  INFO 3335 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 22af7c8a-6813-4e4c-b1fd-5e898747d1ca
+
+2025-05-07T17:09:20.291+03:00  INFO 3335 --- [gateway] [main] c.c.gateway.config.SecurityConfig        : Configuring security with exclude paths: [/api/auth/login, /api/auth/register, /api/auth/refresh-token, /actuator/**, /fallback/**]
+2025-05-07T17:09:20.504+03:00  INFO 3335 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-05-07T17:09:20.504+03:00  INFO 3335 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-05-07T17:09:20.504+03:00  INFO 3335 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-05-07T17:09:20.505+03:00  INFO 3335 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-05-07T17:09:20.505+03:00  INFO 3335 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-05-07T17:09:20.505+03:00  INFO 3335 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-05-07T17:09:20.505+03:00  INFO 3335 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-05-07T17:09:20.505+03:00  INFO 3335 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-05-07T17:09:20.505+03:00  INFO 3335 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-05-07T17:09:20.505+03:00  INFO 3335 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-05-07T17:09:20.505+03:00  INFO 3335 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-05-07T17:09:20.505+03:00  INFO 3335 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-05-07T17:09:20.505+03:00  INFO 3335 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-05-07T17:09:20.505+03:00  INFO 3335 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-05-07T17:09:20.609+03:00  INFO 3335 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoints beneath base path '/actuator'
+2025-05-07T17:09:20.826+03:00  INFO 3335 --- [gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
+2025-05-07T17:09:20.865+03:00  INFO 3335 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Started GatewayApplicationKt in 1.665 seconds (process running for 1.984)
+2025-05-07T17:09:26.657+03:00  INFO 3335 --- [gateway] [parallel-1] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [51a76b4d-8b4b-4223-85f4-d6bd0fe35f07]: POST http://localhost:8080/api/auth/login from 0:0:0:0:0:0:0:1
+2025-05-07T17:09:26.659+03:00  INFO 3335 --- [gateway] [parallel-1] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [f5ce5e58-3df6-4ce2-884a-2c66c4891f30]: POST http://localhost:8080/api/auth/login {Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=adf78671-969b-42f1-b60c-abfbbf0b9e34, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=50, X-Gateway-Auth=true, X-Correlation-ID=51a76b4d-8b4b-4223-85f4-d6bd0fe35f07}
+2025-05-07T17:09:26.700+03:00 ERROR 3335 --- [gateway] [parallel-1] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2025-05-07T17:09:26.940+03:00  INFO 3335 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [f5ce5e58-3df6-4ce2-884a-2c66c4891f30]: Status=200 OK
+2025-05-07T17:09:26.942+03:00  INFO 3335 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [51a76b4d-8b4b-4223-85f4-d6bd0fe35f07]: Status=200 OK, Duration=287ms
+2025-05-07T17:09:37.304+03:00 ERROR 3335 --- [gateway] [reactor-http-nio-3] c.cherenkov.gateway.service.JwtService   : Invalid JWT signature: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+2025-05-07T17:09:37.304+03:00 ERROR 3335 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : Error validating JWT: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+
+io.jsonwebtoken.security.SignatureException: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+	at io.jsonwebtoken.impl.DefaultJwtParser.verifySignature(DefaultJwtParser.java:340) ~[jjwt-impl-0.12.5.jar:0.12.5]
+	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:577) ~[jjwt-impl-0.12.5.jar:0.12.5]
+	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:362) ~[jjwt-impl-0.12.5.jar:0.12.5]
+	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:94) ~[jjwt-impl-0.12.5.jar:0.12.5]
+	at io.jsonwebtoken.impl.io.AbstractParser.parse(AbstractParser.java:36) ~[jjwt-impl-0.12.5.jar:0.12.5]
+	at io.jsonwebtoken.impl.io.AbstractParser.parse(AbstractParser.java:29) ~[jjwt-impl-0.12.5.jar:0.12.5]
+	at io.jsonwebtoken.impl.DefaultJwtParser.parseSignedClaims(DefaultJwtParser.java:821) ~[jjwt-impl-0.12.5.jar:0.12.5]
+	at com.cherenkov.gateway.service.JwtService.extractAllClaims(JwtService.kt:96) ~[main/:na]
+	at com.cherenkov.gateway.service.JwtService.extractClaim(JwtService.kt:86) ~[main/:na]
+	at com.cherenkov.gateway.service.JwtService.extractUsername(JwtService.kt:41) ~[main/:na]
+	at com.cherenkov.gateway.filter.JwtAuthenticationFilter.validateToken(JwtAuthenticationFilter.kt:83) ~[main/:na]
+	at com.cherenkov.gateway.filter.JwtAuthenticationFilter.filter(JwtAuthenticationFilter.kt:60) ~[main/:na]
+	at org.springframework.security.web.server.ObservationWebFilterChainDecorator$ObservationWebFilter.wrapFilter(ObservationWebFilterChainDecorator.java:211) ~[spring-security-web-6.4.4.jar:6.4.4]
+	at org.springframework.security.web.server.ObservationWebFilterChainDecorator$ObservationWebFilter.filter(ObservationWebFilterChainDecorator.java:200) ~[spring-security-web-6.4.4.jar:6.4.4]
+	at org.springframework.security.web.server.ObservationWebFilterChainDecorator$ObservationWebFilterChain.invokeFilter(ObservationWebFilterChainDecorator.java:159) ~[spring-security-web-6.4.4.jar:6.4.4]
+	at org.springframework.security.web.server.ObservationWebFilterChainDecorator$ObservationWebFilterChain.lambda$filter$0(ObservationWebFilterChainDecorator.java:153) ~[spring-security-web-6.4.4.jar:6.4.4]
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:45) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoDeferContextual.subscribe(MonoDeferContextual.java:55) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:165) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMapFuseable$MapFuseableSubscriber.onNext(FluxMapFuseable.java:129) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.secondComplete(MonoFlatMap.java:245) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoFlatMap$FlatMapInner.onNext(MonoFlatMap.java:305) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Operators$BaseFluxToMonoOperator.completePossiblyEmpty(Operators.java:2097) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoCollectList$MonoCollectListSubscriber.onComplete(MonoCollectList.java:118) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.fastPath(FluxIterable.java:424) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:291) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Operators$BaseFluxToMonoOperator.request(Operators.java:2067) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoFlatMap$FlatMapInner.onSubscribe(MonoFlatMap.java:291) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Operators$BaseFluxToMonoOperator.onSubscribe(Operators.java:2051) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:201) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoFromFluxOperator.subscribe(MonoFromFluxOperator.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:165) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onNext(FluxSwitchIfEmpty.java:74) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoNext$NextSubscriber.onNext(MonoNext.java:82) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterWhen$FluxFilterWhenSubscriber.drain(FluxFilterWhen.java:302) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterWhen$FluxFilterWhenSubscriber.onNext(FluxFilterWhen.java:140) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.slowPath(FluxIterable.java:335) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:294) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterWhen$FluxFilterWhenSubscriber.onSubscribe(FluxFilterWhen.java:200) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:201) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFlatMap.trySubscribeScalarMap(FluxFlatMap.java:202) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoFlatMap.subscribeOrReturn(MonoFlatMap.java:53) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:63) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.subscribeNext(MonoIgnoreThen.java:265) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoIgnoreThen.subscribe(MonoIgnoreThen.java:51) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoDeferContextual.subscribe(MonoDeferContextual.java:55) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.netty.http.server.HttpServer$HttpServerHandle.onStateChange(HttpServer.java:1249) ~[reactor-netty-http-1.2.4.jar:1.2.4]
+	at reactor.netty.ReactorNetty$CompositeConnectionObserver.onStateChange(ReactorNetty.java:716) ~[reactor-netty-core-1.2.4.jar:1.2.4]
+	at reactor.netty.transport.ServerTransport$ChildObserver.onStateChange(ServerTransport.java:486) ~[reactor-netty-core-1.2.4.jar:1.2.4]
+	at reactor.netty.http.server.HttpServerOperations.handleDefaultHttpRequest(HttpServerOperations.java:856) ~[reactor-netty-http-1.2.4.jar:1.2.4]
+	at reactor.netty.http.server.HttpServerOperations.onInboundNext(HttpServerOperations.java:782) ~[reactor-netty-http-1.2.4.jar:1.2.4]
+	at reactor.netty.channel.ChannelOperationsHandler.channelRead(ChannelOperationsHandler.java:115) ~[reactor-netty-core-1.2.4.jar:1.2.4]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at reactor.netty.http.server.HttpTrafficHandler.channelRead(HttpTrafficHandler.java:272) ~[reactor-netty-http-1.2.4.jar:1.2.4]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346) ~[netty-codec-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:333) ~[netty-codec-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:455) ~[netty-codec-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:290) ~[netty-codec-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:796) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.119.Final.jar:4.1.119.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1623) ~[na:na]
+
+2025-05-07T17:09:37.310+03:00 ERROR 3335 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validation failed: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+
+io.jsonwebtoken.security.SignatureException: JWT signature does not match locally computed signature. JWT validity cannot be asserted and should not be trusted.
+	at io.jsonwebtoken.impl.DefaultJwtParser.verifySignature(DefaultJwtParser.java:340) ~[jjwt-impl-0.12.5.jar:0.12.5]
+	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:577) ~[jjwt-impl-0.12.5.jar:0.12.5]
+	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:362) ~[jjwt-impl-0.12.5.jar:0.12.5]
+	at io.jsonwebtoken.impl.DefaultJwtParser.parse(DefaultJwtParser.java:94) ~[jjwt-impl-0.12.5.jar:0.12.5]
+	at io.jsonwebtoken.impl.io.AbstractParser.parse(AbstractParser.java:36) ~[jjwt-impl-0.12.5.jar:0.12.5]
+	at io.jsonwebtoken.impl.io.AbstractParser.parse(AbstractParser.java:29) ~[jjwt-impl-0.12.5.jar:0.12.5]
+	at io.jsonwebtoken.impl.DefaultJwtParser.parseSignedClaims(DefaultJwtParser.java:821) ~[jjwt-impl-0.12.5.jar:0.12.5]
+	at com.cherenkov.gateway.service.JwtService.extractAllClaims(JwtService.kt:96) ~[main/:na]
+	at com.cherenkov.gateway.service.JwtService.extractClaim(JwtService.kt:86) ~[main/:na]
+	at com.cherenkov.gateway.service.JwtService.extractUsername(JwtService.kt:41) ~[main/:na]
+	at com.cherenkov.gateway.filter.JwtAuthenticationFilter.validateToken(JwtAuthenticationFilter.kt:83) ~[main/:na]
+	at com.cherenkov.gateway.filter.JwtAuthenticationFilter.filter(JwtAuthenticationFilter.kt:60) ~[main/:na]
+	at org.springframework.security.web.server.ObservationWebFilterChainDecorator$ObservationWebFilter.wrapFilter(ObservationWebFilterChainDecorator.java:211) ~[spring-security-web-6.4.4.jar:6.4.4]
+	at org.springframework.security.web.server.ObservationWebFilterChainDecorator$ObservationWebFilter.filter(ObservationWebFilterChainDecorator.java:200) ~[spring-security-web-6.4.4.jar:6.4.4]
+	at org.springframework.security.web.server.ObservationWebFilterChainDecorator$ObservationWebFilterChain.invokeFilter(ObservationWebFilterChainDecorator.java:159) ~[spring-security-web-6.4.4.jar:6.4.4]
+	at org.springframework.security.web.server.ObservationWebFilterChainDecorator$ObservationWebFilterChain.lambda$filter$0(ObservationWebFilterChainDecorator.java:153) ~[spring-security-web-6.4.4.jar:6.4.4]
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:45) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoDeferContextual.subscribe(MonoDeferContextual.java:55) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:165) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxMapFuseable$MapFuseableSubscriber.onNext(FluxMapFuseable.java:129) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.secondComplete(MonoFlatMap.java:245) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoFlatMap$FlatMapInner.onNext(MonoFlatMap.java:305) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Operators$BaseFluxToMonoOperator.completePossiblyEmpty(Operators.java:2097) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoCollectList$MonoCollectListSubscriber.onComplete(MonoCollectList.java:118) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.fastPath(FluxIterable.java:424) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:291) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Operators$BaseFluxToMonoOperator.request(Operators.java:2067) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoFlatMap$FlatMapInner.onSubscribe(MonoFlatMap.java:291) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Operators$BaseFluxToMonoOperator.onSubscribe(Operators.java:2051) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:201) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoFromFluxOperator.subscribe(MonoFromFluxOperator.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoFlatMap$FlatMapMain.onNext(MonoFlatMap.java:165) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxSwitchIfEmpty$SwitchIfEmptySubscriber.onNext(FluxSwitchIfEmpty.java:74) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoNext$NextSubscriber.onNext(MonoNext.java:82) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterWhen$FluxFilterWhenSubscriber.drain(FluxFilterWhen.java:302) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterWhen$FluxFilterWhenSubscriber.onNext(FluxFilterWhen.java:140) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.slowPath(FluxIterable.java:335) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable$IterableSubscription.request(FluxIterable.java:294) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFilterWhen$FluxFilterWhenSubscriber.onSubscribe(FluxFilterWhen.java:200) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:201) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxIterable.subscribe(FluxIterable.java:83) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.FluxFlatMap.trySubscribeScalarMap(FluxFlatMap.java:202) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoFlatMap.subscribeOrReturn(MonoFlatMap.java:53) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:63) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoDefer.subscribe(MonoDefer.java:53) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4576) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoIgnoreThen$ThenIgnoreMain.subscribeNext(MonoIgnoreThen.java:265) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoIgnoreThen.subscribe(MonoIgnoreThen.java:51) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.InternalMonoOperator.subscribe(InternalMonoOperator.java:76) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.core.publisher.MonoDeferContextual.subscribe(MonoDeferContextual.java:55) ~[reactor-core-3.7.4.jar:3.7.4]
+	at reactor.netty.http.server.HttpServer$HttpServerHandle.onStateChange(HttpServer.java:1249) ~[reactor-netty-http-1.2.4.jar:1.2.4]
+	at reactor.netty.ReactorNetty$CompositeConnectionObserver.onStateChange(ReactorNetty.java:716) ~[reactor-netty-core-1.2.4.jar:1.2.4]
+	at reactor.netty.transport.ServerTransport$ChildObserver.onStateChange(ServerTransport.java:486) ~[reactor-netty-core-1.2.4.jar:1.2.4]
+	at reactor.netty.http.server.HttpServerOperations.handleDefaultHttpRequest(HttpServerOperations.java:856) ~[reactor-netty-http-1.2.4.jar:1.2.4]
+	at reactor.netty.http.server.HttpServerOperations.onInboundNext(HttpServerOperations.java:782) ~[reactor-netty-http-1.2.4.jar:1.2.4]
+	at reactor.netty.channel.ChannelOperationsHandler.channelRead(ChannelOperationsHandler.java:115) ~[reactor-netty-core-1.2.4.jar:1.2.4]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:444) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at reactor.netty.http.server.HttpTrafficHandler.channelRead(HttpTrafficHandler.java:272) ~[reactor-netty-http-1.2.4.jar:1.2.4]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:436) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:346) ~[netty-codec-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:333) ~[netty-codec-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.handler.codec.ByteToMessageDecoder.callDecode(ByteToMessageDecoder.java:455) ~[netty-codec-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:290) ~[netty-codec-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:251) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:442) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:412) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1357) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:440) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.AbstractChannelHandlerContext.invokeChannelRead(AbstractChannelHandlerContext.java:420) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:868) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:166) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:796) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562) ~[netty-transport-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998) ~[netty-common-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74) ~[netty-common-4.1.119.Final.jar:4.1.119.Final]
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30) ~[netty-common-4.1.119.Final.jar:4.1.119.Final]
+	at java.base/java.lang.Thread.run(Thread.java:1623) ~[na:na]
+
+2025-05-07T17:09:46.347+03:00  INFO 3335 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T17:09:46.352+03:00  INFO 3335 --- [gateway] [parallel-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T17:09:46.352+03:00  INFO 3335 --- [gateway] [parallel-3] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [498602d3-c948-49c4-9fb1-bc63dd29930d]: POST http://localhost:8080/reports/attendance from 0:0:0:0:0:0:0:1
+2025-05-07T17:09:46.352+03:00  INFO 3335 --- [gateway] [parallel-3] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [bbc39d97-87e6-4f52-b007-2913d293ff4f]: POST http://localhost:8080/reports/attendance {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=e55414b4-36d7-469e-8c3d-f9649b95b7c1, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=110, X-Auth-User=test, X-Gateway-Auth=true, X-Correlation-ID=498602d3-c948-49c4-9fb1-bc63dd29930d}
+2025-05-07T17:09:47.042+03:00  INFO 3335 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [bbc39d97-87e6-4f52-b007-2913d293ff4f]: Status=500 INTERNAL_SERVER_ERROR
+2025-05-07T17:09:47.043+03:00 ERROR 3335 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : ERROR RESPONSE [498602d3-c948-49c4-9fb1-bc63dd29930d]: Status=500 INTERNAL_SERVER_ERROR, Duration=691ms
+2025-05-07T17:10:05.764+03:00  INFO 3335 --- [gateway] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-07T17:10:05.765+03:00  INFO 3335 --- [gateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
+2025-05-07T17:11:09.215+03:00  INFO 3476 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.2.1 with PID 3476 (/Users/nikitacerenkov/Documents/GitHub/labs/gateway/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs)
+2025-05-07T17:11:09.216+03:00  INFO 3476 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-05-07T17:11:09.850+03:00  INFO 3476 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=64ea6394-4c94-3868-9140-610789fb9bfa
+2025-05-07T17:11:10.090+03:00  INFO 3476 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 09377e93-38fd-4c31-ae11-d8e404933059
+
+2025-05-07T17:11:10.127+03:00  INFO 3476 --- [gateway] [main] c.c.gateway.config.SecurityConfig        : Configuring security with exclude paths: [/api/auth/login, /api/auth/register, /api/auth/refresh-token, /actuator/**, /fallback/**]
+2025-05-07T17:11:10.338+03:00  INFO 3476 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-05-07T17:11:10.338+03:00  INFO 3476 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-05-07T17:11:10.338+03:00  INFO 3476 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-05-07T17:11:10.338+03:00  INFO 3476 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-05-07T17:11:10.338+03:00  INFO 3476 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-05-07T17:11:10.338+03:00  INFO 3476 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-05-07T17:11:10.338+03:00  INFO 3476 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-05-07T17:11:10.338+03:00  INFO 3476 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-05-07T17:11:10.338+03:00  INFO 3476 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-05-07T17:11:10.338+03:00  INFO 3476 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-05-07T17:11:10.338+03:00  INFO 3476 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-05-07T17:11:10.338+03:00  INFO 3476 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-05-07T17:11:10.338+03:00  INFO 3476 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-05-07T17:11:10.338+03:00  INFO 3476 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-05-07T17:11:10.442+03:00  INFO 3476 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoints beneath base path '/actuator'
+2025-05-07T17:11:10.657+03:00  INFO 3476 --- [gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
+2025-05-07T17:11:10.696+03:00  INFO 3476 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Started GatewayApplicationKt in 1.685 seconds (process running for 2.046)
+2025-05-07T17:11:17.000+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T17:11:17.018+03:00  INFO 3476 --- [gateway] [parallel-1] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T17:11:17.023+03:00  INFO 3476 --- [gateway] [parallel-1] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [01901ea5-1a3e-43e7-bfd5-3242ae397122]: POST http://localhost:8080/reports/attendance from 0:0:0:0:0:0:0:1
+2025-05-07T17:11:17.025+03:00  INFO 3476 --- [gateway] [parallel-1] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [625577cf-6e4f-4050-9dbd-3a87826674cd]: POST http://localhost:8080/reports/attendance {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=e698c59c-8d0f-4937-bab2-8339df3bc086, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=110, X-Auth-User=test, X-Gateway-Auth=true, X-Correlation-ID=01901ea5-1a3e-43e7-bfd5-3242ae397122}
+2025-05-07T17:11:17.064+03:00 ERROR 3476 --- [gateway] [parallel-1] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2025-05-07T17:11:17.256+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [625577cf-6e4f-4050-9dbd-3a87826674cd]: Status=403 FORBIDDEN
+2025-05-07T17:11:17.261+03:00  WARN 3476 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : ERROR RESPONSE [01901ea5-1a3e-43e7-bfd5-3242ae397122]: Status=403 FORBIDDEN, Duration=240ms
+2025-05-07T17:11:38.314+03:00  INFO 3476 --- [gateway] [parallel-3] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [f93ea872-4a5a-4a5d-88f9-b98c19275b7c]: POST http://localhost:8080/api/auth/login from 0:0:0:0:0:0:0:1
+2025-05-07T17:11:38.318+03:00  INFO 3476 --- [gateway] [parallel-3] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [9f37cf28-c31a-46a5-880d-b846b2461f31]: POST http://localhost:8080/api/auth/login {Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=3d601996-5384-49a6-9791-f297f53baa95, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=50, X-Gateway-Auth=true, X-Correlation-ID=f93ea872-4a5a-4a5d-88f9-b98c19275b7c}
+2025-05-07T17:11:38.434+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [9f37cf28-c31a-46a5-880d-b846b2461f31]: Status=200 OK
+2025-05-07T17:11:38.435+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [f93ea872-4a5a-4a5d-88f9-b98c19275b7c]: Status=200 OK, Duration=121ms
+2025-05-07T17:11:56.490+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T17:11:56.497+03:00  INFO 3476 --- [gateway] [parallel-5] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T17:11:56.499+03:00  INFO 3476 --- [gateway] [parallel-5] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [143e3617-9d1c-4e6e-9721-c4e738fdc014]: POST http://localhost:8080/reports/attendance from 0:0:0:0:0:0:0:1
+2025-05-07T17:11:56.499+03:00  INFO 3476 --- [gateway] [parallel-5] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [f17f7e6d-54e5-4f6b-9287-38de524cf53e]: POST http://localhost:8080/reports/attendance {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=b75c6527-cd3f-4167-a68f-f0e8ec8bffd0, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=106, X-Auth-User=test, X-Gateway-Auth=true, X-Correlation-ID=143e3617-9d1c-4e6e-9721-c4e738fdc014}
+2025-05-07T17:11:58.244+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [f17f7e6d-54e5-4f6b-9287-38de524cf53e]: Status=200 OK
+2025-05-07T17:11:58.244+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [143e3617-9d1c-4e6e-9721-c4e738fdc014]: Status=200 OK, Duration=1745ms
+2025-05-07T17:12:26.768+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T17:12:26.777+03:00  INFO 3476 --- [gateway] [parallel-7] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T17:12:26.779+03:00  INFO 3476 --- [gateway] [parallel-7] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [6a00261f-b700-487c-8292-973b6c584cd7]: POST http://localhost:8080/reports/attendance from 0:0:0:0:0:0:0:1
+2025-05-07T17:12:26.779+03:00  INFO 3476 --- [gateway] [parallel-7] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [73dbdb52-1560-44c2-b127-2d0cd23a67b1]: POST http://localhost:8080/reports/attendance {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=fedaa44d-c942-4e48-9a73-94f685e2a2b5, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=103, X-Auth-User=test, X-Gateway-Auth=true, X-Correlation-ID=6a00261f-b700-487c-8292-973b6c584cd7}
+2025-05-07T17:12:26.815+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [73dbdb52-1560-44c2-b127-2d0cd23a67b1]: Status=200 OK
+2025-05-07T17:12:26.815+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [6a00261f-b700-487c-8292-973b6c584cd7]: Status=200 OK, Duration=36ms
+2025-05-07T17:12:31.158+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T17:12:31.164+03:00  INFO 3476 --- [gateway] [parallel-1] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T17:12:31.165+03:00  INFO 3476 --- [gateway] [parallel-1] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [6e5377f5-29ca-4032-9cfc-e443772c7eec]: POST http://localhost:8080/reports/attendance from 0:0:0:0:0:0:0:1
+2025-05-07T17:12:31.166+03:00  INFO 3476 --- [gateway] [parallel-1] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [ec4fe4a1-6718-4490-9ae9-83eef5ea1e3f]: POST http://localhost:8080/reports/attendance {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=ee928e75-81d4-4a18-8e2f-23adaad7569d, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=103, X-Auth-User=test, X-Gateway-Auth=true, X-Correlation-ID=6e5377f5-29ca-4032-9cfc-e443772c7eec}
+2025-05-07T17:12:31.186+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [ec4fe4a1-6718-4490-9ae9-83eef5ea1e3f]: Status=200 OK
+2025-05-07T17:12:31.186+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [6e5377f5-29ca-4032-9cfc-e443772c7eec]: Status=200 OK, Duration=21ms
+2025-05-07T17:12:37.266+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T17:12:37.270+03:00  INFO 3476 --- [gateway] [parallel-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: test on path: /reports/attendance
+2025-05-07T17:12:37.272+03:00  INFO 3476 --- [gateway] [parallel-3] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [ca49c0aa-7d18-4117-aa31-f62dda5530e3]: POST http://localhost:8080/reports/attendance from 0:0:0:0:0:0:0:1
+2025-05-07T17:12:37.276+03:00  INFO 3476 --- [gateway] [parallel-3] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [d0ca4385-d828-40e4-8a55-df9e4d1738cd]: POST http://localhost:8080/reports/attendance {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=2aef8f47-55a9-4141-8f29-0fe444d138ca, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=110, X-Auth-User=test, X-Gateway-Auth=true, X-Correlation-ID=ca49c0aa-7d18-4117-aa31-f62dda5530e3}
+2025-05-07T17:12:37.576+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [d0ca4385-d828-40e4-8a55-df9e4d1738cd]: Status=200 OK
+2025-05-07T17:12:37.577+03:00  INFO 3476 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [ca49c0aa-7d18-4117-aa31-f62dda5530e3]: Status=200 OK, Duration=306ms
+2025-05-07T17:12:56.064+03:00  INFO 3476 --- [gateway] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-07T17:12:56.066+03:00  INFO 3476 --- [gateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
