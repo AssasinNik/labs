@@ -33,9 +33,6 @@ class ReportService(
 ) {
     private val logger = LoggerFactory.getLogger(ReportService::class.java)
 
-    /**
-     * Старый метод для обратной совместимости с ReportController
-     */
     @Transactional(transactionManager = "transactionManager")
     fun generateReport(request: ReportRequest): ReportResult {
         logger.info("Запущен старый метод generateReport с параметрами: term={}, startDate={}, endDate={}", 
@@ -51,14 +48,9 @@ class ReportService(
                     fullName = dto.fullName,
                     email = dto.email,
                     groupName = dto.groupName,
-                    departmentName = "", // Нет в новом формате
-                    instituteName = "", // Нет в новом формате
-                    universityName = "", // Нет в новом формате
                     attendancePercentage = dto.attendancePercent,
                     reportPeriod = "${dto.periodStart} - ${dto.periodEnd}",
                     searchTerm = dto.searchTerm,
-                    redisKey = null, // Нет в новом формате
-                    groupNameFromRedis = null // Нет в новом формате
                 )
             }
             
@@ -79,9 +71,6 @@ class ReportService(
         }
     }
 
-    /**
-     * Основной метод генерации отчета о посещаемости
-     */
     fun generateAttendanceReport(term: String, from: Instant, to: Instant): List<FullStudentAttendanceDTO> {
         logger.info("Начало генерации отчета: term={}, from={}, to={}", term, from, to)
         
@@ -114,10 +103,6 @@ class ReportService(
         // Обработка данных и формирование отчета
         return processAttendanceData(expectedAttendance, actualAttendance, fromDateTime, toDateTime, term)
     }
-    
-    /**
-     * Поиск ID лекций по термину (ключевому слову)
-     */
     private fun findLectureIdsByTerm(term: String): List<Long> {
         logger.debug("Поиск ID лекций по термину: {}", term)
         try {
@@ -136,10 +121,6 @@ class ReportService(
             throw ElasticsearchAccessException("Ошибка при поиске лекций: ${e.message}", e)
         }
     }
-    
-    /**
-     * Получение данных об ожидаемой посещаемости из Neo4j
-     */
     private fun getExpectedAttendanceFromNeo4j(
         lectureIds: List<Long>, 
         from: LocalDateTime, 
@@ -184,10 +165,7 @@ class ReportService(
             throw Exception("Ошибка при получении данных из Neo4j: ${e.message}")
         }
     }
-    
-    /**
-     * Получение данных о фактической посещаемости из PostgreSQL через jOOQ
-     */
+
     private fun getActualAttendanceFromPostgres(
         lectureIds: List<Long>,
         from: LocalDateTime,
@@ -229,10 +207,6 @@ class ReportService(
             throw DatabaseAccessException("Ошибка при получении данных о фактической посещаемости: ${e.message}", e)
         }
     }
-    
-    /**
-     * Получение информации о студенте из Redis
-     */
     private fun getStudentInfoFromRedis(studentNumber: String): RedisStudentInfo {
         logger.debug("Получение информации о студенте из Redis: {}", studentNumber)
         
@@ -256,10 +230,6 @@ class ReportService(
             throw RedisAccessException("Ошибка при получении информации о студенте из Redis: ${e.message}", e)
         }
     }
-    
-    /**
-     * Обработка данных о посещаемости и формирование итогового отчета
-     */
     private fun processAttendanceData(
         expected: Map<String, Int>,
         actual: Map<String, Int>,
@@ -278,10 +248,6 @@ class ReportService(
         logger.info("Сформирован отчет с {} записями", results.size)
         return results
     }
-    
-    /**
-     * Расчет процента посещаемости для студента
-     */
     private fun calculateAttendancePercent(
         entry: Map.Entry<String, Int>,
         actual: Map<String, Int>
@@ -298,10 +264,7 @@ class ReportService(
         
         return StudentAttendancePercentDTO(studentNumber, percent)
     }
-    
-    /**
-     * Формирование полного DTO с информацией о студенте
-     */
+
     private fun buildFullDTO(
         dto: StudentAttendancePercentDTO,
         from: LocalDateTime,
