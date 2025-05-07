@@ -30,6 +30,15 @@ class FallbackController {
     }
 
     /**
+     * Обработчик для lab2 сервиса
+     */
+    @GetMapping("/lab2")
+    fun handleLab2Fallback(): Mono<FallbackResponse> {
+        logger.warn("Fallback triggered for Lab2 service")
+        return createFallbackResponse("Lab2 service is temporarily unavailable. Please try again later.")
+    }
+
+    /**
      * Fallback для POST запросов
      */
     @PostMapping("/**")

@@ -21,6 +21,15 @@
           </set>
         </option>
       </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/lab_2" />
+        <option name="gradleJvm" value="corretto-20" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/lab_2" />
+          </set>
+        </option>
+      </GradleProjectSettings>
     </option>
   </component>
 </project>

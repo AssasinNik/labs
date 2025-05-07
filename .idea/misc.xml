@@ -4,6 +4,7 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/gateway" />
     <file type="web" url="file://$PROJECT_DIR$/lab_1" />
+    <file type="web" url="file://$PROJECT_DIR$/lab_2" />
   </component>
   <component name="ProjectRootManager">
     <output url="file://$PROJECT_DIR$/out" />
