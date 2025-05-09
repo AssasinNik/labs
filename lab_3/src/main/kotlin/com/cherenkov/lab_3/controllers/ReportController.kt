@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/reports")
+@RequestMapping("/reports")
 class ReportController(private val reportService: ReportService) {
     private val log = LoggerFactory.getLogger(ReportController::class.java)
 
