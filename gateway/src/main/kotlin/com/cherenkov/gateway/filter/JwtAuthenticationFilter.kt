@@ -63,8 +63,8 @@ class JwtAuthenticationFilter(
                 val authorities = listOf(SimpleGrantedAuthority("ROLE_USER"))
                 val authentication = UsernamePasswordAuthenticationToken(username, null, authorities)
                 
-                // Добавляем информацию о пользователе в заголовки запроса
-                val modifiedRequest = addUserInfoToRequest(request, username)
+                // Добавляем информацию о пользователе и заголовок Gateway в запрос
+                val modifiedRequest = addUserInfoAndGatewayHeader(request, username)
                 val modifiedExchange = exchange.mutate().request(modifiedRequest).build()
 
                 // Устанавливаем аутентификацию в контекст безопасности
@@ -105,7 +105,7 @@ class JwtAuthenticationFilter(
         }
     }
 
-    private fun addUserInfoToRequest(request: ServerHttpRequest, username: String): ServerHttpRequest {
+    private fun addUserInfoAndGatewayHeader(request: ServerHttpRequest, username: String): ServerHttpRequest {
         return request.mutate()
             .header("X-Auth-User", username)
             .header(gatewayHeaderName, gatewayHeaderValue)

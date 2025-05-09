@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val jwtAuthFilter: JwtAuthFilter,
     private val gatewayAuthFilter: GatewayAuthFilter,
     private val userService: UserService
 ) {
@@ -32,16 +31,15 @@ class SecurityConfig(
                     .requestMatchers("/api/auth/**").permitAll()
                     // Статус сервера (опционально) - можно оставить публичным
                     .requestMatchers(HttpMethod.GET, "/").permitAll()
-                    // Все остальные запросы требуют аутентификации
+                    // Все остальные запросы требуют аутентификации через Gateway
                     .anyRequest().authenticated()
             }
             .sessionManagement { session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
             .authenticationProvider(authenticationProvider())
-            // Сначала проверяем заголовок Gateway, затем JWT
+            // Проверяем только заголовок Gateway
             .addFilterBefore(gatewayAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()
     }

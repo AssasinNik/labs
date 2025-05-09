@@ -20,7 +20,6 @@ import java.nio.charset.StandardCharsets
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 class RequestLoggingFilter : OncePerRequestFilter() {
-    private val logger = LoggerFactory.getLogger(RequestLoggingFilter::class.java)
     
     /**
      * Проверка, нужно ли логировать содержимое запроса/ответа

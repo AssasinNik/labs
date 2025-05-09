@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val jwtAuthFilter: JwtAuthFilter,
     private val gatewayAuthFilter: GatewayAuthFilter,
     private val userService: UserService
 ) {
@@ -28,22 +27,19 @@ class SecurityConfig(
             .csrf { it.disable() }
             .authorizeHttpRequests { auth ->
                 auth
-                    // Публичные эндпоинты для аутентификации
-                    .requestMatchers("/api/auth/**").permitAll()
                     // Статус сервера (опционально) - можно оставить публичным
                     .requestMatchers(HttpMethod.GET, "/").permitAll()
-                    // API отчетов требует роли ADMIN
-                    .requestMatchers("/api/reports/**").hasAnyRole("ADMIN", "USER")
-                    // Все остальные запросы требуют аутентификации
+                    // API отчетов требует роли USER (получится из Gateway)
+                    .requestMatchers("/api/reports/**").hasRole("USER")
+                    // Все остальные запросы требуют аутентификации через Gateway
                     .anyRequest().authenticated()
             }
             .sessionManagement { session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
             .authenticationProvider(authenticationProvider())
-            // Сначала проверяем заголовок Gateway, затем JWT
+            // Проверяем только заголовок Gateway
             .addFilterBefore(gatewayAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()
     }

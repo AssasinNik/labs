@@ -1,4 +1,4 @@
-package com.cherenkov.lab_3.configs
+package com.cherenkov.lab_2.filter
 
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
