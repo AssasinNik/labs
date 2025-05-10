@@ -14,7 +14,7 @@ import redis
 from elasticsearch import Elasticsearch
 
 # Импортируем наш визуализатор вместо стандартного логгера
-from terminal_visualizer import start_operation, update_progress, complete_operation, info, error, show_summary
+from terminal_visualizer import start_operation, update_progress, complete_operation, info, show_summary
 
 # Инициализация Faker (русская локализация)
 fake = Faker("ru_RU")

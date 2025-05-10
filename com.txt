@@ -1,0 +1,27 @@
+docker-compose down -v && docker-compose up --build
+
+
+psql -U admin -d mydb
+\dt
+SELECT * FROM student LIMIT 5;
+
+
+mongosh university
+show collections
+db.universities.findOne()
+
+
+redis-cli
+KEYS "student:*"
+# Пример (получить данные первого студента)
+HGETALL "student:STU00001"
+
+
+cypher-shell -u neo4j --format plain
+MATCH (n) RETURN count(n);
+MATCH (s:Student) RETURN s LIMIT 3;
+MATCH (g:Group)-[:HAS_SCHEDULE]->(l:Lecture) RETURN g.name, l.name LIMIT 5;
+
+
+curl -XGET "http://localhost:9200/_cat/indices?v"
+curl.exe -XGET "http://localhost:9200/lectures/_search?pretty" -H "Content-Type: application/json" -d "{ \"query\": { \"match_all\": {} }, \"_source\": [\"description\"] }"
