@@ -11,7 +11,7 @@ class MongoConfig {
     
     @Bean
     fun mongoTemplate(): MongoTemplate {
-        val connectionString = "mongodb://localhost:27017/university"
+        val connectionString = "mongodb://mongo:27017/university"
         val factory = SimpleMongoClientDatabaseFactory(MongoClients.create(connectionString), "university")
         return MongoTemplate(factory)
     }

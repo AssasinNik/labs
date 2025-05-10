@@ -11,7 +11,7 @@ class DataSourceConfig {
     @Bean
     fun dataSource(): DataSource {
         return DataSourceBuilder.create()
-            .url("jdbc:postgresql://localhost:5433/mydb")
+            .url("jdbc:postgresql://postgres:5432/mydb")
             .username("admin")
             .password("secret")
             .build()

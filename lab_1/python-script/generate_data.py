@@ -560,7 +560,7 @@ def populate_postgres(conn):
     
     # === (4) Специальные лекции ===
     op_special = start_operation("Добавление специальных лекций", 100)
-    target_group_id = 4
+    target_group_id = 15
     
     update_progress(op_special, 10)
     

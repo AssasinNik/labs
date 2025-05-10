@@ -291,3 +291,365 @@ jOOQ tip of the day: You can nest collections directly in SQL using jOOQ's SQL/X
 2025-05-10 14:59:15.798 [tomcat-shutdown] [] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
 2025-05-10 14:59:16.135 [SpringApplicationShutdownHook] [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
 2025-05-10 14:59:16.141 [SpringApplicationShutdownHook] [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2025-05-10 16:08:00.813 [main] [] INFO  c.cherenkov.lab_3.Lab3ApplicationKt - Starting Lab3ApplicationKt using Java 20.0.2.1 with PID 5190 (/Users/nikitacerenkov/Documents/GitHub/labs/lab_3/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs)
+2025-05-10 16:08:00.816 [main] [] DEBUG c.cherenkov.lab_3.Lab3ApplicationKt - Running with Spring Boot v3.4.4, Spring v6.2.5
+2025-05-10 16:08:00.817 [main] [] INFO  c.cherenkov.lab_3.Lab3ApplicationKt - No active profile set, falling back to 1 default profile: "default"
+2025-05-10 16:08:01.416 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-05-10 16:08:01.417 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Neo4j repositories in DEFAULT mode.
+2025-05-10 16:08:01.424 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3 ms. Found 0 Neo4j repository interfaces.
+2025-05-10 16:08:01.595 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-05-10 16:08:01.595 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Elasticsearch repositories in DEFAULT mode.
+2025-05-10 16:08:01.605 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 8 ms. Found 0 Elasticsearch repository interfaces.
+2025-05-10 16:08:01.607 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-05-10 16:08:01.607 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Reactive Elasticsearch repositories in DEFAULT mode.
+2025-05-10 16:08:01.610 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 2 ms. Found 0 Reactive Elasticsearch repository interfaces.
+2025-05-10 16:08:01.625 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-05-10 16:08:01.625 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-05-10 16:08:01.628 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 2 ms. Found 0 MongoDB repository interfaces.
+2025-05-10 16:08:01.638 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-05-10 16:08:01.638 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Neo4j repositories in DEFAULT mode.
+2025-05-10 16:08:01.641 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 2 ms. Found 0 Neo4j repository interfaces.
+2025-05-10 16:08:01.648 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-05-10 16:08:01.649 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2025-05-10 16:08:01.651 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1 ms. Found 0 R2DBC repository interfaces.
+2025-05-10 16:08:01.657 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-05-10 16:08:01.658 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-05-10 16:08:01.669 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3 ms. Found 0 Redis repository interfaces.
+2025-05-10 16:08:02.129 [main] [] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8083 (http)
+2025-05-10 16:08:02.138 [main] [] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-05-10 16:08:02.139 [main] [] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-05-10 16:08:02.166 [main] [] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-05-10 16:08:02.167 [main] [] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1310 ms
+2025-05-10 16:08:02.201 [main] [] DEBUG c.c.lab_3.configs.GatewayAuthFilter - Filter 'gatewayAuthFilter' configured for use
+2025-05-10 16:08:02.201 [main] [] DEBUG c.c.l.configs.RequestLoggingFilter - Filter 'requestLoggingFilter' configured for use
+2025-05-10 16:08:02.212 [main] [] INFO  c.c.lab_3.configs.DataInitializer - Инициализация тестовых данных...
+2025-05-10 16:08:02.213 [main] [] INFO  c.c.lab_3.configs.DataInitializer - Создан тестовый пользователь: test
+2025-05-10 16:08:02.213 [main] [] INFO  c.c.lab_3.configs.DataInitializer - Создан пользователь-администратор: admin
+2025-05-10 16:08:02.213 [main] [] INFO  c.c.lab_3.configs.DataInitializer - Инициализация тестовых данных завершена
+2025-05-10 16:08:02.730 [main] [] ERROR i.n.r.d.DnsServerAddressStreamProviders - Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2025-05-10 16:08:02.966 [main] [] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync", "version": "5.2.1"}, "os": {"type": "Darwin", "name": "Mac OS X", "architecture": "aarch64", "version": "15.3.2"}, "platform": "Java/Amazon.com Inc./20.0.2.1+10-FR"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@6549ce71, com.mongodb.Jep395RecordCodecProvider@733bd6f3, com.mongodb.KotlinCodecProvider@2e030cc1]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=UNSPECIFIED, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-05-10 16:08:02.968 [cluster-ClusterId{value='681f4fb2371ea111421a1ccc', description='null'}-localhost:27017] [] INFO  org.mongodb.driver.cluster - Exception in monitor thread while connecting to server localhost:27017
+com.mongodb.MongoSocketReadException: Exception receiving message
+	at com.mongodb.internal.connection.InternalStreamConnection.translateReadException(InternalStreamConnection.java:814)
+	at com.mongodb.internal.connection.InternalStreamConnection.receiveResponseBuffers(InternalStreamConnection.java:862)
+	at com.mongodb.internal.connection.InternalStreamConnection.receiveCommandMessageResponse(InternalStreamConnection.java:517)
+	at com.mongodb.internal.connection.InternalStreamConnection.sendAndReceiveInternal(InternalStreamConnection.java:448)
+	at com.mongodb.internal.connection.InternalStreamConnection.lambda$sendAndReceive$0(InternalStreamConnection.java:375)
+	at com.mongodb.internal.connection.InternalStreamConnection.sendAndReceive(InternalStreamConnection.java:378)
+	at com.mongodb.internal.connection.CommandHelper.sendAndReceive(CommandHelper.java:100)
+	at com.mongodb.internal.connection.CommandHelper.executeCommand(CommandHelper.java:49)
+	at com.mongodb.internal.connection.InternalStreamConnectionInitializer.initializeConnectionDescription(InternalStreamConnectionInitializer.java:144)
+	at com.mongodb.internal.connection.InternalStreamConnectionInitializer.startHandshake(InternalStreamConnectionInitializer.java:79)
+	at com.mongodb.internal.connection.InternalStreamConnection.open(InternalStreamConnection.java:235)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.lookupServerDescription(DefaultServerMonitor.java:219)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.run(DefaultServerMonitor.java:176)
+Caused by: java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:318)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:345)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:794)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:1025)
+	at com.mongodb.internal.connection.SocketStream.read(SocketStream.java:182)
+	at com.mongodb.internal.connection.InternalStreamConnection.receiveResponseBuffers(InternalStreamConnection.java:829)
+	... 11 common frames omitted
+2025-05-10 16:08:03.130 [main] [] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-05-10 16:08:03.131 [main] [] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-05-10 16:08:03.601 [main] [] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.2.1"}, "os": {"type": "Darwin", "name": "Mac OS X", "architecture": "aarch64", "version": "15.3.2"}, "platform": "Java/Amazon.com Inc./20.0.2.1+10-FR"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@6549ce71, com.mongodb.Jep395RecordCodecProvider@733bd6f3, com.mongodb.KotlinCodecProvider@2e030cc1]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-05-10 16:08:03.603 [cluster-ClusterId{value='681f4fb3371ea111421a1ccd', description='null'}-localhost:27017] [] INFO  org.mongodb.driver.cluster - Exception in monitor thread while connecting to server localhost:27017
+com.mongodb.MongoSocketReadException: Exception receiving message
+	at com.mongodb.internal.connection.InternalStreamConnection.translateReadException(InternalStreamConnection.java:814)
+	at com.mongodb.internal.connection.InternalStreamConnection.receiveResponseBuffers(InternalStreamConnection.java:862)
+	at com.mongodb.internal.connection.InternalStreamConnection.receiveCommandMessageResponse(InternalStreamConnection.java:517)
+	at com.mongodb.internal.connection.InternalStreamConnection.sendAndReceiveInternal(InternalStreamConnection.java:448)
+	at com.mongodb.internal.connection.InternalStreamConnection.lambda$sendAndReceive$0(InternalStreamConnection.java:375)
+	at com.mongodb.internal.connection.InternalStreamConnection.sendAndReceive(InternalStreamConnection.java:378)
+	at com.mongodb.internal.connection.CommandHelper.sendAndReceive(CommandHelper.java:100)
+	at com.mongodb.internal.connection.CommandHelper.executeCommand(CommandHelper.java:49)
+	at com.mongodb.internal.connection.InternalStreamConnectionInitializer.initializeConnectionDescription(InternalStreamConnectionInitializer.java:144)
+	at com.mongodb.internal.connection.InternalStreamConnectionInitializer.startHandshake(InternalStreamConnectionInitializer.java:79)
+	at com.mongodb.internal.connection.InternalStreamConnection.open(InternalStreamConnection.java:235)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.lookupServerDescription(DefaultServerMonitor.java:219)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.run(DefaultServerMonitor.java:176)
+Caused by: java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.NioSocketImpl.implRead(NioSocketImpl.java:318)
+	at java.base/sun.nio.ch.NioSocketImpl.read(NioSocketImpl.java:345)
+	at java.base/sun.nio.ch.NioSocketImpl$1.read(NioSocketImpl.java:794)
+	at java.base/java.net.Socket$SocketInputStream.read(Socket.java:1025)
+	at com.mongodb.internal.connection.SocketStream.read(SocketStream.java:182)
+	at com.mongodb.internal.connection.InternalStreamConnection.receiveResponseBuffers(InternalStreamConnection.java:829)
+	... 11 common frames omitted
+2025-05-10 16:08:03.850 [main] [] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8083 (http) with context path '/'
+2025-05-10 16:08:03.858 [main] [] INFO  c.cherenkov.lab_3.Lab3ApplicationKt - Started Lab3ApplicationKt in 3.408 seconds (process running for 3.805)
+2025-05-10 16:10:03.066 [cluster-ClusterId{value='681f4fb2371ea111421a1ccc', description='null'}-localhost:27017] [] INFO  org.mongodb.driver.cluster - Exception in monitor thread while connecting to server localhost:27017
+com.mongodb.MongoSocketOpenException: Exception opening socket
+	at com.mongodb.internal.connection.SocketStream.lambda$open$0(SocketStream.java:85)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at com.mongodb.internal.connection.SocketStream.open(SocketStream.java:85)
+	at com.mongodb.internal.connection.InternalStreamConnection.open(InternalStreamConnection.java:233)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.lookupServerDescription(DefaultServerMonitor.java:219)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.run(DefaultServerMonitor.java:176)
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:673)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:547)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:590)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:666)
+	at com.mongodb.internal.connection.SocketStreamHelper.initialize(SocketStreamHelper.java:76)
+	at com.mongodb.internal.connection.SocketStream.initializeSocket(SocketStream.java:104)
+	at com.mongodb.internal.connection.SocketStream.open(SocketStream.java:79)
+	... 3 common frames omitted
+2025-05-10 16:10:03.663 [cluster-ClusterId{value='681f4fb3371ea111421a1ccd', description='null'}-localhost:27017] [] INFO  org.mongodb.driver.cluster - Exception in monitor thread while connecting to server localhost:27017
+com.mongodb.MongoSocketOpenException: Exception opening socket
+	at com.mongodb.internal.connection.SocketStream.lambda$open$0(SocketStream.java:85)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at com.mongodb.internal.connection.SocketStream.open(SocketStream.java:85)
+	at com.mongodb.internal.connection.InternalStreamConnection.open(InternalStreamConnection.java:233)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.lookupServerDescription(DefaultServerMonitor.java:219)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.run(DefaultServerMonitor.java:176)
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:673)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:547)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:590)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:666)
+	at com.mongodb.internal.connection.SocketStreamHelper.initialize(SocketStreamHelper.java:76)
+	at com.mongodb.internal.connection.SocketStream.initializeSocket(SocketStream.java:104)
+	at com.mongodb.internal.connection.SocketStream.open(SocketStream.java:79)
+	... 3 common frames omitted
+2025-05-10 16:10:24.371 [SpringApplicationShutdownHook] [] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-10 16:10:24.374 [tomcat-shutdown] [] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-05-10 16:15:33.771 [main] [] INFO  c.cherenkov.lab_3.Lab3ApplicationKt - Starting Lab3ApplicationKt using Java 20.0.2.1 with PID 5349 (/Users/nikitacerenkov/Documents/GitHub/labs/lab_3/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs)
+2025-05-10 16:15:33.773 [main] [] DEBUG c.cherenkov.lab_3.Lab3ApplicationKt - Running with Spring Boot v3.4.4, Spring v6.2.5
+2025-05-10 16:15:33.773 [main] [] INFO  c.cherenkov.lab_3.Lab3ApplicationKt - No active profile set, falling back to 1 default profile: "default"
+2025-05-10 16:15:34.312 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-05-10 16:15:34.312 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Neo4j repositories in DEFAULT mode.
+2025-05-10 16:15:34.323 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 4 ms. Found 0 Neo4j repository interfaces.
+2025-05-10 16:15:34.558 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-05-10 16:15:34.559 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Elasticsearch repositories in DEFAULT mode.
+2025-05-10 16:15:34.570 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 10 ms. Found 0 Elasticsearch repository interfaces.
+2025-05-10 16:15:34.573 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-05-10 16:15:34.574 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Reactive Elasticsearch repositories in DEFAULT mode.
+2025-05-10 16:15:34.577 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 2 ms. Found 0 Reactive Elasticsearch repository interfaces.
+2025-05-10 16:15:34.597 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-05-10 16:15:34.598 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-05-10 16:15:34.601 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 2 ms. Found 0 MongoDB repository interfaces.
+2025-05-10 16:15:34.615 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-05-10 16:15:34.615 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Neo4j repositories in DEFAULT mode.
+2025-05-10 16:15:34.619 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3 ms. Found 0 Neo4j repository interfaces.
+2025-05-10 16:15:34.630 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-05-10 16:15:34.630 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data R2DBC repositories in DEFAULT mode.
+2025-05-10 16:15:34.633 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1 ms. Found 0 R2DBC repository interfaces.
+2025-05-10 16:15:34.641 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+2025-05-10 16:15:34.642 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-05-10 16:15:34.649 [main] [] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1 ms. Found 0 Redis repository interfaces.
+2025-05-10 16:15:35.109 [main] [] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8083 (http)
+2025-05-10 16:15:35.120 [main] [] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-05-10 16:15:35.121 [main] [] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-05-10 16:15:35.161 [main] [] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-05-10 16:15:35.162 [main] [] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1337 ms
+2025-05-10 16:15:35.209 [main] [] DEBUG c.c.lab_3.configs.GatewayAuthFilter - Filter 'gatewayAuthFilter' configured for use
+2025-05-10 16:15:35.210 [main] [] DEBUG c.c.l.configs.RequestLoggingFilter - Filter 'requestLoggingFilter' configured for use
+2025-05-10 16:15:35.223 [main] [] INFO  c.c.lab_3.configs.DataInitializer - Инициализация тестовых данных...
+2025-05-10 16:15:35.224 [main] [] INFO  c.c.lab_3.configs.DataInitializer - Создан тестовый пользователь: test
+2025-05-10 16:15:35.224 [main] [] INFO  c.c.lab_3.configs.DataInitializer - Создан пользователь-администратор: admin
+2025-05-10 16:15:35.224 [main] [] INFO  c.c.lab_3.configs.DataInitializer - Инициализация тестовых данных завершена
+2025-05-10 16:15:35.828 [main] [] ERROR i.n.r.d.DnsServerAddressStreamProviders - Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
+2025-05-10 16:15:36.106 [main] [] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync", "version": "5.2.1"}, "os": {"type": "Darwin", "name": "Mac OS X", "architecture": "aarch64", "version": "15.3.2"}, "platform": "Java/Amazon.com Inc./20.0.2.1+10-FR"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@50e24ea4, com.mongodb.Jep395RecordCodecProvider@4ba402b5, com.mongodb.KotlinCodecProvider@22172b00]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=UNSPECIFIED, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-05-10 16:15:36.121 [cluster-ClusterId{value='681f517874625e4a268163d0', description='null'}-localhost:27017] [] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=14419250, minRoundTripTimeNanos=0}
+2025-05-10 16:15:36.348 [main] [] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2025-05-10 16:15:36.349 [main] [] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2025-05-10 16:15:36.905 [main] [] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.2.1"}, "os": {"type": "Darwin", "name": "Mac OS X", "architecture": "aarch64", "version": "15.3.2"}, "platform": "Java/Amazon.com Inc./20.0.2.1+10-FR"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@50e24ea4, com.mongodb.Jep395RecordCodecProvider@4ba402b5, com.mongodb.KotlinCodecProvider@22172b00]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-05-10 16:15:36.908 [cluster-ClusterId{value='681f517874625e4a268163d1', description='null'}-localhost:27017] [] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=3475333, minRoundTripTimeNanos=0}
+2025-05-10 16:15:37.160 [main] [] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8083 (http) with context path '/'
+2025-05-10 16:15:37.168 [main] [] INFO  c.cherenkov.lab_3.Lab3ApplicationKt - Started Lab3ApplicationKt in 3.659 seconds (process running for 4.026)
+2025-05-10 16:16:28.023 [http-nio-8083-exec-1] [] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-05-10 16:16:28.024 [http-nio-8083-exec-1] [] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-05-10 16:16:28.025 [http-nio-8083-exec-1] [] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-05-10 16:16:28.028 [http-nio-8083-exec-1] [] DEBUG c.cherenkov.lab_3.utils.LoggingUtils - Настроен контекст логирования для запроса e4ce825f-92fd-47f2-b9d2-a06c0de6bf7e: пользователь=anonymous, метод=POST, uri=/reports/group
+2025-05-10 16:16:28.031 [http-nio-8083-exec-1] [] INFO  c.c.l.configs.RequestLoggingFilter - >>> {POST} {/reports/group}
+2025-05-10 16:16:28.042 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.configs.GatewayAuthFilter - Запрос от Gateway на путь: /reports/group
+2025-05-10 16:16:28.043 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.configs.GatewayAuthFilter - Аутентифицирован пользователь: kirillik
+2025-05-10 16:16:28.131 [http-nio-8083-exec-1] [] INFO  c.c.l.controllers.ReportController - Получен запрос на формирование отчета по группе: 4
+2025-05-10 16:16:28.131 [http-nio-8083-exec-1] [] INFO  c.c.lab_3.service.ReportService - Начинаем формирование отчета для группы 4
+2025-05-10 16:16:28.359 [http-nio-8083-exec-1] [] INFO  org.jooq.Constants - 
+                                      
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@  @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@  @@  @@    @@@@@@@@@@
+@@@@@@@@@@  @@@@  @@  @@    @@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@    @@  @@  @@@@  @@@@@@@@@@
+@@@@@@@@@@    @@  @@  @@@@  @@@@@@@@@@
+@@@@@@@@@@        @@  @  @  @@@@@@@@@@
+@@@@@@@@@@        @@        @@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@  @@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@  Thank you for using jOOQ 3.19.21 (Build date: 2025-03-11T08:47:49Z)
+                                      
+2025-05-10 16:16:28.359 [http-nio-8083-exec-1] [] INFO  org.jooq.Constants - 
+
+jOOQ tip of the day: jOOQ supports a variety of out-of-the-box export formats, including CSV, XML, JSON, HTML, and Text: https://www.jooq.org/doc/latest/manual/sql-execution/exporting/
+
+2025-05-10 16:16:28.385 [http-nio-8083-exec-1] [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-05-10 16:16:28.487 [http-nio-8083-exec-1] [] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@40cd3a11
+2025-05-10 16:16:28.488 [http-nio-8083-exec-1] [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-05-10 16:16:28.492 [http-nio-8083-exec-1] [] INFO  o.j.i.D.logVersionSupport - Version                  : Database version is supported by dialect POSTGRES: 17.5 (Debian 17.5-1.pgdg120+1)
+2025-05-10 16:16:28.551 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено 2 специальных лекций: [117, 591]
+2025-05-10 16:16:28.799 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Запланированное количество часов для группы 4: 4
+2025-05-10 16:16:28.833 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Количество посещенных часов по студентам: 30 записей
+2025-05-10 16:16:28.999 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.049 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.049 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.050 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.054 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.054 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.055 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.058 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.058 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.059 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.061 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.061 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.070 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.074 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.074 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.075 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.078 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.078 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.079 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.081 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.081 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.082 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.084 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.084 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.085 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.087 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.087 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.087 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.089 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.089 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.090 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.092 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.092 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.092 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.094 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.094 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.095 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.097 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.097 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.097 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.099 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.099 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.100 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.101 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.102 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.102 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.104 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.104 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.105 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.106 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.107 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.107 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.109 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.109 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.110 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.111 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.111 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.112 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.113 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.113 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.114 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.115 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.115 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.116 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.117 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.118 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.118 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.120 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.120 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.120 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.122 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.122 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.123 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.124 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.124 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.125 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.129 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.129 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.130 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.132 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.132 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.133 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.134 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.134 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.135 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.136 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.136 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.137 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Поиск иерархии для departmentId: 1
+2025-05-10 16:16:29.138 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдено университетов в MongoDB: 3
+2025-05-10 16:16:29.138 [http-nio-8083-exec-1] [] DEBUG c.c.lab_3.service.ReportService - Найдена иерархия: университет=РТУ МИРЭА, институт=Институт информационных технологий, кафедра=Кафедра информатики
+2025-05-10 16:16:29.138 [http-nio-8083-exec-1] [] INFO  c.c.lab_3.service.ReportService - Формирование отчета завершено: 30 записей для группы 4
+2025-05-10 16:16:29.165 [http-nio-8083-exec-1] [] INFO  c.c.l.configs.RequestLoggingFilter - <<< {org.apache.catalina.connector.ResponseFacade@16e0753f} - {200} ({1135} мс)
+2025-05-10 16:16:38.695 [cluster-ClusterId{value='681f517874625e4a268163d1', description='null'}-localhost:27017] [] INFO  org.mongodb.driver.cluster - Exception in monitor thread while connecting to server localhost:27017
+com.mongodb.MongoNodeIsRecoveringException: Command failed with error 11600 (InterruptedAtShutdown): 'interrupted at shutdown' on server localhost:27017. The full response is {"ok": 0.0, "errmsg": "interrupted at shutdown", "code": 11600, "codeName": "InterruptedAtShutdown"}
+	at com.mongodb.internal.connection.ProtocolHelper.createSpecialException(ProtocolHelper.java:264)
+	at com.mongodb.internal.connection.ProtocolHelper.getCommandFailureException(ProtocolHelper.java:206)
+	at com.mongodb.internal.connection.InternalStreamConnection.receiveCommandMessageResponse(InternalStreamConnection.java:520)
+	at com.mongodb.internal.connection.InternalStreamConnection.receive(InternalStreamConnection.java:469)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.lookupServerDescription(DefaultServerMonitor.java:249)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.run(DefaultServerMonitor.java:176)
+2025-05-10 16:16:38.694 [cluster-ClusterId{value='681f517874625e4a268163d0', description='null'}-localhost:27017] [] INFO  org.mongodb.driver.cluster - Exception in monitor thread while connecting to server localhost:27017
+com.mongodb.MongoNodeIsRecoveringException: Command failed with error 11600 (InterruptedAtShutdown): 'interrupted at shutdown' on server localhost:27017. The full response is {"ok": 0.0, "errmsg": "interrupted at shutdown", "code": 11600, "codeName": "InterruptedAtShutdown"}
+	at com.mongodb.internal.connection.ProtocolHelper.createSpecialException(ProtocolHelper.java:264)
+	at com.mongodb.internal.connection.ProtocolHelper.getCommandFailureException(ProtocolHelper.java:206)
+	at com.mongodb.internal.connection.InternalStreamConnection.receiveCommandMessageResponse(InternalStreamConnection.java:520)
+	at com.mongodb.internal.connection.InternalStreamConnection.receive(InternalStreamConnection.java:469)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.lookupServerDescription(DefaultServerMonitor.java:249)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.run(DefaultServerMonitor.java:176)
+2025-05-10 16:16:48.707 [cluster-ClusterId{value='681f517874625e4a268163d1', description='null'}-localhost:27017] [] INFO  org.mongodb.driver.cluster - Exception in monitor thread while connecting to server localhost:27017
+com.mongodb.MongoSocketOpenException: Exception opening socket
+	at com.mongodb.internal.connection.SocketStream.lambda$open$0(SocketStream.java:85)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at com.mongodb.internal.connection.SocketStream.open(SocketStream.java:85)
+	at com.mongodb.internal.connection.InternalStreamConnection.open(InternalStreamConnection.java:233)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.lookupServerDescription(DefaultServerMonitor.java:219)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.run(DefaultServerMonitor.java:176)
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:673)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:540)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:590)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:666)
+	at com.mongodb.internal.connection.SocketStreamHelper.initialize(SocketStreamHelper.java:76)
+	at com.mongodb.internal.connection.SocketStream.initializeSocket(SocketStream.java:104)
+	at com.mongodb.internal.connection.SocketStream.open(SocketStream.java:79)
+	... 3 common frames omitted
+2025-05-10 16:16:48.708 [cluster-ClusterId{value='681f517874625e4a268163d0', description='null'}-localhost:27017] [] INFO  org.mongodb.driver.cluster - Exception in monitor thread while connecting to server localhost:27017
+com.mongodb.MongoSocketOpenException: Exception opening socket
+	at com.mongodb.internal.connection.SocketStream.lambda$open$0(SocketStream.java:85)
+	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
+	at com.mongodb.internal.connection.SocketStream.open(SocketStream.java:85)
+	at com.mongodb.internal.connection.InternalStreamConnection.open(InternalStreamConnection.java:233)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.lookupServerDescription(DefaultServerMonitor.java:219)
+	at com.mongodb.internal.connection.DefaultServerMonitor$ServerMonitor.run(DefaultServerMonitor.java:176)
+Caused by: java.net.ConnectException: Connection refused
+	at java.base/sun.nio.ch.Net.pollConnect(Native Method)
+	at java.base/sun.nio.ch.Net.pollConnectNow(Net.java:673)
+	at java.base/sun.nio.ch.NioSocketImpl.timedFinishConnect(NioSocketImpl.java:540)
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:590)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327)
+	at java.base/java.net.Socket.connect(Socket.java:666)
+	at com.mongodb.internal.connection.SocketStreamHelper.initialize(SocketStreamHelper.java:76)
+	at com.mongodb.internal.connection.SocketStream.initializeSocket(SocketStream.java:104)
+	at com.mongodb.internal.connection.SocketStream.open(SocketStream.java:79)
+	... 3 common frames omitted
+2025-05-10 16:17:07.819 [SpringApplicationShutdownHook] [] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-10 16:17:07.821 [tomcat-shutdown] [] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-05-10 16:17:08.150 [SpringApplicationShutdownHook] [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2025-05-10 16:17:08.152 [SpringApplicationShutdownHook] [] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
