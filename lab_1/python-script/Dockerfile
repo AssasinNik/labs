@@ -16,4 +16,5 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Копирование скрипта
+COPY terminal_visualizer.py .
 COPY generate_data.py .

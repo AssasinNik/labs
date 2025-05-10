@@ -20,9 +20,6 @@ data class ReportDTO(
     var institute: String? = null,
     var department: String? = null,
     
-    // Информация о курсе
-    var courseName: String? = null,
-    
     // Информация о часах
     var plannedHours: Int = 0,
     var attendedHours: Int = 0

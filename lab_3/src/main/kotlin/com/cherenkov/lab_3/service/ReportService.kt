@@ -69,9 +69,7 @@ class ReportService(
                 // Обогащаем отчет информацией об иерархии из MongoDB
                 val deptId = group.get("id_department", Int::class.java).toLong()
                 enrichHierarchy(this, deptId)
-                
-                // Добавляем информацию о курсе
-                this.courseName = courseInfo
+
             }
         }
 
