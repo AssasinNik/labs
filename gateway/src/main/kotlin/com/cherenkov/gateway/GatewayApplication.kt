@@ -17,16 +17,7 @@ class GatewayApplication {
 
 	@Bean
 	fun additionalRoutes(builder: RouteLocatorBuilder): RouteLocator {
-		return builder.routes()
-			.route("fallback-route") { r ->
-				r.path("/fallback/**")
-					.filters { f ->
-						f.setPath("/api/fallback")
-							.addResponseHeader("X-Gateway-Fallback", "true")
-					}
-					.uri("http://localhost:8080")
-			}
-			.build()
+		return builder.routes().build()
 	}
 }
 

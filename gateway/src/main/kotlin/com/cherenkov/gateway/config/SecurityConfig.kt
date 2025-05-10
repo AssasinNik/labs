@@ -35,7 +35,6 @@ class SecurityConfig(
                 // Явное разрешение для путей авторизации
                 it.pathMatchers("/api/auth/login", "/api/auth/register", "/api/auth/refresh-token").permitAll()
                 it.pathMatchers("/actuator/**").permitAll()
-                it.pathMatchers("/fallback/**").permitAll()
                 
                 // Для всех остальных запросов требуется аутентификация
                 it.anyExchange().authenticated()
