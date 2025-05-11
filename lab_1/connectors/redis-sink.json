@@ -1,0 +1,15 @@
+{
+    "name": "redis",
+    "config": {
+        "connector.class": "io.lenses.streamreactor.connect.redis.sink.RedisSinkConnector",
+        "tasks.max": "1",
+        "topics": "postgres.public.student",
+        "connect.redis.host": "redis",
+        "connect.redis.port": "6379",
+        "connect.redis.kcql": "SELECT student_number, fullname, email, id_group, redis_key, created_at FROM postgres.public.student PK student_number",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "redis.type": "JSON",
+        "schemas.enable": "false"
+    }
+}

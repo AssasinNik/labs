@@ -1,0 +1,25 @@
+FROM confluentinc/cp-kafka-connect-base:6.2.0
+
+USER root
+
+# 1) Устанавливаем curl и unzip
+RUN microdnf install -y curl unzip \
+    && microdnf clean all
+
+# 2) Устанавливаем Debezium и Elasticsearch через confluent-hub
+RUN confluent-hub install --no-prompt debezium/debezium-connector-postgresql:1.7.0 \
+    && confluent-hub install --no-prompt confluentinc/kafka-connect-elasticsearch:11.1.3
+
+# 3) Скачиваем и распаковываем Redis Sink Connector
+ARG REDIS_VERSION=8.1.33
+RUN curl -L \
+    https://github.com/lensesio/stream-reactor/releases/download/${REDIS_VERSION}/kafka-connect-redis-${REDIS_VERSION}.zip \
+    -o /tmp/redis.zip \
+    && unzip -o /tmp/redis.zip -d /usr/share/confluent-hub-components \
+    && rm /tmp/redis.zip
+
+# Возвращаемся к некорневому пользователю
+USER appuser
+
+# Entrypoint — стандартный скрипт Confluent
+ENTRYPOINT ["/etc/confluent/docker/run"]
