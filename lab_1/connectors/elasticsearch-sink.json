@@ -23,7 +23,7 @@
         "value.converter": "org.apache.kafka.connect.json.JsonConverter",
         "value.converter.schemas.enable": "false",
         "document.id.strategy": "com.github.jcustenborder.kafka.connect.utils.transformation.DocumentIdStrategy$Key",
-        "write.method": "insert",
+        "write.method": "upsert",
         "max.retries": "15",
         "retry.backoff.ms": "15000",
         "connection.timeout.ms": "120000",
