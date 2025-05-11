@@ -1,0 +1,25 @@
+{
+    "name": "postgres-connector",
+    "config": {
+        "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+        "database.hostname": "postgres",
+        "database.port": "5432",
+        "database.user": "admin",
+        "database.password": "secret",
+        "database.dbname": "mydb",
+        "database.server.name": "postgres",
+        "plugin.name": "wal2json",
+        "slot.name": "test_slot",
+        "slot.drop.on.stop": false,
+        "publication.name": "pub",
+        "publication.autocreate.mode": "all_tables",
+        "schema.include.list": "public",
+        "table.include.list": "public.*",
+        "transforms": "unwrap",
+        "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+        "transforms.unwrap.drop.tombstones": "false",
+        "transforms.unwrap.delete.handling.mode": "rewrite",
+        "database.history.kafka.bootstrap.servers": "kafka:9092",
+        "database.history.kafka.topic": "dbhistory.public"
+    }
+}

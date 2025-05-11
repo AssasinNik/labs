@@ -420,3 +420,27 @@ Using generated security password: c522fa07-389d-49a1-a36a-9afaf0813b08
 2025-04-23T20:50:16.740+03:00  INFO 2420 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Started GatewayApplicationKt in 2.074 seconds (process running for 2.394)
 2025-04-23T20:50:47.782+03:00  INFO 2420 --- [gateway] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
 2025-04-23T20:50:47.787+03:00  INFO 2420 --- [gateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
+2025-05-11T11:28:40.742+03:00  INFO 7108 --- [gateway] [Test worker] c.c.gateway.GatewayApplicationTests      : Starting GatewayApplicationTests using Java 17.0.12 with PID 7108 (started by Neket in D:\AndroidProjects\labs\gateway)
+2025-05-11T11:28:40.744+03:00  INFO 7108 --- [gateway] [Test worker] c.c.gateway.GatewayApplicationTests      : No active profile set, falling back to 1 default profile: "default"
+2025-05-11T11:28:42.483+03:00  INFO 7108 --- [gateway] [Test worker] o.s.cloud.context.scope.GenericScope     : BeanFactory id=ceac5148-1afb-38a1-84e8-92fa559b4518
+2025-05-11T11:28:42.963+03:00  INFO 7108 --- [gateway] [Test worker] ctiveUserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 2958e1f9-3777-42f3-aa0e-40026144395e
+
+2025-05-11T11:28:43.067+03:00  INFO 7108 --- [gateway] [Test worker] c.c.gateway.config.SecurityConfig        : Configuring security with exclude paths: [/api/auth/login, /api/auth/register, /api/auth/refresh-token, /actuator/**]
+2025-05-11T11:28:43.751+03:00  INFO 7108 --- [gateway] [Test worker] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-05-11T11:28:43.752+03:00  INFO 7108 --- [gateway] [Test worker] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-05-11T11:28:43.752+03:00  INFO 7108 --- [gateway] [Test worker] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-05-11T11:28:43.752+03:00  INFO 7108 --- [gateway] [Test worker] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-05-11T11:28:43.752+03:00  INFO 7108 --- [gateway] [Test worker] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-05-11T11:28:43.752+03:00  INFO 7108 --- [gateway] [Test worker] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-05-11T11:28:43.753+03:00  INFO 7108 --- [gateway] [Test worker] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-05-11T11:28:43.753+03:00  INFO 7108 --- [gateway] [Test worker] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-05-11T11:28:43.753+03:00  INFO 7108 --- [gateway] [Test worker] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-05-11T11:28:43.753+03:00  INFO 7108 --- [gateway] [Test worker] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-05-11T11:28:43.753+03:00  INFO 7108 --- [gateway] [Test worker] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-05-11T11:28:43.753+03:00  INFO 7108 --- [gateway] [Test worker] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-05-11T11:28:43.753+03:00  INFO 7108 --- [gateway] [Test worker] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-05-11T11:28:43.753+03:00  INFO 7108 --- [gateway] [Test worker] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-05-11T11:28:43.982+03:00  INFO 7108 --- [gateway] [Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-05-11T11:28:44.515+03:00  INFO 7108 --- [gateway] [Test worker] c.c.gateway.GatewayApplicationTests      : Started GatewayApplicationTests in 4.187 seconds (process running for 5.437)
