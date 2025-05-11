@@ -1,150 +1,27 @@
-2025-05-10T14:57:30.857+03:00  INFO 2060 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.2.1 with PID 2060 (/Users/nikitacerenkov/Documents/GitHub/labs/gateway/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs)
-2025-05-10T14:57:30.860+03:00  INFO 2060 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
-2025-05-10T14:57:31.840+03:00  INFO 2060 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=64ea6394-4c94-3868-9140-610789fb9bfa
-2025-05-10T14:57:32.102+03:00  INFO 2060 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
+2025-05-11T09:49:55.800+03:00  INFO 1911 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.2.1 with PID 1911 (/Users/nikitacerenkov/Documents/GitHub/labs/gateway/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs)
+2025-05-11T09:49:55.803+03:00  INFO 1911 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
+2025-05-11T09:49:56.521+03:00  INFO 1911 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=d27a72f8-dac2-31b3-b8d7-f7ebab5999c7
+2025-05-11T09:49:56.788+03:00  INFO 1911 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
 
-Using generated security password: 9884aa8f-fce2-4387-a190-8c4d617be45d
+Using generated security password: 55f265bb-ea87-4a89-853b-e0cff086f526
 
-2025-05-10T14:57:32.145+03:00  INFO 2060 --- [gateway] [main] c.c.gateway.config.SecurityConfig        : Configuring security with exclude paths: [/api/auth/login, /api/auth/register, /api/auth/refresh-token, /actuator/**, /fallback/**]
-2025-05-10T14:57:32.391+03:00  INFO 2060 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
-2025-05-10T14:57:32.391+03:00  INFO 2060 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
-2025-05-10T14:57:32.391+03:00  INFO 2060 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
-2025-05-10T14:57:32.391+03:00  INFO 2060 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
-2025-05-10T14:57:32.391+03:00  INFO 2060 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
-2025-05-10T14:57:32.391+03:00  INFO 2060 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
-2025-05-10T14:57:32.391+03:00  INFO 2060 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
-2025-05-10T14:57:32.391+03:00  INFO 2060 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
-2025-05-10T14:57:32.391+03:00  INFO 2060 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
-2025-05-10T14:57:32.391+03:00  INFO 2060 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
-2025-05-10T14:57:32.392+03:00  INFO 2060 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
-2025-05-10T14:57:32.392+03:00  INFO 2060 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
-2025-05-10T14:57:32.392+03:00  INFO 2060 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
-2025-05-10T14:57:32.392+03:00  INFO 2060 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
-2025-05-10T14:57:32.502+03:00  INFO 2060 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoints beneath base path '/actuator'
-2025-05-10T14:57:32.725+03:00  INFO 2060 --- [gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
-2025-05-10T14:57:32.769+03:00  INFO 2060 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Started GatewayApplicationKt in 2.156 seconds (process running for 2.464)
-2025-05-10T14:57:51.974+03:00  INFO 2060 --- [gateway] [parallel-1] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [f55ecdff-fa06-40e0-aa22-6f06b3743e4e]: POST http://localhost:8080/api/auth/login from 0:0:0:0:0:0:0:1
-2025-05-10T14:57:51.976+03:00  INFO 2060 --- [gateway] [parallel-1] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [249300d3-8f75-4021-a6d2-77070e0c2117]: POST http://localhost:8080/api/auth/login {Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=4bad124d-434b-4497-be73-a9892090143a, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=55, X-Gateway-Auth=true, X-Correlation-ID=f55ecdff-fa06-40e0-aa22-6f06b3743e4e}
-2025-05-10T14:57:52.012+03:00 ERROR 2060 --- [gateway] [parallel-1] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
-2025-05-10T14:57:52.240+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [249300d3-8f75-4021-a6d2-77070e0c2117]: Status=200 OK
-2025-05-10T14:57:52.242+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [f55ecdff-fa06-40e0-aa22-6f06b3743e4e]: Status=200 OK, Duration=270ms
-2025-05-10T14:58:03.189+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/attendance
-2025-05-10T14:58:03.193+03:00  INFO 2060 --- [gateway] [parallel-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/attendance
-2025-05-10T14:58:03.193+03:00  INFO 2060 --- [gateway] [parallel-3] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [26288b71-f130-4cdf-98df-e0cc5da69773]: POST http://localhost:8080/reports/attendance from 0:0:0:0:0:0:0:1
-2025-05-10T14:58:03.193+03:00  INFO 2060 --- [gateway] [parallel-3] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [63a77f03-e3c7-4ad6-902a-736b9e2fc07b]: POST http://localhost:8080/reports/attendance {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=951b7ffa-1ea0-490e-a1f3-71c336b41060, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=110, X-Auth-User=kirillik, X-Gateway-Auth=true, X-Correlation-ID=26288b71-f130-4cdf-98df-e0cc5da69773}
-2025-05-10T14:58:04.862+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [63a77f03-e3c7-4ad6-902a-736b9e2fc07b]: Status=200 OK
-2025-05-10T14:58:04.862+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [26288b71-f130-4cdf-98df-e0cc5da69773]: Status=200 OK, Duration=1669ms
-2025-05-10T14:58:27.940+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/course
-2025-05-10T14:58:27.944+03:00  INFO 2060 --- [gateway] [parallel-5] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/course
-2025-05-10T14:58:27.945+03:00  INFO 2060 --- [gateway] [parallel-5] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [f5880176-9c02-4728-b313-64f799f35b6f]: POST http://localhost:8080/reports/course from 0:0:0:0:0:0:0:1
-2025-05-10T14:58:27.946+03:00  INFO 2060 --- [gateway] [parallel-5] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [2c154925-ebbb-4950-91d4-9f35d491153c]: POST http://localhost:8080/reports/course {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=8bd779a7-6d9c-42c9-8afc-8f163c5b8cbe, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=58, X-Auth-User=kirillik, X-Gateway-Auth=true, X-Correlation-ID=f5880176-9c02-4728-b313-64f799f35b6f}
-2025-05-10T14:58:29.133+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [2c154925-ebbb-4950-91d4-9f35d491153c]: Status=200 OK
-2025-05-10T14:58:29.134+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [f5880176-9c02-4728-b313-64f799f35b6f]: Status=200 OK, Duration=1189ms
-2025-05-10T14:58:46.641+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/group
-2025-05-10T14:58:46.647+03:00  INFO 2060 --- [gateway] [parallel-7] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/group
-2025-05-10T14:58:46.648+03:00  INFO 2060 --- [gateway] [parallel-7] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [79c86e78-55d5-4d86-87ba-036a840d37b4]: POST http://localhost:8080/reports/group from 0:0:0:0:0:0:0:1
-2025-05-10T14:58:46.648+03:00  INFO 2060 --- [gateway] [parallel-7] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [7b6ed826-17e2-4233-812e-ba7749b6366f]: POST http://localhost:8080/reports/group {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=01b73a78-4f19-4e68-b8d9-eb09426c5ca6, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=20, X-Auth-User=kirillik, X-Gateway-Auth=true, X-Correlation-ID=79c86e78-55d5-4d86-87ba-036a840d37b4}
-2025-05-10T14:58:47.658+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [7b6ed826-17e2-4233-812e-ba7749b6366f]: Status=200 OK
-2025-05-10T14:58:47.659+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [79c86e78-55d5-4d86-87ba-036a840d37b4]: Status=200 OK, Duration=1012ms
-2025-05-10T14:58:58.922+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/group
-2025-05-10T14:58:58.936+03:00  INFO 2060 --- [gateway] [parallel-1] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/group
-2025-05-10T14:58:58.938+03:00  INFO 2060 --- [gateway] [parallel-1] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [09f8ff96-eddc-48e2-a1c9-6c5f6be98716]: POST http://localhost:8080/reports/group from 0:0:0:0:0:0:0:1
-2025-05-10T14:58:58.939+03:00  INFO 2060 --- [gateway] [parallel-1] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [e5fd0ab9-1d50-4438-ab41-a6512a09bce3]: POST http://localhost:8080/reports/group {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=4e6d0e30-0fe3-4308-8f67-bb434b49edb6, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=20, X-Auth-User=kirillik, X-Gateway-Auth=true, X-Correlation-ID=09f8ff96-eddc-48e2-a1c9-6c5f6be98716}
-2025-05-10T14:58:58.965+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [e5fd0ab9-1d50-4438-ab41-a6512a09bce3]: Status=200 OK
-2025-05-10T14:58:58.966+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [09f8ff96-eddc-48e2-a1c9-6c5f6be98716]: Status=200 OK, Duration=28ms
-2025-05-10T14:59:03.548+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/group
-2025-05-10T14:59:03.554+03:00  INFO 2060 --- [gateway] [parallel-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/group
-2025-05-10T14:59:03.556+03:00  INFO 2060 --- [gateway] [parallel-3] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [d2ea435f-09d1-4c2d-b7b4-694d7a37bf04]: POST http://localhost:8080/reports/group from 0:0:0:0:0:0:0:1
-2025-05-10T14:59:03.557+03:00  INFO 2060 --- [gateway] [parallel-3] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [bd9f8c6d-524d-4714-9072-98fef931a482]: POST http://localhost:8080/reports/group {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=02f2a933-5bd9-44fc-a774-a57c57424bfa, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=20, X-Auth-User=kirillik, X-Gateway-Auth=true, X-Correlation-ID=d2ea435f-09d1-4c2d-b7b4-694d7a37bf04}
-2025-05-10T14:59:03.748+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [bd9f8c6d-524d-4714-9072-98fef931a482]: Status=200 OK
-2025-05-10T14:59:03.748+03:00  INFO 2060 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [d2ea435f-09d1-4c2d-b7b4-694d7a37bf04]: Status=200 OK, Duration=192ms
-2025-05-10T14:59:15.828+03:00  INFO 2060 --- [gateway] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
-2025-05-10T14:59:15.830+03:00  INFO 2060 --- [gateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
-2025-05-10T16:07:55.728+03:00  INFO 5169 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.2.1 with PID 5169 (/Users/nikitacerenkov/Documents/GitHub/labs/gateway/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs)
-2025-05-10T16:07:55.730+03:00  INFO 5169 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
-2025-05-10T16:07:56.825+03:00  INFO 5169 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=d27a72f8-dac2-31b3-b8d7-f7ebab5999c7
-2025-05-10T16:07:57.237+03:00  INFO 5169 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
-
-Using generated security password: 35c0e5b5-00d8-4d95-9d44-aa345ca83ed4
-
-2025-05-10T16:07:57.310+03:00  INFO 5169 --- [gateway] [main] c.c.gateway.config.SecurityConfig        : Configuring security with exclude paths: [/api/auth/login, /api/auth/register, /api/auth/refresh-token, /actuator/**]
-2025-05-10T16:07:57.647+03:00  INFO 5169 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
-2025-05-10T16:07:57.648+03:00  INFO 5169 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
-2025-05-10T16:07:57.648+03:00  INFO 5169 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
-2025-05-10T16:07:57.648+03:00  INFO 5169 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
-2025-05-10T16:07:57.648+03:00  INFO 5169 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
-2025-05-10T16:07:57.648+03:00  INFO 5169 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
-2025-05-10T16:07:57.648+03:00  INFO 5169 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
-2025-05-10T16:07:57.648+03:00  INFO 5169 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
-2025-05-10T16:07:57.648+03:00  INFO 5169 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
-2025-05-10T16:07:57.648+03:00  INFO 5169 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
-2025-05-10T16:07:57.648+03:00  INFO 5169 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
-2025-05-10T16:07:57.648+03:00  INFO 5169 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
-2025-05-10T16:07:57.648+03:00  INFO 5169 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
-2025-05-10T16:07:57.648+03:00  INFO 5169 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
-2025-05-10T16:07:57.823+03:00  INFO 5169 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
-2025-05-10T16:07:58.172+03:00  INFO 5169 --- [gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
-2025-05-10T16:07:58.245+03:00  INFO 5169 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Started GatewayApplicationKt in 3.291 seconds (process running for 3.887)
-2025-05-10T16:08:51.985+03:00  INFO 5169 --- [gateway] [parallel-1] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [6d464225-0516-44e3-933b-bf57aff6b700]: POST http://localhost:8080/api/auth/login from 0:0:0:0:0:0:0:1
-2025-05-10T16:08:51.988+03:00  INFO 5169 --- [gateway] [parallel-1] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [5e956cec-b248-43db-b4b1-bd7f42efd256]: POST http://localhost:8080/api/auth/login {Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=3595fdf2-27d7-4221-a95d-661d776bd8b1, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=55, X-Gateway-Auth=true, X-Correlation-ID=6d464225-0516-44e3-933b-bf57aff6b700}
-2025-05-10T16:08:52.047+03:00 ERROR 5169 --- [gateway] [parallel-1] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
-2025-05-10T16:08:52.437+03:00  INFO 5169 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [5e956cec-b248-43db-b4b1-bd7f42efd256]: Status=200 OK
-2025-05-10T16:08:52.441+03:00  INFO 5169 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [6d464225-0516-44e3-933b-bf57aff6b700]: Status=200 OK, Duration=459ms
-2025-05-10T16:09:05.217+03:00  INFO 5169 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/attendance
-2025-05-10T16:09:05.222+03:00  INFO 5169 --- [gateway] [parallel-2] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/attendance
-2025-05-10T16:09:05.223+03:00  INFO 5169 --- [gateway] [parallel-2] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [a9c42102-e277-481c-8a5d-433553edd850]: POST http://localhost:8080/reports/attendance from 0:0:0:0:0:0:0:1
-2025-05-10T16:09:05.223+03:00  INFO 5169 --- [gateway] [parallel-2] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [933b736e-c6cd-49c5-a538-2a426f2881dc]: POST http://localhost:8080/reports/attendance {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=ca0879a7-16de-4d7b-a122-ef324abfdfed, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=110, X-Auth-User=kirillik, X-Gateway-Auth=true, X-Correlation-ID=a9c42102-e277-481c-8a5d-433553edd850}
-2025-05-10T16:09:05.744+03:00  INFO 5169 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [933b736e-c6cd-49c5-a538-2a426f2881dc]: Status=500 INTERNAL_SERVER_ERROR
-2025-05-10T16:09:05.745+03:00 ERROR 5169 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : ERROR RESPONSE [a9c42102-e277-481c-8a5d-433553edd850]: Status=500 INTERNAL_SERVER_ERROR, Duration=522ms
-2025-05-10T16:10:24.488+03:00  INFO 5169 --- [gateway] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
-2025-05-10T16:10:24.494+03:00  INFO 5169 --- [gateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
-2025-05-10T16:15:32.544+03:00  INFO 5347 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Starting GatewayApplicationKt using Java 20.0.2.1 with PID 5347 (/Users/nikitacerenkov/Documents/GitHub/labs/gateway/build/classes/kotlin/main started by nikitacerenkov in /Users/nikitacerenkov/Documents/GitHub/labs)
-2025-05-10T16:15:32.545+03:00  INFO 5347 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : The following 1 profile is active: "gateway"
-2025-05-10T16:15:33.718+03:00  INFO 5347 --- [gateway] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=d27a72f8-dac2-31b3-b8d7-f7ebab5999c7
-2025-05-10T16:15:34.163+03:00  INFO 5347 --- [gateway] [main] ctiveUserDetailsServiceAutoConfiguration : 
-
-Using generated security password: 92a8a64f-2d79-4bf2-ae52-3b652f19629e
-
-2025-05-10T16:15:34.234+03:00  INFO 5347 --- [gateway] [main] c.c.gateway.config.SecurityConfig        : Configuring security with exclude paths: [/api/auth/login, /api/auth/register, /api/auth/refresh-token, /actuator/**]
-2025-05-10T16:15:34.544+03:00  INFO 5347 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
-2025-05-10T16:15:34.544+03:00  INFO 5347 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
-2025-05-10T16:15:34.544+03:00  INFO 5347 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
-2025-05-10T16:15:34.544+03:00  INFO 5347 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
-2025-05-10T16:15:34.544+03:00  INFO 5347 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
-2025-05-10T16:15:34.544+03:00  INFO 5347 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
-2025-05-10T16:15:34.544+03:00  INFO 5347 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
-2025-05-10T16:15:34.544+03:00  INFO 5347 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
-2025-05-10T16:15:34.544+03:00  INFO 5347 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
-2025-05-10T16:15:34.544+03:00  INFO 5347 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
-2025-05-10T16:15:34.544+03:00  INFO 5347 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
-2025-05-10T16:15:34.544+03:00  INFO 5347 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
-2025-05-10T16:15:34.544+03:00  INFO 5347 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
-2025-05-10T16:15:34.545+03:00  INFO 5347 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
-2025-05-10T16:15:34.699+03:00  INFO 5347 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
-2025-05-10T16:15:35.004+03:00  INFO 5347 --- [gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
-2025-05-10T16:15:35.088+03:00  INFO 5347 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Started GatewayApplicationKt in 2.955 seconds (process running for 3.521)
-2025-05-10T16:15:50.506+03:00  INFO 5347 --- [gateway] [parallel-1] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [1b075c7f-8309-467e-a22b-c4bc8bb72769]: POST http://localhost:8080/api/auth/login from 0:0:0:0:0:0:0:1
-2025-05-10T16:15:50.508+03:00  INFO 5347 --- [gateway] [parallel-1] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [7d632a5d-77f0-4dce-8bde-ea8d15424e64]: POST http://localhost:8080/api/auth/login {Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=c5c9fb15-0b4e-4b38-ab37-4a0ae40b0557, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=55, X-Gateway-Auth=true, X-Correlation-ID=1b075c7f-8309-467e-a22b-c4bc8bb72769}
-2025-05-10T16:15:50.554+03:00 ERROR 5347 --- [gateway] [parallel-1] i.n.r.d.DnsServerAddressStreamProviders  : Unable to load io.netty.resolver.dns.macos.MacOSDnsServerAddressStreamProvider, fallback to system defaults. This may result in incorrect DNS resolutions on MacOS. Check whether you have a dependency on 'io.netty:netty-resolver-dns-native-macos'. Use DEBUG level to see the full stack: java.lang.UnsatisfiedLinkError: failed to load the required native library
-2025-05-10T16:15:50.819+03:00  INFO 5347 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [7d632a5d-77f0-4dce-8bde-ea8d15424e64]: Status=200 OK
-2025-05-10T16:15:50.821+03:00  INFO 5347 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [1b075c7f-8309-467e-a22b-c4bc8bb72769]: Status=200 OK, Duration=317ms
-2025-05-10T16:16:01.484+03:00  INFO 5347 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/attendance
-2025-05-10T16:16:01.489+03:00  INFO 5347 --- [gateway] [parallel-2] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/attendance
-2025-05-10T16:16:01.489+03:00  INFO 5347 --- [gateway] [parallel-2] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [f63a3f67-e4a3-4d65-b3e8-bafb7f011b15]: POST http://localhost:8080/reports/attendance from 0:0:0:0:0:0:0:1
-2025-05-10T16:16:01.489+03:00  INFO 5347 --- [gateway] [parallel-2] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [29da5191-3462-485a-9cd6-12e24bf59e5e]: POST http://localhost:8080/reports/attendance {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=22ff20b9-04cb-48b0-9742-e93b843326b4, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=110, X-Auth-User=kirillik, X-Gateway-Auth=true, X-Correlation-ID=f63a3f67-e4a3-4d65-b3e8-bafb7f011b15}
-2025-05-10T16:16:03.409+03:00  INFO 5347 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [29da5191-3462-485a-9cd6-12e24bf59e5e]: Status=200 OK
-2025-05-10T16:16:03.409+03:00  INFO 5347 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [f63a3f67-e4a3-4d65-b3e8-bafb7f011b15]: Status=200 OK, Duration=1920ms
-2025-05-10T16:16:15.277+03:00  INFO 5347 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/course
-2025-05-10T16:16:15.283+03:00  INFO 5347 --- [gateway] [parallel-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/course
-2025-05-10T16:16:15.284+03:00  INFO 5347 --- [gateway] [parallel-3] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [7bdfbfee-c96a-4dba-9991-96f26e6a873d]: POST http://localhost:8080/reports/course from 0:0:0:0:0:0:0:1
-2025-05-10T16:16:15.285+03:00  INFO 5347 --- [gateway] [parallel-3] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [3bb5a267-2a1d-4b0d-bee1-55410f78face]: POST http://localhost:8080/reports/course {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=f7ff4d84-e522-4885-93ac-92f118b83677, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=58, X-Auth-User=kirillik, X-Gateway-Auth=true, X-Correlation-ID=7bdfbfee-c96a-4dba-9991-96f26e6a873d}
-2025-05-10T16:16:16.638+03:00  INFO 5347 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [3bb5a267-2a1d-4b0d-bee1-55410f78face]: Status=200 OK
-2025-05-10T16:16:16.638+03:00  INFO 5347 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [7bdfbfee-c96a-4dba-9991-96f26e6a873d]: Status=200 OK, Duration=1354ms
-2025-05-10T16:16:27.960+03:00  INFO 5347 --- [gateway] [reactor-http-nio-3] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/group
-2025-05-10T16:16:27.964+03:00  INFO 5347 --- [gateway] [parallel-4] c.c.g.filter.JwtAuthenticationFilter     : JWT validated for user: kirillik on path: /reports/group
-2025-05-10T16:16:27.966+03:00  INFO 5347 --- [gateway] [parallel-4] c.c.gateway.filter.LoggingGlobalFilter   : REQUEST [fe615a97-236e-41a0-b701-c9c45e387797]: POST http://localhost:8080/reports/group from 0:0:0:0:0:0:0:1
-2025-05-10T16:16:27.966+03:00  INFO 5347 --- [gateway] [parallel-4] c.c.gateway.filter.RequestLoggingFilter  : REQUEST [3f451952-7b6b-4a05-8438-1040c0aa0885]: POST http://localhost:8080/reports/group {Authorization=Bearer [MASKED], Content-Type=application/json, User-Agent=PostmanRuntime/7.43.4, Accept=*/*, Cache-Control=no-cache, Postman-Token=b2bc580f-be12-4e85-9cce-551cd4e05acd, Host=localhost:8080, Accept-Encoding=gzip, deflate, br, Connection=keep-alive, Content-Length=20, X-Auth-User=kirillik, X-Gateway-Auth=true, X-Correlation-ID=fe615a97-236e-41a0-b701-c9c45e387797}
-2025-05-10T16:16:29.169+03:00  INFO 5347 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.RequestLoggingFilter  : RESPONSE [3f451952-7b6b-4a05-8438-1040c0aa0885]: Status=200 OK
-2025-05-10T16:16:29.170+03:00  INFO 5347 --- [gateway] [reactor-http-nio-3] c.c.gateway.filter.LoggingGlobalFilter   : RESPONSE [fe615a97-236e-41a0-b701-c9c45e387797]: Status=200 OK, Duration=1205ms
-2025-05-10T16:17:07.893+03:00  INFO 5347 --- [gateway] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
-2025-05-10T16:17:07.895+03:00  INFO 5347 --- [gateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete
+2025-05-11T09:49:56.833+03:00  INFO 1911 --- [gateway] [main] c.c.gateway.config.SecurityConfig        : Configuring security with exclude paths: [/api/auth/login, /api/auth/register, /api/auth/refresh-token, /actuator/**]
+2025-05-11T09:49:57.045+03:00  INFO 1911 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [After]
+2025-05-11T09:49:57.045+03:00  INFO 1911 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Before]
+2025-05-11T09:49:57.045+03:00  INFO 1911 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Between]
+2025-05-11T09:49:57.045+03:00  INFO 1911 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Cookie]
+2025-05-11T09:49:57.045+03:00  INFO 1911 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Header]
+2025-05-11T09:49:57.045+03:00  INFO 1911 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Host]
+2025-05-11T09:49:57.045+03:00  INFO 1911 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Method]
+2025-05-11T09:49:57.045+03:00  INFO 1911 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Path]
+2025-05-11T09:49:57.046+03:00  INFO 1911 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Query]
+2025-05-11T09:49:57.046+03:00  INFO 1911 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [ReadBody]
+2025-05-11T09:49:57.046+03:00  INFO 1911 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [RemoteAddr]
+2025-05-11T09:49:57.046+03:00  INFO 1911 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [XForwardedRemoteAddr]
+2025-05-11T09:49:57.046+03:00  INFO 1911 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [Weight]
+2025-05-11T09:49:57.046+03:00  INFO 1911 --- [gateway] [main] o.s.c.g.r.RouteDefinitionRouteLocator    : Loaded RoutePredicateFactory [CloudFoundryRouteService]
+2025-05-11T09:49:57.176+03:00  INFO 1911 --- [gateway] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-05-11T09:49:57.409+03:00  INFO 1911 --- [gateway] [main] o.s.b.web.embedded.netty.NettyWebServer  : Netty started on port 8080 (http)
+2025-05-11T09:49:57.455+03:00  INFO 1911 --- [gateway] [main] c.c.gateway.GatewayApplicationKt         : Started GatewayApplicationKt in 1.838 seconds (process running for 2.224)
+2025-05-11T09:50:20.230+03:00  INFO 1911 --- [gateway] [SpringApplicationShutdownHook] o.s.b.w.embedded.netty.GracefulShutdown  : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-11T09:50:20.232+03:00  INFO 1911 --- [gateway] [netty-shutdown] o.s.b.w.embedded.netty.GracefulShutdown  : Graceful shutdown complete

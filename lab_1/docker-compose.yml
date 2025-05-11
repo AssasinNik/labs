@@ -1,15 +1,19 @@
 version: '3.8'
 
+networks:
+  app_net:
+    driver: bridge
+
 services:
   redis:
     image: redis:latest
     container_name: redis
+    networks:
+      - app_net
     ports:
       - "6379:6379"
     volumes:
       - redis-data:/data
-    networks:
-      - app_net
     healthcheck:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 10s
@@ -19,12 +23,12 @@ services:
   mongo:
     image: mongo:latest
     container_name: mongo
+    networks:
+      - app_net
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
-    networks:
-      - app_net
     healthcheck:
       test: [ "CMD", "mongo", "--eval", "db.adminCommand('ping')" ]
       interval: 10s
@@ -34,14 +38,14 @@ services:
   neo4j:
     image: neo4j:latest
     container_name: neo4j
+    networks:
+      - app_net
     ports:
       - "7474:7474"
       - "7687:7687"
     volumes:
       - neo4j-data:/data
       - neo4j-logs:/logs
-    networks:
-      - app_net
     environment:
       - NEO4J_AUTH=none
     healthcheck:
@@ -53,14 +57,14 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
     container_name: elasticsearch
+    networks:
+      - app_net
     environment:
       - discovery.type=single-node
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
       - "9200:9200"
       - "9300:9300"
-    networks:
-      - app_net
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
     healthcheck:
@@ -72,14 +76,14 @@ services:
   postgres:
     image: postgres:latest
     container_name: postgres
+    networks:
+      - app_net
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=secret
       - POSTGRES_DB=mydb
     ports:
       - "5433:5432"
-    networks:
-      - app_net
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
@@ -90,6 +94,8 @@ services:
   python-script:
     build: ./python-script
     container_name: python-script
+    networks:
+      - app_net
     depends_on:
       - redis
       - mongo
@@ -98,8 +104,6 @@ services:
       - postgres
     environment:
       - PYTHONUNBUFFERED=1
-    networks:
-      - app_net
     command: sh -c "
       echo 'Проверка готовности баз данных...';
       wait-for-it postgres:5432 --timeout=0 &&
@@ -113,6 +117,8 @@ services:
   lab_1:
     build: .
     container_name: lab1
+    networks:
+      - app_net
     depends_on:
       - redis
       - mongo
@@ -121,13 +127,13 @@ services:
       - postgres
     ports:
       - "8081:8081"
-    networks:
-      - app_net
-    command: sh -c "sleep 20 && java -jar /app/lab_1-0.0.1-SNAPSHOT.jar"
+    command: sh -c "java -jar /app/lab_1-0.0.1-SNAPSHOT.jar"
 
   lab_2:
     build: ../lab_2
     container_name: lab2
+    networks:
+      - app_net
     depends_on:
       - redis
       - mongo
@@ -136,13 +142,13 @@ services:
       - postgres
     ports:
       - "8082:8082"
-    networks:
-      - app_net
-    command: sh -c "sleep 20 && java -jar /app/lab_2-0.0.1-SNAPSHOT.jar"
+    command: sh -c "java -jar /app/lab_2-0.0.1-SNAPSHOT.jar"
 
   lab_3:
     build: ../lab_3
     container_name: lab3
+    networks:
+      - app_net
     depends_on:
       - redis
       - mongo
@@ -151,21 +157,19 @@ services:
       - postgres
     ports:
       - "8083:8083"
-    networks:
-      - app_net
-    command: sh -c "sleep 20 && java -jar /app/lab_3-0.0.1-SNAPSHOT.jar"
+    command: sh -c "java -jar /app/lab_3-0.0.1-SNAPSHOT.jar"
 
   gateway:
     build: ../gateway
     container_name: gateway
+    networks:
+      - app_net
     depends_on:
       - lab_1
       - lab_2
       - lab_3
     ports:
       - "8080:8080"
-    networks:
-      - app_net
     command: sh -c "java -jar /app/gateway-0.0.1-SNAPSHOT.jar"
 
 volumes:
@@ -175,8 +179,3 @@ volumes:
   neo4j-logs:
   elasticsearch-data:
   postgres-data:
-
-networks:
-  app_net:
-    name: app_net
-    driver: bridge
