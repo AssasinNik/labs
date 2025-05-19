@@ -645,109 +645,6 @@ def populate_postgres(conn):
     complete_operation(op_main)
     cur.close()
 
-##########################################################################
-# MongoDB: Заполнение коллекции «universities» вложенной структурой
-##########################################################################
-
-def populate_mongodb(pg_conn):
-    """
-    Извлекает из PostgreSQL данные по университетам, институтам и кафедрам,
-    формирует вложенную структуру и загружает в MongoDB.
-    """
-    op_mongo = start_operation("Заполнение MongoDB", 100)
-    
-    cur = pg_conn.cursor()
-    
-    # Получаем иерархию: университеты -> институты -> кафедры
-    info("Извлечение данных из PostgreSQL...")
-    update_progress(op_mongo, 10)
-    
-    cur.execute("""
-        SELECT u.id, u.name, i.id, i.name, d.id, d.name
-        FROM university u
-        JOIN institute i ON i.id_university = u.id
-        JOIN department d ON d.id_institute = i.id
-        ORDER BY u.id, i.id, d.id;
-    """)
-    rows = cur.fetchall()
-    update_progress(op_mongo, 20)
-    
-    info(f"Получено {len(rows)} записей из PostgreSQL")
-    cur.close()
-
-    # Строим иерархию данных без групп
-    info("Построение иерархических документов для MongoDB...")
-    update_progress(op_mongo, 30)
-    
-    mongo_data = {}
-    universities_count = 0
-    institutes_count = 0
-    departments_count = 0
-    
-    for u_id, u_name, i_id, i_name, d_id, d_name in rows:
-        # Инициализируем университет, если его еще нет
-        if u_id not in mongo_data:
-            mongo_data[u_id] = {
-                "id": u_id,
-                "name": u_name,
-                "institutes": {}
-            }
-            universities_count += 1
-        
-        # Инициализируем институт, если его еще нет в университете
-        if i_id not in mongo_data[u_id]["institutes"]:
-            mongo_data[u_id]["institutes"][i_id] = {
-                "id": i_id,
-                "name": i_name,
-                "departments": {}
-            }
-            institutes_count += 1
-        
-        # Инициализируем кафедру, если ее еще нет в институте
-        if d_id not in mongo_data[u_id]["institutes"][i_id]["departments"]:
-            mongo_data[u_id]["institutes"][i_id]["departments"][d_id] = {
-                "departmentId": int(d_id),
-                "name": d_name
-            }
-            departments_count += 1
-    
-    update_progress(op_mongo, 50)
-
-    # Преобразуем словари в списки для финального JSON
-    info("Преобразование структуры данных для записи в MongoDB...")
-    documents = []
-    for uni_id, uni_data in mongo_data.items():
-        # Преобразуем словарь институтов в список
-        institutes_list = []
-        for inst_id, inst_data in uni_data["institutes"].items():
-            # Преобразуем словарь кафедр в список
-            departments_list = []
-            for dept_id, dept_data in inst_data["departments"].items():
-                departments_list.append(dept_data)
-            inst_data["departments"] = departments_list
-            institutes_list.append(inst_data)
-        uni_data["institutes"] = institutes_list
-        documents.append(uni_data)
-    
-    update_progress(op_mongo, 70)
-
-    # Записываем в MongoDB
-    info(f"Загрузка {len(documents)} университетов в MongoDB...")
-    client = MongoClient(MONGO_CONN_STRING)
-    db = client["university"]
-    collection = db["universities"]
-    
-    # Очищаем коллекцию перед загрузкой
-    info("Очистка существующей коллекции в MongoDB...")
-    collection.delete_many({})
-    update_progress(op_mongo, 80)
-    
-    if documents:
-        collection.insert_many(documents)
-        info(f"Загружено {len(documents)} документов в MongoDB")
-    
-    update_progress(op_mongo, 100)
-    complete_operation(op_mongo)
 
 ##########################################################################
 # Neo4j: Полное заполнение: создаются узлы для кафедр, лекций, групп и студентов;
@@ -1153,11 +1050,6 @@ def main():
     info(f"Всего в PostgreSQL создано {total_records} записей")
 
     # Заполнение внешних БД
-    try:
-        info("=== Этап 2: Заполнение MongoDB ===")
-        populate_mongodb(pg_conn)
-    except Exception as e:
-        error(f"Ошибка при заполнении MongoDB: {e}")
     
     try:
         info("=== Этап 3: Заполнение Neo4j ===")

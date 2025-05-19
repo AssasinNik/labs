@@ -18,8 +18,29 @@ RUN curl -L \
     && unzip -o /tmp/redis.zip -d /usr/share/confluent-hub-components \
     && rm /tmp/redis.zip
 
+# 7) Копируем наш собственный JAR с кастомным CDC handler
+COPY sink/kafka-connect-mongo-1.17.0 /usr/share/confluent-hub-components/mongodb-kafka-connect-mongodb
+
+
+# 5) Скачиваем необходимые зависимости для MongoDB (обновленная версия 4.7.2)
+RUN mkdir -p /tmp/mongodb-driver-deps && \
+    cd /tmp/mongodb-driver-deps && \
+    echo "Downloading MongoDB Java Driver 4.7.2..." && \
+    curl -L "https://repo1.maven.org/maven2/org/mongodb/mongodb-driver-core/4.7.2/mongodb-driver-core-4.7.2.jar" -o mongodb-driver-core.jar && \
+    curl -L "https://repo1.maven.org/maven2/org/mongodb/mongodb-driver-sync/4.7.2/mongodb-driver-sync-4.7.2.jar" -o mongodb-driver-sync.jar && \
+    curl -L "https://repo1.maven.org/maven2/org/mongodb/bson/4.7.2/bson-4.7.2.jar" -o bson.jar && \
+    curl -L "https://repo1.maven.org/maven2/org/mongodb/mongodb-driver-legacy/4.7.2/mongodb-driver-legacy-4.7.2.jar" -o mongodb-driver-legacy.jar && \
+    echo "Moving MongoDB drivers to connector lib directory..." && \
+    rm -f /usr/share/confluent-hub-components/mongodb-kafka-connect-mongodb/lib/mongodb-driver*.jar && \
+    rm -f /usr/share/confluent-hub-components/mongodb-kafka-connect-mongodb/lib/bson*.jar && \
+    cp *.jar /usr/share/confluent-hub-components/mongodb-kafka-connect-mongodb/lib/ && \
+    cd / && \
+    rm -rf /tmp/mongodb-driver-deps
+
+
 # Возвращаемся к некорневому пользователю
 USER appuser
 
 # Entrypoint — стандартный скрипт Confluent
 ENTRYPOINT ["/etc/confluent/docker/run"]
+

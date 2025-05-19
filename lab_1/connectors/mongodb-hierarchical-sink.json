@@ -1,0 +1,25 @@
+{
+    "name": "mongodb-hierarchical-sink",
+    "config": {
+        "connector.class": "com.mongodb.kafka.connect.MongoSinkConnector",
+        "topics": "postgres.public.university,postgres.public.institute,postgres.public.department",
+        "connection.uri": "mongodb://mongo:27017",
+        "database": "university",
+        "collection": "universities",
+        "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter.schemas.enable": "false",
+        "document.id.strategy": "com.mongodb.kafka.connect.sink.processor.id.strategy.FullKeyStrategy",
+        "change.data.capture.handler": "com.mongodb.kafka.connect.sink.cdc.hierarchical.HierarchicalRdbmsHandler",
+        "delete.on.null.values": "true",
+        "errors.tolerance": "all",
+        "errors.log.enable": "true",
+        "errors.log.include.messages": "true",
+        "transforms": "unwrap",
+        "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+        "transforms.unwrap.drop.tombstones": "false",
+        "transforms.unwrap.delete.handling.mode": "rewrite",
+        "max.batch.size": 100,
+        "max.tasks": 1
+    }
+}
