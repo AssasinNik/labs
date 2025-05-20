@@ -1,5 +1,5 @@
 {
-    "name": "elk",
+    "name": "elk-1",
     "config": {
         "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
         "tasks.max": "1",
@@ -7,21 +7,21 @@
         "connection.url": "http://elasticsearch:9200",
         "type.name": "_doc",
         "key.ignore": "false",
-        "schema.ignore": "true",
-        "transforms": "unwrap,key,removeDefaults",
+        "schema.ignore": "false",
+        "transforms": "unwrap,key,castBoolean",
         "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
         "transforms.unwrap.drop.tombstones": "false",
+        "transforms.unwrap.delete.handling.mode": "rewrite",
         "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
         "transforms.key.field": "id",
-        "transforms.removeDefaults.type": "org.apache.kafka.connect.transforms.ReplaceField$Value",
-        "transforms.removeDefaults.blacklist": "schema,__deleted",
-        "transforms.unwrap.delete.handling.mode": "rewrite",
+        "transforms.castBoolean.type": "org.apache.kafka.connect.transforms.Cast$Value",
+        "transforms.castBoolean.spec": "tech_equipment:boolean,default:boolean",
+        "behavior.on.malformed.documents": "WARN",
         "behavior.on.null.values": "delete",
-        "behavior.on.malformed.documents": "IGNORE",
         "key.converter": "org.apache.kafka.connect.json.JsonConverter",
         "key.converter.schemas.enable": "true",
         "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-        "value.converter.schemas.enable": "false",
-        "elastic.version": "8"
+        "value.converter.schemas.enable": "true",
+        "elastic.version": "7"
     }
 }
