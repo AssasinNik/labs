@@ -298,6 +298,48 @@ def populate_postgres(conn):
         cur.execute(view_sql)
         conn.commit()
         info("Представление student_view успешно создано.")
+        
+        # Создаем таблицу для хранения результатов представления для CDC и Redis
+        student_view_table_sql = """
+        CREATE TABLE IF NOT EXISTS public.student_view_table (
+            student_number VARCHAR(100) PRIMARY KEY,
+            fullname VARCHAR(200) NOT NULL,
+            email VARCHAR(255),
+            id_group INT NOT NULL,
+            group_name VARCHAR(200) NOT NULL,
+            redis_key VARCHAR(100)
+        );
+        
+        -- Первоначальное заполнение таблицы данными из представления
+        TRUNCATE TABLE public.student_view_table;
+        INSERT INTO public.student_view_table
+        SELECT * FROM public.student_view;
+        
+        -- Функция для обновления student_view_table при изменениях
+        CREATE OR REPLACE FUNCTION update_student_view_table() RETURNS TRIGGER AS $$
+        BEGIN
+            -- При изменениях в таблицах обновляем таблицу представления
+            TRUNCATE TABLE public.student_view_table;
+            INSERT INTO public.student_view_table
+            SELECT * FROM public.student_view;
+            RETURN NULL;
+        END;
+        $$ LANGUAGE plpgsql;
+        
+        -- Триггеры для автоматического обновления таблицы представления
+        DROP TRIGGER IF EXISTS update_student_view_table_student ON public.student;
+        CREATE TRIGGER update_student_view_table_student
+        AFTER INSERT OR UPDATE OR DELETE ON public.student
+        FOR EACH STATEMENT EXECUTE PROCEDURE update_student_view_table();
+        
+        DROP TRIGGER IF EXISTS update_student_view_table_groups ON public.groups;
+        CREATE TRIGGER update_student_view_table_groups
+        AFTER INSERT OR UPDATE OR DELETE ON public.groups
+        FOR EACH STATEMENT EXECUTE PROCEDURE update_student_view_table();
+        """
+        cur.execute(student_view_table_sql)
+        conn.commit()
+        info("Таблица student_view_table успешно создана и заполнена.")
     except Exception as e:
         conn.rollback()
         info(f"Ошибка при создании представления: {e}")
@@ -356,9 +398,10 @@ def populate_postgres(conn):
     try:
         cur.execute("DROP PUBLICATION IF EXISTS pub;")
         conn.commit()
-        cur.execute("CREATE PUBLICATION pub FOR TABLE public.student, public.groups, public.student_view_materialized;")
+        # Добавляем в публикацию таблицу student_view_table для CDC
+        cur.execute("CREATE PUBLICATION pub FOR TABLE public.student, public.groups, public.student_view_table;")
         conn.commit()
-        info("Публикация pub успешно создана для таблиц student, groups и student_view_materialized.")
+        info("Публикация pub успешно создана для таблиц student, groups и student_view_table.")
     except Exception as e:
         conn.rollback()
         info(f"Ошибка при создании публикации: {e}")
