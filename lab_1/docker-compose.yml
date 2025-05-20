@@ -150,13 +150,18 @@ services:
           --data @/connectors/redis-sink.json \
           -v;
         sleep 10;
+        echo "Registering Elasticsearch connector...";
+        curl -X POST http://kafka-connect:8083/connectors \
+          -H 'Content-Type: application/json' \
+          --data @/connectors/elasticsearch-sink.json \
+          -v;
+        sleep 10;
         echo "Checking connector status...";
         curl -v http://kafka-connect:8083/connectors;
     volumes:
       - ./connectors/mongodb-hierarchical-sink.json:/connectors/mongodb-hierarchical-sink.json:ro
       - ./connectors/postgres.json:/connectors/postgres.json:ro
       - ./connectors/elasticsearch-sink.json:/connectors/elasticsearch-sink.json:ro
-      - ./connectors/elasticsearch-sink-1.json:/connectors/elasticsearch-sink-1.json:ro
       - ./connectors/redis-sink.json:/connectors/redis-sink.json:ro
     networks:
       - app_net

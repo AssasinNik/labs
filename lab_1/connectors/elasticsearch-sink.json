@@ -3,7 +3,7 @@
     "config": {
         "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
         "tasks.max": "1",
-        "topics.regex": "postgres.public.student",
+        "topics": "postgres.public.student",
         "connection.url": "http://elasticsearch:9200",
         "type.name": "_doc",
         "key.ignore": "false",
@@ -11,27 +11,14 @@
         "transforms": "unwrap,key",
         "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
         "transforms.unwrap.drop.tombstones": "false",
+        "transforms.unwrap.delete.handling.mode": "rewrite",
         "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
         "transforms.key.field": "student_number",
         "behavior.on.null.values": "delete",
-        "behavior.on.malformed.documents": "warn",
-        "errors.tolerance": "all",
-        "errors.log.enable": "true",
-        "errors.log.include.messages": "true",
         "key.converter": "org.apache.kafka.connect.json.JsonConverter",
         "key.converter.schemas.enable": "true",
         "value.converter": "org.apache.kafka.connect.json.JsonConverter",
         "value.converter.schemas.enable": "false",
-        "document.id.strategy": "com.github.jcustenborder.kafka.connect.utils.transformation.DocumentIdStrategy$Key",
-        "write.method": "upsert",
-        "max.retries": "15",
-        "retry.backoff.ms": "15000",
-        "connection.timeout.ms": "120000",
-        "read.timeout.ms": "120000",
-        "batch.size": "2000",
-        "max.in.flight.requests": "1",
-        "linger.ms": "5000",
-        "elastic.version": "8",
-        "ignore.key.and.version": "true"
+        "elastic.version": "8"
     }
 }

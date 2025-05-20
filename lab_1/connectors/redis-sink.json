@@ -4,17 +4,14 @@
         "connector.class": "io.lenses.streamreactor.connect.redis.sink.RedisSinkConnector",
         "tasks.max": "1",
         "topics": "postgres.public.student",
-        "transforms": "unwrap,key",
-        "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
-        "transforms.unwrap.drop.tombstones": "false",
-        "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
-        "transforms.key.field": "student_number",
         "connect.redis.host": "redis",
         "connect.redis.port": "6379",
-        "connect.redis.kcql": "INSERT INTO student_info SELECT fullname, email, id_group, redis_key, created_at FROM postgres.public.student PK student_number",
+        "connect.redis.kcql": "SELECT student_number, fullname, id_group, redis_key FROM postgres.public.student PK student_number",
         "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter.schemas.enable": "true",
         "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "key.converter.schemas.enable": "true",
         "redis.type": "JSON",
-        "schemas.enable": "false"
+        "schemas.enable": "true"
     }
 }

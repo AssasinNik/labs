@@ -784,62 +784,6 @@ def populate_neo4j(pg_conn):
     complete_operation(op_neo4j)
 
 ##########################################################################
-# Redis: Запись данных о студентах в виде hash
-##########################################################################
-
-def populate_redis(pg_conn):
-    """
-    Извлекает данные по студентам из PostgreSQL и сохраняет их в Redis.
-    Ключ – redis_key, значения – поля fullname, email, group_id, group_name.
-    """
-    op_redis = start_operation("Заполнение Redis", 100)
-    
-    r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
-    
-    # Очистка Redis перед заполнением
-    info("Очистка существующих данных в Redis...")
-    r.flushdb()
-    update_progress(op_redis, 10)
-    
-    # Получаем информацию о студентах включая название группы
-    info("Извлечение данных о студентах из PostgreSQL...")
-    cur = pg_conn.cursor()
-    cur.execute("""
-        SELECT s.student_number, s.fullname, s.email, s.id_group, g.name as group_name, s.redis_key 
-        FROM student s
-        JOIN groups g ON s.id_group = g.id
-    """)
-    students = cur.fetchall()
-    info(f"Получено {len(students)} записей о студентах")
-    cur.close()
-    update_progress(op_redis, 30)
-
-    # Заполняем Redis
-    info(f"Загрузка {len(students)} записей в Redis...")
-    records_processed = 0
-    
-    student_load_op = start_operation("Загрузка студентов в Redis", len(students))
-    
-    for i, stud in enumerate(students):
-        student_number, fullname, email, id_group, group_name, redis_key = stud
-        r.hset(redis_key, mapping={
-            "fullname": fullname,
-            "email": email,
-            "group_id": id_group,
-            "group_name": group_name,
-            "redis_key": redis_key
-        })
-        records_processed += 1
-        
-        if (i+1) % 1000 == 0 or i+1 == len(students):
-            update_progress(student_load_op, i+1)
-            update_progress(op_redis, 30 + int(70 * (i+1) / len(students)))
-    
-    complete_operation(student_load_op)
-    update_progress(op_redis, 100)
-    complete_operation(op_redis)
-
-##########################################################################
 # Elasticsearch: Индексирование лекций
 ##########################################################################
 
@@ -1056,12 +1000,6 @@ def main():
         populate_neo4j(pg_conn)
     except Exception as e:
         error(f"Ошибка при заполнении Neo4j: {e}")
-    
-    try:
-        info("=== Этап 4: Заполнение Redis ===")
-        populate_redis(pg_conn)
-    except Exception as e:
-        error(f"Ошибка при заполнении Redis: {e}")
     
     try:
         info("=== Этап 5: Заполнение Elasticsearch ===")
