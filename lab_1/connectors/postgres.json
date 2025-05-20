@@ -12,7 +12,7 @@
         "slot.name": "test_slot",
         "slot.drop.on.stop": false,
         "publication.name": "pub",
-        "publication.autocreate.mode": "all_tables",
+        "publication.autocreate.mode": "disabled",
         "schema.include.list": "public",
         "table.include.list": "public.*",
         "transforms": "unwrap",

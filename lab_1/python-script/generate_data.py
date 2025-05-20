@@ -278,6 +278,108 @@ def populate_postgres(conn):
     
     cur = conn.cursor()
 
+    # 0. Создание представления student_view для Redis
+    info("Создание представления student_view для Redis...")
+    try:
+        view_sql = """
+        CREATE OR REPLACE VIEW public.student_view AS
+        SELECT 
+            s.student_number,
+            s.fullname,
+            s.email,
+            s.id_group,
+            g.name as group_name,
+            s.redis_key 
+        FROM 
+            public.student s
+        JOIN 
+            public.groups g ON s.id_group = g.id;
+        """
+        cur.execute(view_sql)
+        conn.commit()
+        info("Представление student_view успешно создано.")
+    except Exception as e:
+        conn.rollback()
+        info(f"Ошибка при создании представления: {e}")
+
+    # 0.1 Создание материализованного представления и триггеры для автоматического обновления
+    info("Создание материализованного представления student_view_materialized...")
+    try:
+        materialized_view_sql = """
+        CREATE MATERIALIZED VIEW IF NOT EXISTS public.student_view_materialized AS
+        SELECT 
+            s.student_number,
+            s.fullname,
+            s.email,
+            s.id_group,
+            g.name as group_name,
+            s.redis_key 
+        FROM 
+            public.student s
+        JOIN 
+            public.groups g ON s.id_group = g.id;
+        
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_student_view_materialized_student_number 
+        ON public.student_view_materialized(student_number);
+        """
+        cur.execute(materialized_view_sql)
+        conn.commit()
+        
+        # Создание функции и триггеров для обновления материализованного представления
+        trigger_func_sql = """
+        CREATE OR REPLACE FUNCTION refresh_student_view_materialized() RETURNS TRIGGER AS $$
+        BEGIN
+            REFRESH MATERIALIZED VIEW CONCURRENTLY public.student_view_materialized;
+            RETURN NULL;
+        END;
+        $$ LANGUAGE plpgsql;
+        
+        DROP TRIGGER IF EXISTS refresh_student_view_materialized_student ON public.student;
+        CREATE TRIGGER refresh_student_view_materialized_student
+        AFTER INSERT OR UPDATE OR DELETE ON public.student
+        FOR EACH STATEMENT EXECUTE PROCEDURE refresh_student_view_materialized();
+        
+        DROP TRIGGER IF EXISTS refresh_student_view_materialized_groups ON public.groups;
+        CREATE TRIGGER refresh_student_view_materialized_groups
+        AFTER INSERT OR UPDATE OR DELETE ON public.groups
+        FOR EACH STATEMENT EXECUTE PROCEDURE refresh_student_view_materialized();
+        """
+        cur.execute(trigger_func_sql)
+        conn.commit()
+        info("Материализованное представление и триггеры успешно созданы.")
+    except Exception as e:
+        conn.rollback()
+        info(f"Ошибка при создании материализованного представления: {e}")
+
+    # 1. Создание публикации (если ещё не существует)
+    info("Создание публикации pub...")
+    try:
+        cur.execute("DROP PUBLICATION IF EXISTS pub;")
+        conn.commit()
+        cur.execute("CREATE PUBLICATION pub FOR TABLE public.student, public.groups, public.student_view_materialized;")
+        conn.commit()
+        info("Публикация pub успешно создана для таблиц student, groups и student_view_materialized.")
+    except Exception as e:
+        conn.rollback()
+        info(f"Ошибка при создании публикации: {e}")
+
+    # 2. Создание слота репликации
+    info("Создание логического слота репликации...")
+    try:
+        # Сначала проверяем, существует ли слот
+        cur.execute("SELECT slot_name FROM pg_replication_slots WHERE slot_name = 'test_slot';")
+        if cur.fetchone():
+            info("Слот уже существует, удаляем и создаем заново.")
+            cur.execute("SELECT pg_drop_replication_slot('test_slot');")
+            conn.commit()
+        
+        cur.execute("SELECT * FROM pg_create_logical_replication_slot('test_slot', 'wal2json');")
+        conn.commit()
+        info("Слот репликации успешно создан.")
+    except Exception as e:
+        conn.rollback()
+        info(f"Ошибка при создании слота репликации: {e}")
+
     num_universities = min(len(UNIVERSITIES), 3)
     institutes_per_univ = 4
     departments_per_inst = 5

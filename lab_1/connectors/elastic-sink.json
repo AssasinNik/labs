@@ -1,9 +1,9 @@
 {
-    "name": "elk-1",
+    "name": "elk",
     "config": {
         "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
         "tasks.max": "1",
-        "topics": "postgres.public.student",
+        "topics.regex": "postgres\\.public\\.(?!student$).*",
         "connection.url": "http://elasticsearch:9200",
         "type.name": "_doc",
         "key.ignore": "false",
@@ -15,8 +15,9 @@
         "transforms.removeKeyDefaults.blacklist": "schema.fields.default",
         "transforms.unwrap.delete.handling.mode": "rewrite",
         "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
-        "transforms.key.field": "student_number",
+        "transforms.key.field": "id",
         "behavior.on.null.values": "delete",
+        "behavior.on.malformed.documents": "IGNORE",
         "key.converter": "org.apache.kafka.connect.json.JsonConverter",
         "key.converter.schemas.enable": "true",
         "value.converter": "org.apache.kafka.connect.json.JsonConverter",
