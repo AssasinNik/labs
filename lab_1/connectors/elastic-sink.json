@@ -1,9 +1,9 @@
 {
-    "name": "elk-1",
+    "name": "elk",
     "config": {
         "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
         "tasks.max": "1",
-        "topics.regex": "postgres\\.public\\.(?!student$).*",
+        "topics.regex": "postgres\\.public\\.(?!(student$|student_view_table$)).*",
         "connection.url": "http://elasticsearch:9200",
         "type.name": "_doc",
         "key.ignore": "false",
