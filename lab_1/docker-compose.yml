@@ -222,6 +222,10 @@ services:
       - neo4j-logs:/logs
     environment:
       - NEO4J_AUTH=none
+      - NEO4JLABS_PLUGINS=["apoc"]
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:7474" ]
       interval: 10s
