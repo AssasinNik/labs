@@ -129,7 +129,7 @@ services:
       - -c
       - |
         echo 'Waiting for Kafka Connect to start...';
-        sleep 60;
+        sleep 120;
         echo "Checking Kafka Connect version...";
         curl -v http://kafka-connect:8083/ | grep version;
         echo "Registering PostgreSQL connector...";
