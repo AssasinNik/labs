@@ -2,32 +2,38 @@ package com.cherenkov.lab_2.entity
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
+import org.springframework.data.mongodb.core.mapping.Field
 
 /**
- * Документ университета в MongoDB
+ * Документ MongoDB с информацией об университете и его структуре
  */
 @Document(collection = "universities")
 data class UniversityDocument(
     @Id
-    val id: String,
-    val universityId: Int?,
+    val id: Int,
+    
+    @Field("name")
     val name: String,
+    
+    @Field("institutes")
     val institutes: List<Institute>
 )
 
-/**
- * Институт внутри университета
- */
 data class Institute(
-    val id: Int?,
+    @Field("_id")
+    val id: Int,
+    
+    @Field("name")
     val name: String,
+    
+    @Field("departments")
     val departments: List<Department>
 )
 
-/**
- * Кафедра внутри института
- */
 data class Department(
-    val departmentId: Int,
+    @Field("_id")
+    val id: Int,
+    
+    @Field("name")
     val name: String
 ) 

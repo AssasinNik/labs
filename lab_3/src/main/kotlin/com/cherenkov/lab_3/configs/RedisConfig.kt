@@ -6,7 +6,10 @@ import org.springframework.context.annotation.Primary
 import org.springframework.data.redis.connection.RedisConnectionFactory
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import org.springframework.data.redis.core.RedisTemplate
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer
 import org.springframework.data.redis.serializer.StringRedisSerializer
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 
 @Configuration
 class RedisConfig {
@@ -18,15 +21,20 @@ class RedisConfig {
     }
 
     @Bean
-    fun redisTemplate(redisConnectionFactory: RedisConnectionFactory): RedisTemplate<String, Any> {
+    fun objectMapper(): ObjectMapper {
+        return ObjectMapper().registerModule(KotlinModule.Builder().build())
+    }
+
+    @Bean
+    fun redisTemplate(redisConnectionFactory: RedisConnectionFactory, objectMapper: ObjectMapper): RedisTemplate<String, Any> {
         val template = RedisTemplate<String, Any>()
-        val strSerializer = StringRedisSerializer()
+        val jsonSerializer = GenericJackson2JsonRedisSerializer(objectMapper)
 
         template.connectionFactory = redisConnectionFactory
-        template.keySerializer = strSerializer
-        template.valueSerializer = strSerializer
-        template.hashKeySerializer = strSerializer
-        template.hashValueSerializer = strSerializer
+        template.keySerializer = StringRedisSerializer()
+        template.valueSerializer = jsonSerializer
+        template.hashKeySerializer = StringRedisSerializer()
+        template.hashValueSerializer = jsonSerializer
         template.afterPropertiesSet()
 
         return template

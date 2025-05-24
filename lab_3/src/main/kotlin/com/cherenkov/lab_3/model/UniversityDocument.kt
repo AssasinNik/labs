@@ -2,6 +2,7 @@ package com.cherenkov.lab_3.model
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
+import org.springframework.data.mongodb.core.mapping.Field
 
 /**
  * Документ MongoDB с информацией об университете и его структуре
@@ -9,19 +10,30 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document(collection = "universities")
 data class UniversityDocument(
     @Id
-    val id: String,
+    val id: Int,
+    
+    @Field("name")
     val name: String,
-    val institutes: List<Institute> = emptyList()
+    
+    @Field("institutes")
+    val institutes: List<Institute>
 )
 
 data class Institute(
-    val instituteId: Int = 0,
+    @Field("_id")
+    val id: Int,
+    
+    @Field("name")
     val name: String,
-    val departments: List<Department> = emptyList()
+    
+    @Field("departments")
+    val departments: List<Department>
 )
 
 data class Department(
-    val departmentId: Int,
-    val name: String,
-    val specializations: List<String> = emptyList()
+    @Field("_id")
+    val id: Int,
+    
+    @Field("name")
+    val name: String
 ) 

@@ -1,6 +1,7 @@
 package com.cherenkov.lab_3.service
 
 import com.cherenkov.lab_3.dto.ReportDTO
+import com.cherenkov.lab_3.dto.RedisStudentInfo
 import com.cherenkov.lab_3.model.UniversityDocument
 import com.cherenkov.lab_3.repository.AttendanceRepository
 import com.cherenkov.lab_3.repository.GroupRepository
@@ -134,9 +135,13 @@ class ReportService(
      * Обогатить отчет информацией о студенте из Redis
      */
     fun enrichStudentInfo(dto: ReportDTO, studentNumber: String) {
-        val entries = redisTemplate.opsForHash<String, Any>().entries("student:$studentNumber")
-        dto.studentName = entries["fullname"] as? String
-        dto.email = entries["email"] as? String
+        val studentInfo = redisTemplate.opsForValue()
+            .get("student:$studentNumber") as? RedisStudentInfo
+            
+        studentInfo?.let {
+            dto.studentName = it.fullname
+            dto.email = it.email
+        }
     }
 
     /**
@@ -145,40 +150,58 @@ class ReportService(
     fun enrichHierarchy(dto: ReportDTO, deptId: Long) {
         try {
             log.debug("Поиск иерархии для departmentId: {}", deptId)
-            val unis = mongoTemplate.findAll(UniversityDocument::class.java)
-            log.debug("Найдено университетов в MongoDB: {}", unis.size)
             
-            var found = false
-            for (uni in unis) {
-                for (inst in uni.institutes) {
-                    for (dept in inst.departments) {
-                        if (dept.departmentId == deptId.toInt()) {
-                            dto.university = uni.name
-                            dto.institute = inst.name
-                            dto.department = dept.name
-                            found = true
-                            log.debug("Найдена иерархия: университет={}, институт={}, кафедра={}", 
-                                     uni.name, inst.name, dept.name)
-                            return
+            // Ищем университет, содержащий кафедру с указанным ID
+            val university = mongoTemplate.findAll(UniversityDocument::class.java)
+                .find { uni ->
+                    uni.institutes.any { inst ->
+                        inst.departments.any { dept ->
+                            dept.id == deptId.toInt()
                         }
+                    }
+                }
+
+            if (university != null) {
+                dto.university = university.name
+                
+                // Находим институт, содержащий кафедру
+                val institute = university.institutes.find { inst ->
+                    inst.departments.any { dept -> dept.id == deptId.toInt() }
+                }
+                
+                if (institute != null) {
+                    dto.institute = institute.name
+                    
+                    // Находим кафедру
+                    val department = institute.departments.find { dept ->
+                        dept.id == deptId.toInt()
+                    }
+                    
+                    if (department != null) {
+                        dto.department = department.name
+                        log.debug("Найдена иерархия: университет={}, институт={}, кафедра={}", 
+                                university.name, institute.name, department.name)
+                        return
                     }
                 }
             }
             
-            if (!found) {
-                log.warn("Не удалось найти иерархию для departmentId: {}", deptId)
-                // Устанавливаем значения по умолчанию, чтобы поля не были пустыми
-                dto.university = "МИРЭА - Российский технологический университет"
-                dto.institute = "Институт информационных технологий"
-                dto.department = "Кафедра #" + deptId
-            }
+            log.warn("Не удалось найти иерархию для departmentId: {}", deptId)
+            setDefaultHierarchy(dto, deptId)
+            
         } catch (e: Exception) {
             log.error("Ошибка при обогащении данными иерархии: {}", e.message)
-            // Устанавливаем значения по умолчанию в случае ошибки
-            dto.university = "МИРЭА - Российский технологический университет"
-            dto.institute = "Институт информационных технологий"
-            dto.department = "Кафедра #" + deptId
+            setDefaultHierarchy(dto, deptId)
         }
+    }
+
+    /**
+     * Установить значения иерархии по умолчанию
+     */
+    private fun setDefaultHierarchy(dto: ReportDTO, deptId: Long) {
+        dto.university = "МИРЭА - Российский технологический университет"
+        dto.institute = "Институт информационных технологий"
+        dto.department = "Кафедра #$deptId"
     }
 }
 
