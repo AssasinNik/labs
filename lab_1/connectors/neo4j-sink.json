@@ -1,28 +1,24 @@
 {
-  "name": "neo",
+  "name": "neo4j-sink",
   "config": {
     "connector.class": "streams.kafka.connect.sink.Neo4jSinkConnector",
-    "tasks.max": "1",
-    "topics": "postgres.public.groups,postgres.public.student,postgres.public.lecture",
+    "topics": "postgres.public.department,postgres.public.lecture,postgres.public.groups,postgres.public.student",
     "neo4j.server.uri": "bolt://neo4j:7687",
-    "neo4j.authentication.basic.username": "neo4j",
-    "neo4j.authentication.basic.password": "password",
-    "neo4j.database": "neo4j",
+    "neo4j.authentication.basic.username": "",
+    "neo4j.authentication.basic.password": "",
+    "neo4j.topic.cypher.postgres.public.department": "CALL apoc.do.case([event.op = 'c' OR event.op = 'r', 'MERGE (d:Department {id: event.after.id}) SET d.name = event.after.name, d.neo_id = event.after.neo_id, d.created_at = event.after.created_at, d.updated_at = event.after.updated_at RETURN d', event.op = 'u', 'MATCH (d:Department {id: event.after.id}) SET d.name = event.after.name, d.neo_id = event.after.neo_id, d.updated_at = event.after.updated_at RETURN d', event.op = 'd', 'MATCH (d:Department {id: event.before.id}) DETACH DELETE d RETURN d'], '', {event: event}) YIELD value RETURN value",
+    "neo4j.topic.cypher.postgres.public.lecture": "CALL apoc.do.case([event.op = 'c' OR event.op = 'r', 'MERGE (l:Lecture {id: event.after.id}) SET l.name = event.after.name, l.duration_hours = event.after.duration_hours, l.tech_equipment = event.after.tech_equipment, l.elasticsearch_id = event.after.elasticsearch_id, l.created_at = event.after.created_at, l.course_id = event.after.id_course WITH l MATCH (d:Department) WHERE d.id = event.after.id_course / 10 MERGE (l)-[:ORIGINATES_FROM]->(d) RETURN l', event.op = 'u', 'MATCH (l:Lecture {id: event.after.id}) SET l.name = event.after.name, l.duration_hours = event.after.duration_hours, l.tech_equipment = event.after.tech_equipment, l.elasticsearch_id = event.after.elasticsearch_id, l.course_id = event.after.id_course RETURN l', event.op = 'd', 'MATCH (l:Lecture {id: event.before.id}) DETACH DELETE l RETURN l'], '', {event: event}) YIELD value RETURN value",
+    "neo4j.topic.cypher.postgres.public.groups": "CALL apoc.do.case([event.op = 'c' OR event.op = 'r', 'MERGE (g:Group {id: event.after.id}) SET g.name = event.after.name, g.mongo_id = event.after.mongo_id, g.formation_year = event.after.formation_year, g.created_at = event.after.created_at, g.department_id = event.after.id_department RETURN g', event.op = 'u', 'MATCH (g:Group {id: event.after.id}) SET g.name = event.after.name, g.mongo_id = event.after.mongo_id, g.formation_year = event.after.formation_year, g.department_id = event.after.id_department RETURN g', event.op = 'd', 'MATCH (g:Group {id: event.before.id}) DETACH DELETE g RETURN g'], '', {event: event}) YIELD value RETURN value",
+    "neo4j.topic.cypher.postgres.public.student": "CALL apoc.do.case([event.op = 'c' OR event.op = 'r', 'MERGE (s:Student {student_number: event.after.student_number}) SET s.fullname = event.after.fullname, s.email = event.after.email, s.redis_key = event.after.redis_key, s.created_at = event.after.created_at, s.group_id = event.after.id_group WITH s MATCH (g:Group {id: s.group_id}) MERGE (s)-[:BELONGS_TO]->(g) RETURN s', event.op = 'u', 'MATCH (s:Student {student_number: event.after.student_number}) SET s.fullname = event.after.fullname, s.email = event.after.email, s.redis_key = event.after.redis_key, s.group_id = event.after.id_group WITH s MATCH (g:Group {id: s.group_id}) MERGE (s)-[:BELONGS_TO]->(g) RETURN s', event.op = 'd', 'MATCH (s:Student {student_number: event.before.student_number}) DETACH DELETE s RETURN s'], '', {event: event}) YIELD value RETURN value",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "true",
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
     "value.converter.schemas.enable": "false",
     "errors.tolerance": "all",
     "errors.log.enable": "true",
     "errors.log.include.messages": "true",
-
-    "neo4j.topic.cypher.postgres_server.public.groups": "MERGE (g:Group {id: event.after.id_group}) ON CREATE SET g += event.after",
-
-    "neo4j.topic.cypher.postgres_server.public.students": "MATCH (g:Group {id: event.after.id_group}) MERGE (s:Student {id: event.after.id_stud}) MERGE (s)-[:STUDIESAT]->(g)",
-
-    "neo4j.topic.cypher.postgres_server.public.lectures": "MATCH (g:Group {id: event.after.id_group}) MERGE (l:Lecture {id: event.after.id_lect}) SET l += event.after MERGE (g)-[:HAS_LECTURE]->(l)",
-
-    "transforms": "unwrap",
-    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
-    "transforms.unwrap.drop.tombstones": "true",
-    "transforms.unwrap.delete.handling.mode": "none"
+    "neo4j.batch.size": 100,
+    "neo4j.batch.timeout": 5000,
+    "neo4j.database": "neo4j"
   }
 }

@@ -162,6 +162,12 @@ services:
           --data @/connectors/elastic-sink.json \
           -v;
         sleep 10;
+        echo "Registering Neo4j connector...";
+        curl -X POST http://kafka-connect:8083/connectors \
+          -H 'Content-Type: application/json' \
+          --data @/connectors/neo4j-sink.json \
+          -v;
+        sleep 10;
         echo "Checking connector status...";
         curl -v http://kafka-connect:8083/connectors;
     volumes:
@@ -173,7 +179,7 @@ services:
       - ./connectors/redis-sink.json:/connectors/redis-sink.json:ro
     networks:
       - app_net
-      
+
   redis:
     image: redis:latest
     container_name: redis
@@ -249,7 +255,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
-      
+
   postgres:
     build:
       context: ./postgres
