@@ -1,7 +1,8 @@
 {
-    "name": "postgres-connector",
+    "name": "postgres",
     "config": {
         "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+        "tasks.max": "1",
         "database.hostname": "postgres",
         "database.port": "5432",
         "database.user": "admin",
@@ -15,11 +16,11 @@
         "publication.autocreate.mode": "disabled",
         "schema.include.list": "public",
         "table.include.list": "public.*",
-        "transforms": "unwrap",
-        "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
-        "transforms.unwrap.drop.tombstones": "false",
-        "transforms.unwrap.delete.handling.mode": "rewrite",
-        "database.history.kafka.bootstrap.servers": "kafka:9092",
-        "database.history.kafka.topic": "dbhistory.public"
+        "key.ignore": "false",
+        "schema.ignore": "true",
+        "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "key.converter.schemas.enable": "true",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter.schemas.enable": "false"
     }
 }
