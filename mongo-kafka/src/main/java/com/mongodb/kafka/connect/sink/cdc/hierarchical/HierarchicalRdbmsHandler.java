@@ -71,85 +71,70 @@ public class HierarchicalRdbmsHandler extends CdcHandler {
         
         LOGGER.debug("Processing document: {}", valueDoc.toJson());
         
-        BsonDocument payload;
-        if (valueDoc.containsKey("payload") && valueDoc.get("payload").isDocument()) {
-            payload = valueDoc.getDocument("payload");
-        } else {
-            payload = valueDoc;
-        }
-        
         try {
-            // Определяем тип объекта по составу полей и имени таблицы
-            String tableName = "";
-            if (valueDoc.containsKey("source") && valueDoc.getDocument("source").containsKey("table")) {
-                tableName = valueDoc.getDocument("source").getString("table").getValue();
+            // Получаем операцию
+            String operation = valueDoc.getString("op").getValue();
+            
+            // Получаем данные из секции after или before в зависимости от операции
+            BsonDocument payload;
+            if (operation.equals("d")) {
+                // Для удаления берем данные из before
+                payload = valueDoc.getDocument("before");
+            } else {
+                // Для create, update и read берем данные из after
+                payload = valueDoc.getDocument("after");
             }
             
-            // Проверяем, является ли это операцией удаления
-            boolean isDelete = false;
-            if (payload.containsKey("__deleted") && payload.getString("__deleted").getValue().equals("true")) {
-                isDelete = true;
-                LOGGER.debug("Detected delete operation for {}", tableName);
-            } else if (payload.isEmpty() && keyDoc.containsKey("payload") && keyDoc.getDocument("payload").containsKey("id")) {
-                // Это второе сообщение об удалении (только ключ без значения)
-                LOGGER.debug("Detected tombstone delete message with key only");
-                return Optional.empty(); // Пропускаем обработку сообщения-могильника (tombstone)
-            }
+            // Получаем имя таблицы из source
+            String tableName = valueDoc.getDocument("source").getString("table").getValue();
             
+            // В зависимости от операции и таблицы вызываем соответствующий обработчик
             Optional<WriteModel<BsonDocument>> result;
             
-            if (UNIVERSITY_TABLE.equals(tableName) || 
-                (payload.containsKey("id") && payload.containsKey("name") && 
-                !payload.containsKey("id_university") && !payload.containsKey("id_institute"))) {
-                // Это университет
-                if (isDelete) {
-                    result = handleUniversityDelete(payload);
-                } else {
-                    result = handleUniversity(payload);
-                }
-                
-                // После обработки университета пытаемся очистить временные университеты
-                List<WriteModel<BsonDocument>> deleteOps = cleanupTemporaryUniversities();
-                // Объединяем операцию обновления с операциями удаления, если они есть
-                if (!deleteOps.isEmpty() && result.isPresent()) {
-                    WriteModel<BsonDocument> updateOp = result.get();
-                    List<WriteModel<BsonDocument>> allOps = new ArrayList<>();
-                    allOps.add(updateOp);
-                    allOps.addAll(deleteOps);
+            switch (tableName) {
+                case UNIVERSITY_TABLE:
+                    if (operation.equals("d")) {
+                        result = handleUniversityDelete(payload);
+                    } else {
+                        result = handleUniversity(payload);
+                    }
+                    break;
                     
-                    // Возвращаем только первую операцию, остальные будут выполнены отдельно
-                    return result;
-                }
-            } else if (INSTITUTE_TABLE.equals(tableName) || 
-                      (payload.containsKey("id") && payload.containsKey("name") && 
-                      payload.containsKey("id_university") && !payload.containsKey("id_institute"))) {
-                // Это институт
-                if (isDelete) {
-                    result = handleInstituteDelete(payload);
-                } else {
-                    result = handleInstitute(payload);
-                }
+                case INSTITUTE_TABLE:
+                    if (operation.equals("d")) {
+                        result = handleInstituteDelete(payload);
+                    } else {
+                        result = handleInstitute(payload);
+                    }
+                    break;
+                    
+                case DEPARTMENT_TABLE:
+                    if (operation.equals("d")) {
+                        result = handleDepartmentDelete(payload);
+                    } else {
+                        result = handleDepartment(payload);
+                    }
+                    break;
+                    
+                default:
+                    LOGGER.warn("Unknown table: {}", tableName);
+                    return Optional.empty();
+            }
+            
+            // После обработки любой операции пытаемся очистить временные университеты
+            List<WriteModel<BsonDocument>> deleteOps = cleanupTemporaryUniversities();
+            if (!deleteOps.isEmpty() && result.isPresent()) {
+                WriteModel<BsonDocument> updateOp = result.get();
+                List<WriteModel<BsonDocument>> allOps = new ArrayList<>();
+                allOps.add(updateOp);
+                allOps.addAll(deleteOps);
                 
-                // После обработки института пытаемся очистить временные университеты
-                cleanupTemporaryUniversities();
-            } else if (DEPARTMENT_TABLE.equals(tableName) || 
-                      (payload.containsKey("id") && 
-                      payload.containsKey("id_institute"))) {
-                // Это кафедра
-                if (isDelete) {
-                    result = handleDepartmentDelete(payload);
-                } else {
-                    result = handleDepartment(payload);
-                }
-                
-                // После обработки кафедры пытаемся очистить временные университеты
-                cleanupTemporaryUniversities();
-            } else {
-                LOGGER.warn("Unknown entity type for document: {}", payload.toJson());
-                return Optional.empty();
+                // Возвращаем только первую операцию, остальные будут выполнены отдельно
+                return result;
             }
             
             return result;
+            
         } catch (Exception e) {
             LOGGER.error("Error processing document", e);
             return Optional.empty();
