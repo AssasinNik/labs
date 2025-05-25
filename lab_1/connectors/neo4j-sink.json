@@ -1,0 +1,28 @@
+{
+  "name": "neo",
+  "config": {
+    "connector.class": "streams.kafka.connect.sink.Neo4jSinkConnector",
+    "tasks.max": "1",
+    "topics": "postgres.public.groups,postgres.public.student,postgres.public.lecture",
+    "neo4j.server.uri": "bolt://neo4j:7687",
+    "neo4j.authentication.basic.username": "neo4j",
+    "neo4j.authentication.basic.password": "password",
+    "neo4j.database": "neo4j",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "errors.tolerance": "all",
+    "errors.log.enable": "true",
+    "errors.log.include.messages": "true",
+
+    "neo4j.topic.cypher.postgres_server.public.groups": "MERGE (g:Group {id: event.after.id_group}) ON CREATE SET g += event.after",
+
+    "neo4j.topic.cypher.postgres_server.public.students": "MATCH (g:Group {id: event.after.id_group}) MERGE (s:Student {id: event.after.id_stud}) MERGE (s)-[:STUDIESAT]->(g)",
+
+    "neo4j.topic.cypher.postgres_server.public.lectures": "MATCH (g:Group {id: event.after.id_group}) MERGE (l:Lecture {id: event.after.id_lect}) SET l += event.after MERGE (g)-[:HAS_LECTURE]->(l)",
+
+    "transforms": "unwrap",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "true",
+    "transforms.unwrap.delete.handling.mode": "none"
+  }
+}

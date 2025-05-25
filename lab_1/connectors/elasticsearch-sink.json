@@ -21,6 +21,6 @@
         "key.converter.schemas.enable": "true",
         "value.converter": "org.apache.kafka.connect.json.JsonConverter",
         "value.converter.schemas.enable": "false",
-        "elastic.version": "8"
+        "elastic.version": "7"
     }
 }

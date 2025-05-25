@@ -72,6 +72,12 @@ public class HierarchicalRdbmsHandler extends CdcHandler {
         LOGGER.debug("Processing document: {}", valueDoc.toJson());
         
         try {
+            // Проверяем, не является ли это tombstone сообщением
+            if (valueDoc.isEmpty()) {
+                LOGGER.debug("Skipping tombstone message with key: {}", keyDoc.toJson());
+                return Optional.empty();
+            }
+            
             // Получаем операцию
             String operation = valueDoc.getString("op").getValue();
             
@@ -79,9 +85,35 @@ public class HierarchicalRdbmsHandler extends CdcHandler {
             BsonDocument payload;
             if (operation.equals("d")) {
                 // Для удаления берем данные из before
-                payload = valueDoc.getDocument("before");
+                if (!valueDoc.containsKey("before") || valueDoc.get("before").isNull()) {
+                    // Если секция before пустая, берем ID из ключа
+                    BsonDocument keyPayload = keyDoc.getDocument("payload");
+                    payload = new BsonDocument("id", keyPayload.get("id"));
+                } else {
+                    payload = valueDoc.getDocument("before");
+                }
+            } else if (operation.equals("u")) {
+                // Для обновления берем данные из after, но сохраняем id из before
+                BsonDocument beforeDoc = valueDoc.getDocument("before");
+                BsonDocument afterDoc = valueDoc.getDocument("after");
+                
+                // Копируем все поля из after
+                payload = afterDoc.clone();
+                
+                // Если в after нет id, берем его из before
+                if (!afterDoc.containsKey("id") && beforeDoc.containsKey("id")) {
+                    payload.put("id", beforeDoc.get("id"));
+                }
+                
+                // Если все еще нет id, пробуем взять из ключа
+                if (!payload.containsKey("id")) {
+                    BsonDocument keyPayload = keyDoc.getDocument("payload");
+                    if (keyPayload.containsKey("id")) {
+                        payload.put("id", keyPayload.get("id"));
+                    }
+                }
             } else {
-                // Для create, update и read берем данные из after
+                // Для create и read берем данные из after
                 payload = valueDoc.getDocument("after");
             }
             

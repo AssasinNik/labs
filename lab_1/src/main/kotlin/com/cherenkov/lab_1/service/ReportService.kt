@@ -22,6 +22,8 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.stream.Collectors
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 
 @Service
 @Transactional(readOnly = true, transactionManager = "transactionManager")
@@ -212,19 +214,17 @@ class ReportService(
         
         val key = "student:$studentNumber"
         try {
-            val entries = redisTemplate.opsForHash<String, String>().entries(key)
+            val jsonValue = redisTemplate.opsForValue().get(key)
             
-            if (entries.isEmpty()) {
+            if (jsonValue.isNullOrEmpty()) {
                 logger.warn("Информация о студенте не найдена в Redis: {}", key)
                 throw RuntimeException("Информация о студенте не найдена в Redis: $key")
             }
             
-            return RedisStudentInfo(
-                fullname = entries["fullname"] ?: "",
-                email = entries["email"] ?: "",
-                groupId = entries["group_id"]?.toLong() ?: 0,
-                groupName = entries["group_name"] ?: ""
-            )
+            // Десериализация JSON в объект RedisStudentInfo
+            val objectMapper = ObjectMapper()
+            return objectMapper.readValue(jsonValue)
+            
         } catch (e: Exception) {
             logger.error("Ошибка при получении данных из Redis: {}", e.message, e)
             throw RedisAccessException("Ошибка при получении информации о студенте из Redis: ${e.message}", e)

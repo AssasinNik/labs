@@ -18,6 +18,13 @@ RUN curl -L \
     && unzip -o /tmp/redis.zip -d /usr/share/confluent-hub-components \
     && rm /tmp/redis.zip
 
+# 4) Скачиваем и устанавливаем Neo4j Sink Connector
+RUN curl -L \
+https://github.com/neo4j/neo4j-kafka-connector/releases/download/5.1.11/neo4j-kafka-connect-5.1.11.zip \
+    -o /tmp/neo4j.zip \
+    && unzip -o /tmp/neo4j.zip -d /usr/share/confluent-hub-components \
+    && rm /tmp/neo4j.zip
+
 # 7) Копируем наш собственный JAR с кастомным CDC handler
 COPY sink/kafka-connect-mongo-1.17.0 /usr/share/confluent-hub-components/mongodb-kafka-connect-mongodb
 
@@ -43,4 +50,5 @@ USER appuser
 
 # Entrypoint — стандартный скрипт Confluent
 ENTRYPOINT ["/etc/confluent/docker/run"]
+
 

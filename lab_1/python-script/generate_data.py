@@ -1140,13 +1140,11 @@ def main():
     info(f"Всего в PostgreSQL создано {total_records} записей")
 
     # Заполнение внешних БД
-    
     try:
-        info("=== Этап 3: Заполнение Neo4j ===")
+        info("=== Этап 5: Заполнение Neo4j ===")
         populate_neo4j(pg_conn)
     except Exception as e:
         error(f"Ошибка при заполнении Neo4j: {e}")
-    
     try:
         info("=== Этап 5: Заполнение Elasticsearch ===")
         populate_elasticsearch(pg_conn)

@@ -3,25 +3,23 @@
     "config": {
         "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
         "tasks.max": "1",
-        "topics.regex": "postgres\\.public\\.(?!student$).*",
+        "topics.regex": "postgres\\.public\\.(?!(student$|student_view_table$)).*",
         "connection.url": "http://elasticsearch:9200",
         "type.name": "_doc",
-        "key.ignore": "false",
+        "key.ignore": "true",
         "schema.ignore": "true",
-        "transforms": "unwrap,removeKeyDefaults,key",
+        "transforms": "unwrap,castBoolean",
         "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
         "transforms.unwrap.drop.tombstones": "false",
-        "transforms.removeKeyDefaults.type": "org.apache.kafka.connect.transforms.ReplaceField$Key",
-        "transforms.removeKeyDefaults.blacklist": "schema.fields.default",
         "transforms.unwrap.delete.handling.mode": "rewrite",
-        "transforms.key.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
-        "transforms.key.field": "id",
+        "transforms.castBoolean.type": "org.apache.kafka.connect.transforms.Cast$Value",
+        "transforms.castBoolean.spec": "tech_equipment:boolean,default:boolean",
+        "behavior.on.malformed.documents": "WARN",
         "behavior.on.null.values": "delete",
-        "behavior.on.malformed.documents": "IGNORE",
         "key.converter": "org.apache.kafka.connect.json.JsonConverter",
-        "key.converter.schemas.enable": "true",
+        "key.converter.schemas.enable": "false",
         "value.converter": "org.apache.kafka.connect.json.JsonConverter",
         "value.converter.schemas.enable": "false",
-        "elastic.version": "8"
+        "elastic.version": "7"
     }
 }

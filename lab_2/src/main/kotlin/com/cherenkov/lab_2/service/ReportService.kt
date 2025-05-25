@@ -85,14 +85,14 @@ class ReportService(
             logger.warn("[{}] Документ университета не найден для departmentId={}", 
                 requestId, course.departmentId)
         } else {
-            logger.debug("[{}] Документ университета получен: universityId={}, name='{}'", 
-                requestId, uniDoc.universityId, uniDoc.name)
+            logger.debug("[{}] Получен документ университета: id={}, name='{}'", 
+                requestId, uniDoc.id, uniDoc.name)
         }
 
         // Находим информацию об институте и кафедре
         val departmentInfo = uniDoc?.institutes?.flatMap { institute ->
             institute.departments
-                .filter { it.departmentId == course.departmentId.toInt() }
+                .filter { it.id == course.departmentId.toInt() }
                 .map { AbstractMap.SimpleEntry(institute.name, it.name) }
         }?.firstOrNull()
 
@@ -339,7 +339,7 @@ class ReportService(
         
         try {
             val query = Query.query(
-                Criteria.where("institutes.departments.departmentId").`is`(departmentId.toInt())
+                Criteria.where("institutes.departments.id").`is`(departmentId.toInt())
             )
             
             logger.debug("[{}] Выполнение MongoDB запроса: query={}", 
@@ -351,7 +351,7 @@ class ReportService(
                 logger.warn("[{}] Документ университета не найден для departmentId={}", 
                     requestId, departmentId)
             } else {
-                logger.debug("[{}] Получен документ университета: id={}, name={}", 
+                logger.debug("[{}] Получен документ университета: id={}, name='{}'", 
                     requestId, result.id, result.name)
             }
             
