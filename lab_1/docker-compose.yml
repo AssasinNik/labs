@@ -34,6 +34,85 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 100
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "broker:29092", "--list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    networks:
+      - app_net
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+      - influxdb-config:/etc/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_BUCKET}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    networks:
+      - app_net
+    depends_on:
+      - influxdb
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  telegraf:
+    image: telegraf:latest
+    container_name: telegraf
+    networks:
+      - app_net
+    depends_on:
+      connector-setup:
+        condition: service_completed_successfully
+      broker:
+        condition: service_started
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    environment:
+      - INFLUXDB_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN}
+      - INFLUXDB_ORG=${INFLUXDB_ORG}
+      - INFLUXDB_BUCKET=${INFLUXDB_BUCKET}
+      - TELEGRAF_DEBUG=true
+    restart: unless-stopped
+    entrypoint:
+    - sh
+    - -c
+    - |
+      apt-get update && apt-get install -y iputils-ping net-tools curl
+      echo "Проверка доступности Kafka..."
+      ping -c 3 broker
+      echo "Проверка порта Kafka..."
+      nc -zv broker 29092
+      echo "Запуск Telegraf..."
+      telegraf --config /etc/telegraf/telegraf.conf
 
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
@@ -61,7 +140,7 @@ services:
     networks:
       - app_net
     ports:
-      - "8086:8081"
+      - "8087:8081"  # Изменен порт с 8086 на 8087, чтобы избежать конфликта с InfluxDB
     depends_on:
       - broker
     environment:
@@ -353,3 +432,6 @@ volumes:
   neo4j-plugins:
   elasticsearch-data:
   postgres-data:
+  influxdb-data:
+  influxdb-config:
+  grafana-data:
