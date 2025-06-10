@@ -6,7 +6,7 @@
         "topics": "postgres.public.student_view_table",
         "connect.redis.host": "redis",
         "connect.redis.port": "6379",
-        "connect.redis.kcql": "SELECT after.fullname, after.email, after.id_group AS group_id, after.group_name FROM postgres.public.student_view_table PK after.redis_key WITH OPERATION=op, STOREAS=JSON",
+        "connect.redis.kcql": "SELECT after.fullname, after.email, after.id_group AS group_id, after.group_name, after.redis_key FROM postgres.public.student_view_table PK after.redis_key WITH OPERATION=op, STOREAS=JSON",
         "value.converter": "org.apache.kafka.connect.json.JsonConverter",
         "value.converter.schemas.enable": "false",
         "key.converter": "org.apache.kafka.connect.json.JsonConverter",
