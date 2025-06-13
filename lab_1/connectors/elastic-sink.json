@@ -3,7 +3,7 @@
     "config": {
         "connector.class": "io.confluent.connect.elasticsearch.ElasticsearchSinkConnector",
         "tasks.max": "1",
-        "topics.regex": "postgres\\.public\\.(?!(student$|student_view_table$)).*",
+        "topics.regex": "postgres\\.public\\.(?!(student$|student_view_table$|lecture_department$)).*",
         "connection.url": "http://elasticsearch:9200",
         "type.name": "_doc",
         "key.ignore": "false",
