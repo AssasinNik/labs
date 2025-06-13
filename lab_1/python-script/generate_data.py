@@ -21,19 +21,19 @@ fake = Faker("ru_RU")
 
 # Параметры подключения (согласно docker-compose)
 PG_CONN_PARAMS = {
-    "host": "host.docker.internal",
-    "port": 5433,  # проброшенный порт для PostgreSQL
+    "host": "postgres",
+    "port": 5432,  # проброшенный порт для PostgreSQL
     "user": "admin",
     "password": "secret",
     "dbname": "mydb",
 }
 
-MONGO_CONN_STRING = "mongodb://host.docker.internal:27017/"
-NEO4J_URI = "bolt://host.docker.internal:7687"
+MONGO_CONN_STRING = "mongodb://mongo:27017/"
+NEO4J_URI = "bolt://neo4j:7687"
 NEO4J_AUTH = None  # если NEO4J_AUTH=none
-REDIS_HOST = "host.docker.internal"
+REDIS_HOST = "redis"
 REDIS_PORT = 6379
-ES_HOSTS = ["http://host.docker.internal:9200"]
+ES_HOSTS = ["http://elasticsearch:9200"]
 
 
 # Реальные названия университетов и институтов для более осмысленных данных
@@ -393,6 +393,70 @@ def populate_postgres(conn):
     except Exception as e:
         conn.rollback()
         info(f"Ошибка при создании материализованного представления: {e}")
+    
+    # 0.2 Табличка лекция-кафедра
+    try:
+        view_sql = """
+        CREATE TABLE lecture_department (
+            lecture_id INTEGER PRIMARY KEY,
+            lecture_name VARCHAR(200) NOT NULL,
+            id_course INTEGER NOT NULL,
+            id_department INTEGER NOT NULL,
+            department_name VARCHAR(200) NOT NULL
+        );
+
+        CREATE OR REPLACE FUNCTION upsert_lecture_department()
+        RETURNS TRIGGER AS $$
+        BEGIN
+            IF TG_TABLE_NAME = 'lecture' THEN
+                INSERT INTO lecture_department (lecture_id, lecture_name, id_course, id_department, department_name)
+                SELECT NEW.id, NEW.name, c.id, c.id_department, d.name
+                FROM course c
+                JOIN department d ON d.id = c.id_department
+                WHERE c.id = NEW.id_course
+                ON CONFLICT (lecture_id) DO UPDATE
+                SET lecture_name = EXCLUDED.lecture_name,
+                    id_course = EXCLUDED.id_course,
+                    id_department = EXCLUDED.id_department,
+                    department_name = EXCLUDED.department_name;
+                IF TG_OP = 'DELETE' THEN
+                    DELETE FROM lecture_department WHERE lecture_id = OLD.id;
+                END IF;
+
+                RETURN NEW;
+            END IF;
+
+            IF TG_TABLE_NAME = 'course' THEN
+                UPDATE lecture_department ld
+                SET id_department = NEW.id_department,
+                    department_name = (SELECT name FROM department WHERE id = NEW.id_department)
+                WHERE ld.id_course = NEW.id;
+
+                IF TG_OP = 'DELETE' THEN
+                    DELETE FROM lecture_department WHERE id_course = OLD.id;
+                END IF;
+
+                RETURN NEW;
+            END IF;
+
+            RETURN NULL;
+        END;
+        $$ LANGUAGE plpgsql;
+
+        CREATE TRIGGER trg_lecture_upsert
+        AFTER INSERT OR UPDATE OR DELETE ON lecture
+        FOR EACH ROW EXECUTE FUNCTION upsert_lecture_department();
+
+        CREATE TRIGGER trg_course_update
+        AFTER INSERT OR UPDATE OR DELETE ON course
+        FOR EACH ROW EXECUTE FUNCTION upsert_lecture_department();
+        """
+        cur.execute(view_sql)
+        conn.commit()
+        info("Таблица лекция-кафедра и триггеры созданы.")
+    except Exception as e:
+        conn.rollback()
+        info(f"Ошибка при создании этого говна: {e}")
 
     # 1. Создание публикации (если ещё не существует)
     info("Создание публикации pub...")
