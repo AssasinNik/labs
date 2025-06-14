@@ -7,6 +7,7 @@ from neo4j import GraphDatabase
 from pymongo import MongoClient
 from elasticsearch import Elasticsearch
 import time
+
 PG_CONN_PARAMS = {
     "host": "postgres",
     "port": 5432,
@@ -82,9 +83,6 @@ if __name__ == "__main__":
     if neo4j_driver: neo4j_driver.close()
     if mongo_client: mongo_client.close()
 
-
-
-
 def generate_unique_student_data():
     student_number = fake.unique.uuid4()
     fullname = fake.name()
@@ -130,7 +128,6 @@ def verify_redis_student(redis_client, redis_key, expected_fullname, expected_em
         print(f"Error verifying Redis: {e}")
         return False
 
-# Placeholder for getting an existing group ID from PostgreSQL
 def get_existing_group_id(pg_conn):
     try:
         with pg_conn.cursor() as cur:
@@ -165,9 +162,6 @@ if __name__ == "__main__":
     if pg_conn: pg_conn.close()
     if neo4j_driver: neo4j_driver.close()
     if mongo_client: mongo_client.close()
-
-
-
 
 def update_student_pg(pg_conn, student_number, new_fullname, new_email):
     try:
@@ -245,9 +239,6 @@ if __name__ == "__main__":
     if neo4j_driver: neo4j_driver.close()
     if mongo_client: mongo_client.close()
 
-
-
-
 def create_department_pg(pg_conn, name, id_institute):
     try:
         with pg_conn.cursor() as cur:
@@ -307,7 +298,7 @@ def verify_neo4j_department(neo4j_driver, department_id, expected_name):
                     print(f"Neo4j verification successful for Department {department_id}.")
                     return True
                 else:
-                    print(f"Neo4j verification failed for Department {department_id}. Expected: {expected_name}, Got: {record["name"]}")
+                    print(f"Neo4j verification failed for Department {department_id}. Expected: {expected_name}, Got: {record['name']}")
                     return False
             else:
                 print(f"Neo4j verification failed for Department {department_id}. Node not found.")
@@ -401,9 +392,6 @@ if __name__ == "__main__":
     if neo4j_driver: neo4j_driver.close()
     if mongo_client: mongo_client.close()
 
-
-
-
 def create_university_pg(pg_conn, name):
     try:
         with pg_conn.cursor() as cur:
@@ -460,7 +448,7 @@ def verify_mongo_university(mongo_client, university_id, expected_name):
                 print(f"MongoDB verification successful for University {university_id}.")
                 return True
             else:
-                print(f"MongoDB verification failed for University {university_id}. Expected: {expected_name}, Got: {doc.get("name")}")
+                print(f"MongoDB verification failed for University {university_id}. Expected: {expected_name}, Got: {doc.get('name')}")
                 return False
         else:
             print(f"MongoDB verification failed for University {university_id}. Document not found.")
@@ -483,7 +471,6 @@ def verify_mongo_university_deleted(mongo_client, university_id):
     except Exception as e:
         print(f"Error verifying MongoDB University deletion: {e}")
         return False
-
 
 def create_institute_pg(pg_conn, name, id_university):
     try:
@@ -542,7 +529,7 @@ def verify_mongo_institute(mongo_client, university_id, institute_id, expected_n
                 print(f"MongoDB verification successful for Institute {institute_id} under University {university_id}.")
                 return True
             else:
-                print(f"MongoDB verification failed for Institute {institute_id}. Expected: {expected_name}, Got: {institute_doc.get("name")}")
+                print(f"MongoDB verification failed for Institute {institute_id}. Expected: {expected_name}, Got: {institute_doc.get('name')}")
                 return False
         else:
             print(f"MongoDB verification failed for Institute {institute_id} under University {university_id}. Document not found.")
@@ -566,7 +553,6 @@ def verify_mongo_institute_deleted(mongo_client, university_id, institute_id):
         print(f"Error verifying MongoDB Institute deletion: {e}")
         return False
 
-
 def verify_mongo_department(mongo_client, university_id, institute_id, department_id, expected_name):
     try:
         db = mongo_client.university
@@ -581,7 +567,7 @@ def verify_mongo_department(mongo_client, university_id, institute_id, departmen
                         print(f"MongoDB verification successful for Department {department_id} under Institute {institute_id} and University {university_id}.")
                         return True
                     else:
-                        print(f"MongoDB verification failed for Department {department_id}. Expected: {expected_name}, Got: {department_doc.get("name")}")
+                        print(f"MongoDB verification failed for Department {department_id}. Expected: {expected_name}, Got: {department_doc.get('name')}")
                         return False
         print(f"MongoDB verification failed for Department {department_id} under Institute {institute_id} and University {university_id}. Document not found.")
         return False
@@ -603,7 +589,6 @@ def verify_mongo_department_deleted(mongo_client, university_id, institute_id, d
     except Exception as e:
         print(f"Error verifying MongoDB Department deletion: {e}")
         return False
-
 
 if __name__ == "__main__":
     pg_conn = connect_pg()
@@ -714,9 +699,6 @@ if __name__ == "__main__":
     if neo4j_driver: neo4j_driver.close()
     if mongo_client: mongo_client.close()
 
-
-
-
 def create_course_pg(pg_conn, name, id_department):
     try:
         with pg_conn.cursor() as cur:
@@ -777,7 +759,7 @@ def verify_es_document(es_client, index_name, doc_id, expected_data):
                 print(f"Elasticsearch verification successful for {index_name} document {doc_id}.")
                 return True
             else:
-                print(f"Elasticsearch verification failed for {index_name} document {doc_id}. Expected: {expected_data}, Got: {doc["_source"]}")
+                print(f"Elasticsearch verification failed for {index_name} document {doc_id}. Expected: {expected_data}, Got: {doc['_source']}")
                 return False
         else:
             print(f"Elasticsearch verification failed for {index_name} document {doc_id}. Document not found.")
@@ -797,7 +779,6 @@ def verify_es_document_deleted(es_client, index_name, doc_id):
     except Exception as e:
         print(f"Error verifying Elasticsearch document deletion: {e}")
         return False
-
 
 if __name__ == "__main__":
     pg_conn = connect_pg()
@@ -929,15 +910,6 @@ if __name__ == "__main__":
     if neo4j_driver: neo4j_driver.close()
     if mongo_client: mongo_client.close()
 
-
-
-
-from faker import Faker
-fake = Faker("ru_RU")
-
-
-
-
 def verify_es_student(es_client, student_number, expected_fullname, expected_email, expected_id_group):
     try:
         doc = es_client.get(index="postgres.public.student", id=student_number)
@@ -950,7 +922,7 @@ def verify_es_student(es_client, student_number, expected_fullname, expected_ema
                 print(f"Elasticsearch (student) verification successful for {student_number}.")
                 return True
             else:
-                print(f"Elasticsearch (student) verification failed for {student_number}. Expected: {expected_fullname}, {expected_email}, {expected_id_group}, Got: {doc["_source"]}")
+                print(f"Elasticsearch (student) verification failed for {student_number}. Expected: {expected_fullname}, {expected_email}, {expected_id_group}, Got: {doc['_source']}")
                 return False
         else:
             print(f"Elasticsearch (student) verification failed for {student_number}. Document not found.")
@@ -1120,9 +1092,6 @@ if __name__ == "__main__":
     if pg_conn: pg_conn.close()
     if neo4j_driver: neo4j_driver.close()
     if mongo_client: mongo_client.close()
-
-
-
 
 def create_lecture_pg(pg_conn, name, id_course):
     try:
@@ -1358,7 +1327,7 @@ def verify_neo4j_schedule(neo4j_driver, schedule_id, expected_location):
                     print(f"Neo4j verification successful for Schedule {schedule_id}.")
                     return True
                 else:
-                    print(f"Neo4j verification failed for Schedule {schedule_id}. Expected: {expected_location}, Got: {record["location"]}")
+                    print(f"Neo4j verification failed for Schedule {schedule_id}. Expected: {expected_location}, Got: {record['location']}")
                     return False
             else:
                 print(f"Neo4j verification failed for Schedule {schedule_id}. Relationship not found.")
@@ -1397,7 +1366,6 @@ def get_existing_course_id(pg_conn):
     except Exception as e:
         print(f"Error getting course ID from PostgreSQL: {e}")
         return None, None
-
 
 if __name__ == "__main__":
     pg_conn = connect_pg()
@@ -1611,5 +1579,3 @@ if __name__ == "__main__":
     if pg_conn: pg_conn.close()
     if neo4j_driver: neo4j_driver.close()
     if mongo_client: mongo_client.close()
-
-
