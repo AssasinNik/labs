@@ -375,6 +375,19 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
     command: sh -c " echo 'Проверка готовности баз данных...'; wait-for-it postgres:5432 --timeout=0 && wait-for-it mongo:27017 --timeout=0 && wait-for-it redis:6379 --timeout=0 && wait-for-it neo4j:7687 --timeout=0 && wait-for-it elasticsearch:9200 --timeout=0 && echo 'Все БД готовы. Запуск скрипта...'; python ./generate_data.py"
+  connector-test:
+    build: 
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: connector-test
+    networks:
+      - app_net
+    depends_on:
+      connector-setup:
+        condition: service_completed_successfully
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: sh -c "sleep 240; python connector_test.py"
 
   lab_1:
     build: .
