@@ -177,6 +177,8 @@ services:
       CONNECT_PLUGIN_PATH: /usr/share/java,/usr/share/confluent-hub-components
     volumes:
       - $PWD/data:/data
+      - ./config:/etc/kafka/config
+      - connect-cache:/data/cache
 
   ksqldb:
     image: confluentinc/ksqldb-server:0.21.0
@@ -448,3 +450,5 @@ volumes:
   influxdb-data:
   influxdb-config:
   grafana-data:
+  connect-cache:
+    driver: local

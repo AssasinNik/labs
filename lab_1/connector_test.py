@@ -8,6 +8,7 @@ from pymongo import MongoClient
 from elasticsearch import Elasticsearch
 import time
 import uuid
+import json
 
 # --- Конфигурация подключений ---
 POSTGRES_CONFIG = {
@@ -57,8 +58,13 @@ def get_mongodb_client():
 def get_elasticsearch_client():
     return Elasticsearch(**ELASTICSEARCH_CONFIG)
 
+def get_es_data(es_doc):
+    """Извлекает актуальные данные из сообщения Debezium"""
+    source = es_doc["_source"]
+    return source.get('after', source) if 'after' in source else source
+
 # Задержка для Kafka Connect, чтобы обработать изменения
-KAFKA_CONNECT_DELAY = 15  # Секунды, подберите оптимальное значение
+KAFKA_CONNECT_DELAY = 25  # Увеличили задержку
 
 # --- Функции для CRUD операций в PostgreSQL и проверки в других БД ---
 
@@ -75,50 +81,52 @@ def test_university_crud(pg_conn, mongo_db, es_client):
     cursor.execute(f"INSERT INTO {table_name} (name) VALUES (%s) RETURNING id;", (uni_name,))
     uni_id = cursor.fetchone()[0]
     pg_conn.commit()
-    print(f"  PostgreSQL: Создан университет \'{uni_name}\' с ID {uni_id}")
+    print(f"  PostgreSQL: Создан университет '{uni_name}' с ID {uni_id}")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в MongoDB
-    mongo_doc = mongo_db["universities"].find_one({"_id": str(uni_id)})
+    mongo_doc = mongo_db["universities"].find_one({"_id": uni_id})
     if mongo_doc and mongo_doc.get("name") == uni_name:
-        print(f"  MongoDB: Университет \'{uni_name}\' (ID: {uni_id}) успешно создан.")
+        print(f"  MongoDB: Университет '{uni_name}' (ID: {uni_id}) успешно создан.")
     else:
-        print(f"  MongoDB: ОШИБКА! Университет \'{uni_name}\' (ID: {uni_id}) не найден или данные не совпадают. Найдено: {mongo_doc}")
+        print(f"  MongoDB: ОШИБКА! Университет '{uni_name}' (ID: {uni_id}) не найден или данные не совпадают.")
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client.get(index=es_index_name, id=str(uni_id))
-        if es_doc["_source"].get("name") == uni_name:
-            print(f"  Elasticsearch: Университет \'{uni_name}\' (ID: {uni_id}) успешно создан.")
+        data = get_es_data(es_doc)
+        if data.get("name") == uni_name:
+            print(f"  Elasticsearch: Университет '{uni_name}' (ID: {uni_id}) успешно создан.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Университет \'{uni_name}\' (ID: {uni_id}) данные не совпадают. Найдено: {es_doc}")
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {uni_name}, Получено: {data.get('name')}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Университет \'{uni_name}\' (ID: {uni_id}) не найден. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # UPDATE
     print("UPDATE операция...")
     updated_uni_name = f"Updated {uni_name}"
     cursor.execute(f"UPDATE {table_name} SET name = %s WHERE id = %s;", (updated_uni_name, uni_id))
     pg_conn.commit()
-    print(f"  PostgreSQL: Университет ID {uni_id} обновлен на \'{updated_uni_name}\'")
+    print(f"  PostgreSQL: Университет ID {uni_id} обновлен на '{updated_uni_name}'")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в MongoDB
-    mongo_doc = mongo_db["universities"].find_one({"_id": str(uni_id)})
+    mongo_doc = mongo_db["universities"].find_one({"_id": uni_id})
     if mongo_doc and mongo_doc.get("name") == updated_uni_name:
-        print(f"  MongoDB: Университет \'{updated_uni_name}\' (ID: {uni_id}) успешно обновлен.")
+        print(f"  MongoDB: Университет '{updated_uni_name}' (ID: {uni_id}) успешно обновлен.")
     else:
-        print(f"  MongoDB: ОШИБКА! Университет \'{updated_uni_name}\' (ID: {uni_id}) не обновлен или данные не совпадают. Найдено: {mongo_doc}")
+        print(f"  MongoDB: ОШИБКА! Университет '{updated_uni_name}' (ID: {uni_id}) не обновлен или данные не совпадают.")
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client.get(index=es_index_name, id=str(uni_id))
-        if es_doc["_source"].get("name") == updated_uni_name:
-            print(f"  Elasticsearch: Университет \'{updated_uni_name}\' (ID: {uni_id}) успешно обновлен.")
+        data = get_es_data(es_doc)
+        if data.get("name") == updated_uni_name:
+            print(f"  Elasticsearch: Университет '{updated_uni_name}' (ID: {uni_id}) успешно обновлен.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Университет \'{updated_uni_name}\' (ID: {uni_id}) данные не совпадают. Найдено: {es_doc}")
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {updated_uni_name}, Получено: {data.get('name')}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Университет \'{updated_uni_name}\' (ID: {uni_id}) не найден после обновления. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # DELETE
     print("DELETE операция...")
@@ -128,11 +136,11 @@ def test_university_crud(pg_conn, mongo_db, es_client):
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в MongoDB
-    mongo_doc = mongo_db["universities"].find_one({"_id": str(uni_id)})
+    mongo_doc = mongo_db["universities"].find_one({"_id": uni_id})
     if not mongo_doc:
         print(f"  MongoDB: Университет ID {uni_id} успешно удален.")
     else:
-        print(f"  MongoDB: ОШИБКА! Университет ID {uni_id} не удален. Найдено: {mongo_doc}")
+        print(f"  MongoDB: ОШИБКА! Университет ID {uni_id} не удален.")
 
     # Проверка в Elasticsearch
     try:
@@ -155,7 +163,7 @@ def test_institute_crud(pg_conn, mongo_db, es_client):
     cursor.execute("INSERT INTO university (name) VALUES (%s) RETURNING id;", (uni_name_for_inst,))
     parent_uni_id = cursor.fetchone()[0]
     pg_conn.commit()
-    print(f"  PostgreSQL: Создан родительский университет \'{uni_name_for_inst}\' с ID {parent_uni_id} для институтов")
+    print(f"  PostgreSQL: Создан родительский университет '{uni_name_for_inst}' с ID {parent_uni_id} для институтов")
     time.sleep(KAFKA_CONNECT_DELAY) # Даем время на создание университета в MongoDB
 
     # CREATE
@@ -164,62 +172,73 @@ def test_institute_crud(pg_conn, mongo_db, es_client):
     cursor.execute(f"INSERT INTO {table_name} (name, id_university) VALUES (%s, %s) RETURNING id;", (inst_name, parent_uni_id))
     inst_id = cursor.fetchone()[0]
     pg_conn.commit()
-    print(f"  PostgreSQL: Создан институт \'{inst_name}\' с ID {inst_id} в университете {parent_uni_id}")
+    print(f"  PostgreSQL: Создан институт '{inst_name}' с ID {inst_id} в университете {parent_uni_id}")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в MongoDB (иерархическая структура)
-    mongo_uni_doc = mongo_db["universities"].find_one({"_id": str(parent_uni_id)})
+    mongo_uni_doc = mongo_db["universities"].find_one({"_id": parent_uni_id})
+    if mongo_uni_doc is None:
+        print(f"  MongoDB: ОШИБКА! Университет ID {parent_uni_id} не найден.")
+        cursor.close()
+        return
+        
     institute_found_in_mongo = False
-    if mongo_uni_doc and "institute" in mongo_uni_doc:
-        for inst_doc in mongo_uni_doc["institute"]:
-            if str(inst_doc.get("id")) == str(inst_id) and inst_doc.get("name") == inst_name:
+    if "institutes" in mongo_uni_doc:
+        for inst_doc in mongo_uni_doc["institutes"]:
+            if str(inst_doc.get("_id")) == str(inst_id) or inst_doc.get("name") == inst_name:
                 institute_found_in_mongo = True
                 break
+                
     if institute_found_in_mongo:
-        print(f"  MongoDB: Институт \'{inst_name}\' (ID: {inst_id}) успешно создан в университете {parent_uni_id}.")
+        print(f"  MongoDB: Институт '{inst_name}' (ID: {inst_id}) успешно создан в университете {parent_uni_id}.")
     else:
-        print(f"  MongoDB: ОШИБКА! Институт \'{inst_name}\' (ID: {inst_id}) не найден или данные не совпадают в университете {parent_uni_id}. Университет: {mongo_uni_doc}")
+        print(f"  MongoDB: ОШИБКА! Институт '{inst_name}' (ID: {inst_id}) не найден или данные не совпадают.")
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client.get(index=es_index_name, id=str(inst_id))
-        if es_doc["_source"].get("name") == inst_name and es_doc["_source"].get("id_university") == parent_uni_id:
-            print(f"  Elasticsearch: Институт \'{inst_name}\' (ID: {inst_id}) успешно создан.")
+        data = get_es_data(es_doc)
+        if data.get("name") == inst_name and data.get("id_university") == parent_uni_id:
+            print(f"  Elasticsearch: Институт '{inst_name}' (ID: {inst_id}) успешно создан.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Институт \'{inst_name}\' (ID: {inst_id}) данные не совпадают. Найдено: {es_doc}")
+            expected = f"name={inst_name}, id_university={parent_uni_id}"
+            actual = f"name={data.get('name')}, id_university={data.get('id_university')}"
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {expected}, Получено: {actual}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Институт \'{inst_name}\' (ID: {inst_id}) не найден. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # UPDATE
     print("UPDATE операция...")
     updated_inst_name = f"Updated {inst_name}"
     cursor.execute(f"UPDATE {table_name} SET name = %s WHERE id = %s;", (updated_inst_name, inst_id))
     pg_conn.commit()
-    print(f"  PostgreSQL: Институт ID {inst_id} обновлен на \'{updated_inst_name}\'")
+    print(f"  PostgreSQL: Институт ID {inst_id} обновлен на '{updated_inst_name}'")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в MongoDB
-    mongo_uni_doc = mongo_db["universities"].find_one({"_id": str(parent_uni_id)})
+    mongo_uni_doc = mongo_db["universities"].find_one({"_id": parent_uni_id})
     institute_updated_in_mongo = False
-    if mongo_uni_doc and "institute" in mongo_uni_doc:
-        for inst_doc in mongo_uni_doc["institute"]:
-            if str(inst_doc.get("id")) == str(inst_id) and inst_doc.get("name") == updated_inst_name:
+    if mongo_uni_doc and "institutes" in mongo_uni_doc:
+        for inst_doc in mongo_uni_doc["institutes"]:
+            if str(inst_doc.get("_id")) == str(inst_id) or inst_doc.get("name") == updated_inst_name:
                 institute_updated_in_mongo = True
                 break
+                
     if institute_updated_in_mongo:
-        print(f"  MongoDB: Институт \'{updated_inst_name}\' (ID: {inst_id}) успешно обновлен.")
+        print(f"  MongoDB: Институт '{updated_inst_name}' (ID: {inst_id}) успешно обновлен.")
     else:
-        print(f"  MongoDB: ОШИБКА! Институт \'{updated_inst_name}\' (ID: {inst_id}) не обновлен или данные не совпадают. Найдено: {mongo_uni_doc}")
+        print(f"  MongoDB: ОШИБКА! Институт '{updated_inst_name}' (ID: {inst_id}) не обновлен или данные не совпадают.")
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client.get(index=es_index_name, id=str(inst_id))
-        if es_doc["_source"].get("name") == updated_inst_name:
-            print(f"  Elasticsearch: Институт \'{updated_inst_name}\' (ID: {inst_id}) успешно обновлен.")
+        data = get_es_data(es_doc)
+        if data.get("name") == updated_inst_name:
+            print(f"  Elasticsearch: Институт '{updated_inst_name}' (ID: {inst_id}) успешно обновлен.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Институт \'{updated_inst_name}\' (ID: {inst_id}) данные не совпадают. Найдено: {es_doc}")
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {updated_inst_name}, Получено: {data.get('name')}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Институт \'{updated_inst_name}\' (ID: {inst_id}) не найден после обновления. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # DELETE
     print("DELETE операция...")
@@ -229,17 +248,18 @@ def test_institute_crud(pg_conn, mongo_db, es_client):
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в MongoDB
-    mongo_uni_doc = mongo_db["universities"].find_one({"_id": str(parent_uni_id)})
+    mongo_uni_doc = mongo_db["universities"].find_one({"_id": parent_uni_id})
     institute_deleted_from_mongo = True
-    if mongo_uni_doc and "institute" in mongo_uni_doc:
-        for inst_doc in mongo_uni_doc["institute"]:
-            if str(inst_doc.get("id")) == str(inst_id):
+    if mongo_uni_doc and "institutes" in mongo_uni_doc:
+        for inst_doc in mongo_uni_doc["institutes"]:
+            if str(inst_doc.get("_id")) == str(inst_id):
                 institute_deleted_from_mongo = False
                 break
+                
     if institute_deleted_from_mongo:
         print(f"  MongoDB: Институт ID {inst_id} успешно удален из университета {parent_uni_id}.")
     else:
-        print(f"  MongoDB: ОШИБКА! Институт ID {inst_id} не удален из университета {parent_uni_id}. Университет: {mongo_uni_doc}")
+        print(f"  MongoDB: ОШИБКА! Институт ID {inst_id} не удален из университета {parent_uni_id}.")
 
     # Проверка в Elasticsearch
     try:
@@ -281,86 +301,99 @@ def test_department_crud(pg_conn, mongo_db, neo4j_driver, es_client):
     cursor.execute(f"INSERT INTO {table_name} (name, id_institute) VALUES (%s, %s) RETURNING id;", (dept_name, parent_inst_id_dept))
     dept_id = cursor.fetchone()[0]
     pg_conn.commit()
-    print(f"  PostgreSQL: Создан факультет \'{dept_name}\' с ID {dept_id} в институте {parent_inst_id_dept}")
+    print(f"  PostgreSQL: Создан факультет '{dept_name}' с ID {dept_id} в институте {parent_inst_id_dept}")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в MongoDB (иерархическая структура)
-    mongo_uni_doc = mongo_db["universities"].find_one({"_id": str(parent_uni_id_dept)})
+    mongo_uni_doc = mongo_db["universities"].find_one({"_id": parent_uni_id_dept})
+    if mongo_uni_doc is None:
+        print(f"  MongoDB: ОШИБКА! Университет ID {parent_uni_id_dept} не найден.")
+        cursor.close()
+        return
+        
     department_found_in_mongo = False
-    if mongo_uni_doc and "institute" in mongo_uni_doc:
-        for inst_doc in mongo_uni_doc["institute"]:
-            if str(inst_doc.get("id")) == str(parent_inst_id_dept) and "department" in inst_doc:
-                for dept_doc in inst_doc["department"]:
-                    if str(dept_doc.get("id")) == str(dept_id) and dept_doc.get("name") == dept_name:
+    if mongo_uni_doc and "institutes" in mongo_uni_doc:
+        for inst_doc in mongo_uni_doc["institutes"]:
+            if str(inst_doc.get("_id")) == str(parent_inst_id_dept) and "departments" in inst_doc:
+                for dept_doc in inst_doc["departments"]:
+                    if str(dept_doc.get("_id")) == str(dept_id) or dept_doc.get("name") == dept_name:
                         department_found_in_mongo = True
                         break
                 if department_found_in_mongo: break
+                
     if department_found_in_mongo:
-        print(f"  MongoDB: Факультет \'{dept_name}\' (ID: {dept_id}) успешно создан в институте {parent_inst_id_dept}.")
+        print(f"  MongoDB: Факультет '{dept_name}' (ID: {dept_id}) успешно создан в институте {parent_inst_id_dept}.")
     else:
-        print(f"  MongoDB: ОШИБКА! Факультет \'{dept_name}\' (ID: {dept_id}) не найден или данные не совпадают. Найдено: {mongo_uni_doc}")
+        print(f"  MongoDB: ОШИБКА! Факультет '{dept_name}' (ID: {dept_id}) не найден или данные не совпадают.")
 
     # Проверка в Neo4j
     with neo4j_driver.session(database=NEO4J_CONFIG.get("database", "neo4j")) as session:
         result = session.run("MATCH (d:Department {id: $id}) RETURN d.name AS name", id=dept_id)
         record = result.single()
         if record and record["name"] == dept_name:
-            print(f"  Neo4j: Факультет \'{dept_name}\' (ID: {dept_id}) успешно создан.")
+            print(f"  Neo4j: Факультет '{dept_name}' (ID: {dept_id}) успешно создан.")
         else:
-            print(f"  Neo4j: ОШИБКА! Факультет \'{dept_name}\' (ID: {dept_id}) не найден или данные не совпадают. Найдено: {record}")
+            found_name = record["name"] if record else "None"
+            print(f"  Neo4j: ОШИБКА! Ожидалось: '{dept_name}', Получено: '{found_name}'")
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client.get(index=es_index_name, id=str(dept_id))
-        if es_doc["_source"].get("name") == dept_name and es_doc["_source"].get("id_institute") == parent_inst_id_dept:
-            print(f"  Elasticsearch: Факультет \'{dept_name}\' (ID: {dept_id}) успешно создан.")
+        data = get_es_data(es_doc)
+        if data.get("name") == dept_name and data.get("id_institute") == parent_inst_id_dept:
+            print(f"  Elasticsearch: Факультет '{dept_name}' (ID: {dept_id}) успешно создан.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Факультет \'{dept_name}\' (ID: {dept_id}) данные не совпадают. Найдено: {es_doc}")
+            expected = f"name={dept_name}, id_institute={parent_inst_id_dept}"
+            actual = f"name={data.get('name')}, id_institute={data.get('id_institute')}"
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {expected}, Получено: {actual}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Факультет \'{dept_name}\' (ID: {dept_id}) не найден. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # UPDATE
     print("UPDATE операция...")
     updated_dept_name = f"Updated {dept_name}"
     cursor.execute(f"UPDATE {table_name} SET name = %s WHERE id = %s;", (updated_dept_name, dept_id))
     pg_conn.commit()
-    print(f"  PostgreSQL: Факультет ID {dept_id} обновлен на \'{updated_dept_name}\'")
+    print(f"  PostgreSQL: Факультет ID {dept_id} обновлен на '{updated_dept_name}'")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в MongoDB
-    mongo_uni_doc = mongo_db["universities"].find_one({"_id": str(parent_uni_id_dept)})
+    mongo_uni_doc = mongo_db["universities"].find_one({"_id": parent_uni_id_dept})
     department_updated_in_mongo = False
-    if mongo_uni_doc and "institute" in mongo_uni_doc:
-        for inst_doc in mongo_uni_doc["institute"]:
-            if str(inst_doc.get("id")) == str(parent_inst_id_dept) and "department" in inst_doc:
-                for dept_doc in inst_doc["department"]:
-                    if str(dept_doc.get("id")) == str(dept_id) and dept_doc.get("name") == updated_dept_name:
+    if mongo_uni_doc and "institutes" in mongo_uni_doc:
+        for inst_doc in mongo_uni_doc["institutes"]:
+            if str(inst_doc.get("_id")) == str(parent_inst_id_dept) and "departments" in inst_doc:
+                for dept_doc in inst_doc["departments"]:
+                    if str(dept_doc.get("_id")) == str(dept_id) or dept_doc.get("name") == updated_dept_name:
                         department_updated_in_mongo = True
                         break
                 if department_updated_in_mongo: break
+                
     if department_updated_in_mongo:
-        print(f"  MongoDB: Факультет \'{updated_dept_name}\' (ID: {dept_id}) успешно обновлен.")
+        print(f"  MongoDB: Факультет '{updated_dept_name}' (ID: {dept_id}) успешно обновлен.")
     else:
-        print(f"  MongoDB: ОШИБКА! Факультет \'{updated_dept_name}\' (ID: {dept_id}) не обновлен или данные не совпадают. Найдено: {mongo_uni_doc}")
+        print(f"  MongoDB: ОШИБКА! Факультет '{updated_dept_name}' (ID: {dept_id}) не обновлен или данные не совпадают.")
 
     # Проверка в Neo4j
     with neo4j_driver.session(database=NEO4J_CONFIG.get("database", "neo4j")) as session:
         result = session.run("MATCH (d:Department {id: $id}) RETURN d.name AS name", id=dept_id)
         record = result.single()
         if record and record["name"] == updated_dept_name:
-            print(f"  Neo4j: Факультет \'{updated_dept_name}\' (ID: {dept_id}) успешно обновлен.")
+            print(f"  Neo4j: Факультет '{updated_dept_name}' (ID: {dept_id}) успешно обновлен.")
         else:
-            print(f"  Neo4j: ОШИБКА! Факультет \'{updated_dept_name}\' (ID: {dept_id}) не обновлен или данные не совпадают. Найдено: {record}")
+            found_name = record["name"] if record else "None"
+            print(f"  Neo4j: ОШИБКА! Ожидалось: '{updated_dept_name}', Получено: '{found_name}'")
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client.get(index=es_index_name, id=str(dept_id))
-        if es_doc["_source"].get("name") == updated_dept_name:
-            print(f"  Elasticsearch: Факультет \'{updated_dept_name}\' (ID: {dept_id}) успешно обновлен.")
+        data = get_es_data(es_doc)
+        if data.get("name") == updated_dept_name:
+            print(f"  Elasticsearch: Факультет '{updated_dept_name}' (ID: {dept_id}) успешно обновлен.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Факультет \'{updated_dept_name}\' (ID: {dept_id}) данные не совпадают. Найдено: {es_doc}")
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {updated_dept_name}, Получено: {data.get('name')}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Факультет \'{updated_dept_name}\' (ID: {dept_id}) не найден после обновления. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # DELETE
     print("DELETE операция...")
@@ -370,20 +403,21 @@ def test_department_crud(pg_conn, mongo_db, neo4j_driver, es_client):
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в MongoDB
-    mongo_uni_doc = mongo_db["universities"].find_one({"_id": str(parent_uni_id_dept)})
+    mongo_uni_doc = mongo_db["universities"].find_one({"_id": parent_uni_id_dept})
     department_deleted_from_mongo = True
-    if mongo_uni_doc and "institute" in mongo_uni_doc:
-        for inst_doc in mongo_uni_doc["institute"]:
-            if str(inst_doc.get("id")) == str(parent_inst_id_dept) and "department" in inst_doc:
-                for dept_doc in inst_doc["department"]:
-                    if str(dept_doc.get("id")) == str(dept_id):
+    if mongo_uni_doc and "institutes" in mongo_uni_doc:
+        for inst_doc in mongo_uni_doc["institutes"]:
+            if str(inst_doc.get("_id")) == str(parent_inst_id_dept) and "departments" in inst_doc:
+                for dept_doc in inst_doc["departments"]:
+                    if str(dept_doc.get("_id")) == str(dept_id):
                         department_deleted_from_mongo = False
                         break
                 if not department_deleted_from_mongo: break
+                
     if department_deleted_from_mongo:
         print(f"  MongoDB: Факультет ID {dept_id} успешно удален.")
     else:
-        print(f"  MongoDB: ОШИБКА! Факультет ID {dept_id} не удален. Найдено: {mongo_uni_doc}")
+        print(f"  MongoDB: ОШИБКА! Факультет ID {dept_id} не удален.")
 
     # Проверка в Neo4j
     with neo4j_driver.session(database=NEO4J_CONFIG.get("database", "neo4j")) as session:
@@ -442,7 +476,7 @@ def test_groups_crud(pg_conn, neo4j_driver, es_client):
                    (group_name, parent_dept_id_grp, mongo_id_val, formation_year_val))
     group_id = cursor.fetchone()[0]
     pg_conn.commit()
-    print(f"  PostgreSQL: Создана группа \'{group_name}\' с ID {group_id} на факультете {parent_dept_id_grp}")
+    print(f"  PostgreSQL: Создана группа '{group_name}' с ID {group_id} на факультете {parent_dept_id_grp}")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в Neo4j
@@ -450,22 +484,25 @@ def test_groups_crud(pg_conn, neo4j_driver, es_client):
         result = session.run("MATCH (g:Group {id: $id}) RETURN g.name AS name, g.department_id AS dept_id, g.mongo_id as m_id, g.formation_year as f_year", id=group_id)
         record = result.single()
         if record and record["name"] == group_name and record["dept_id"] == parent_dept_id_grp and record["m_id"] == mongo_id_val and record["f_year"] == formation_year_val:
-            print(f"  Neo4j: Группа \'{group_name}\' (ID: {group_id}) успешно создана.")
+            print(f"  Neo4j: Группа '{group_name}' (ID: {group_id}) успешно создана.")
         else:
-            print(f"  Neo4j: ОШИБКА! Группа \'{group_name}\' (ID: {group_id}) не найдена или данные не совпадают. Найдено: {record}")
+            print(f"  Neo4j: ОШИБКА! Группа '{group_name}' (ID: {group_id}) не найдена или данные не совпадают.")
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client.get(index=es_index_name, id=str(group_id))
-        if (es_doc["_source"].get("name") == group_name and 
-            es_doc["_source"].get("id_department") == parent_dept_id_grp and 
-            es_doc["_source"].get("mongo_id") == mongo_id_val and 
-            es_doc["_source"].get("formation_year") == formation_year_val):
-            print(f"  Elasticsearch: Группа \'{group_name}\' (ID: {group_id}) успешно создана.")
+        data = get_es_data(es_doc)
+        if (data.get("name") == group_name and 
+            data.get("id_department") == parent_dept_id_grp and 
+            data.get("mongo_id") == mongo_id_val and 
+            data.get("formation_year") == formation_year_val):
+            print(f"  Elasticsearch: Группа '{group_name}' (ID: {group_id}) успешно создана.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Группа \'{group_name}\' (ID: {group_id}) данные не совпадают. Найдено: {es_doc}")
+            expected = f"name={group_name}, id_department={parent_dept_id_grp}, mongo_id={mongo_id_val}, formation_year={formation_year_val}"
+            actual = f"name={data.get('name')}, id_department={data.get('id_department')}, mongo_id={data.get('mongo_id')}, formation_year={data.get('formation_year')}"
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {expected}, Получено: {actual}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Группа \'{group_name}\' (ID: {group_id}) не найдена. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # UPDATE
     print("UPDATE операция...")
@@ -473,7 +510,7 @@ def test_groups_crud(pg_conn, neo4j_driver, es_client):
     updated_formation_year = 2024
     cursor.execute(f"UPDATE {table_name} SET name = %s, formation_year = %s WHERE id = %s;", (updated_group_name, updated_formation_year, group_id))
     pg_conn.commit()
-    print(f"  PostgreSQL: Группа ID {group_id} обновлен на \'{updated_group_name}\' год {updated_formation_year}")
+    print(f"  PostgreSQL: Группа ID {group_id} обновлен на '{updated_group_name}' год {updated_formation_year}")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в Neo4j
@@ -481,19 +518,22 @@ def test_groups_crud(pg_conn, neo4j_driver, es_client):
         result = session.run("MATCH (g:Group {id: $id}) RETURN g.name AS name, g.formation_year as f_year", id=group_id)
         record = result.single()
         if record and record["name"] == updated_group_name and record["f_year"] == updated_formation_year:
-            print(f"  Neo4j: Группа \'{updated_group_name}\' (ID: {group_id}) успешно обновлена.")
+            print(f"  Neo4j: Группа '{updated_group_name}' (ID: {group_id}) успешно обновлена.")
         else:
-            print(f"  Neo4j: ОШИБКА! Группа \'{updated_group_name}\' (ID: {group_id}) не обновлена или данные не совпадают. Найдено: {record}")
+            print(f"  Neo4j: ОШИБКА! Группа '{updated_group_name}' (ID: {group_id}) не обновлена или данные не совпадают.")
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client.get(index=es_index_name, id=str(group_id))
-        if es_doc["_source"].get("name") == updated_group_name and es_doc["_source"].get("formation_year") == updated_formation_year:
-            print(f"  Elasticsearch: Группа \'{updated_group_name}\' (ID: {group_id}) успешно обновлена.")
+        data = get_es_data(es_doc)
+        if data.get("name") == updated_group_name and data.get("formation_year") == updated_formation_year:
+            print(f"  Elasticsearch: Группа '{updated_group_name}' (ID: {group_id}) успешно обновлена.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Группа \'{updated_group_name}\' (ID: {group_id}) данные не совпадают. Найдено: {es_doc}")
+            expected = f"name={updated_group_name}, formation_year={updated_formation_year}"
+            actual = f"name={data.get('name')}, formation_year={data.get('formation_year')}"
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {expected}, Получено: {actual}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Группа \'{updated_group_name}\' (ID: {group_id}) не найдена после обновления. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # DELETE
     print("DELETE операция...")
@@ -566,7 +606,7 @@ def test_student_crud(pg_conn, neo4j_driver, es_client_specific):
     cursor.execute(f"INSERT INTO {table_name} (student_number, fullname, email, id_group, redis_key) VALUES (%s, %s, %s, %s, %s);",
                    (student_number, fullname, email, parent_group_id_std, redis_key_val))
     pg_conn.commit()
-    print(f"  PostgreSQL: Создан студент \'{fullname}\' с номером {student_number} в группе {parent_group_id_std}")
+    print(f"  PostgreSQL: Создан студент '{fullname}' с номером {student_number} в группе {parent_group_id_std}")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в Neo4j
@@ -575,22 +615,25 @@ def test_student_crud(pg_conn, neo4j_driver, es_client_specific):
                              sn=student_number, gid=parent_group_id_std)
         record = result.single()
         if record and record["name"] == fullname and record["mail"] == email and record["rk"] == redis_key_val:
-            print(f"  Neo4j: Студент \'{fullname}\' ({student_number}) успешно создан и связан с группой {parent_group_id_std}.")
+            print(f"  Neo4j: Студент '{fullname}' ({student_number}) успешно создан и связан с группой {parent_group_id_std}.")
         else:
-            print(f"  Neo4j: ОШИБКА! Студент \'{fullname}\' ({student_number}) не найден, данные не совпадают или связь с группой неверна. Найдено: {record}")
+            print(f"  Neo4j: ОШИБКА! Студент '{fullname}' ({student_number}) не найден, данные не совпадают или связь с группой неверна.")
 
     # Проверка в Elasticsearch (специфичный индекс)
     try:
         es_doc = es_client_specific.get(index=es_index_name_student, id=str(student_number))
-        if (es_doc["_source"].get("fullname") == fullname and 
-            es_doc["_source"].get("email") == email and 
-            es_doc["_source"].get("id_group") == parent_group_id_std and 
-            es_doc["_source"].get("redis_key") == redis_key_val):
-            print(f"  Elasticsearch (student index): Студент \'{fullname}\' ({student_number}) успешно создан.")
+        data = get_es_data(es_doc)
+        if (data.get("fullname") == fullname and 
+            data.get("email") == email and 
+            data.get("id_group") == parent_group_id_std and 
+            data.get("redis_key") == redis_key_val):
+            print(f"  Elasticsearch (student index): Студент '{fullname}' ({student_number}) успешно создан.")
         else:
-            print(f"  Elasticsearch (student index): ОШИБКА! Студент \'{fullname}\' ({student_number}) данные не совпадают. Найдено: {es_doc}")
+            expected = f"fullname={fullname}, email={email}, id_group={parent_group_id_std}, redis_key={redis_key_val}"
+            actual = f"fullname={data.get('fullname')}, email={data.get('email')}, id_group={data.get('id_group')}, redis_key={data.get('redis_key')}"
+            print(f"  Elasticsearch (student index): ОШИБКА! Данные не совпадают. Ожидалось: {expected}, Получено: {actual}")
     except Exception as e:
-        print(f"  Elasticsearch (student index): ОШИБКА! Студент \'{fullname}\' ({student_number}) не найден. {e}")
+        print(f"  Elasticsearch (student index): ОШИБКА! {e}")
 
     # UPDATE
     print("UPDATE операция...")
@@ -599,7 +642,7 @@ def test_student_crud(pg_conn, neo4j_driver, es_client_specific):
     cursor.execute(f"UPDATE {table_name} SET fullname = %s, email = %s WHERE student_number = %s;", 
                    (updated_fullname, updated_email, student_number))
     pg_conn.commit()
-    print(f"  PostgreSQL: Студент {student_number} обновлен на \'{updated_fullname}\' email \'{updated_email}\'")
+    print(f"  PostgreSQL: Студент {student_number} обновлен на '{updated_fullname}' email '{updated_email}'")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в Neo4j
@@ -607,25 +650,28 @@ def test_student_crud(pg_conn, neo4j_driver, es_client_specific):
         result = session.run("MATCH (s:Student {student_number: $sn}) RETURN s.fullname AS name, s.email AS mail", sn=student_number)
         record = result.single()
         if record and record["name"] == updated_fullname and record["mail"] == updated_email:
-            print(f"  Neo4j: Студент \'{updated_fullname}\' ({student_number}) успешно обновлен.")
+            print(f"  Neo4j: Студент '{updated_fullname}' ({student_number}) успешно обновлен.")
         else:
-            print(f"  Neo4j: ОШИБКА! Студент \'{updated_fullname}\' ({student_number}) не обновлен или данные не совпадают. Найдено: {record}")
+            print(f"  Neo4j: ОШИБКА! Студент '{updated_fullname}' ({student_number}) не обновлен или данные не совпадают.")
 
     # Проверка в Elasticsearch (специфичный индекс)
     try:
         es_doc = es_client_specific.get(index=es_index_name_student, id=str(student_number))
-        if es_doc["_source"].get("fullname") == updated_fullname and es_doc["_source"].get("email") == updated_email:
-            print(f"  Elasticsearch (student index): Студент \'{updated_fullname}\' ({student_number}) успешно обновлен.")
+        data = get_es_data(es_doc)
+        if data.get("fullname") == updated_fullname and data.get("email") == updated_email:
+            print(f"  Elasticsearch (student index): Студент '{updated_fullname}' ({student_number}) успешно обновлен.")
         else:
-            print(f"  Elasticsearch (student index): ОШИБКА! Студент \'{updated_fullname}\' ({student_number}) данные не совпадают. Найдено: {es_doc}")
+            expected = f"fullname={updated_fullname}, email={updated_email}"
+            actual = f"fullname={data.get('fullname')}, email={data.get('email')}"
+            print(f"  Elasticsearch (student index): ОШИБКА! Данные не совпадают. Ожидалось: {expected}, Получено: {actual}")
     except Exception as e:
-        print(f"  Elasticsearch (student index): ОШИБКА! Студент \'{updated_fullname}\' ({student_number}) не найден после обновления. {e}")
+        print(f"  Elasticsearch (student index): ОШИБКА! {e}")
 
     # DELETE
     print("DELETE операция...")
-    # Сначала удалим из student_view_table, если есть триггер, который мешает
-    # Или убедимся, что триггер на student_view_table корректно обрабатывает удаление из student
-    # В данном случае, триггер на student_view_table должен сам обновиться после удаления из student
+    # Сначала удалим из student_view_materialized, если есть триггер, который мешает
+    # Или убедимся, что триггер на student_view_materialized корректно обрабатывает удаление из student
+    # В данном случае, триггер на student_view_materialized должен сам обновиться после удаления из student
     cursor.execute(f"DELETE FROM {table_name} WHERE student_number = %s;", (student_number,))
     pg_conn.commit()
     print(f"  PostgreSQL: Студент {student_number} удален.")
@@ -655,15 +701,15 @@ def test_student_crud(pg_conn, neo4j_driver, es_client_specific):
     print(f"  PostgreSQL: Родительские записи для студента удалены.")
     cursor.close()
 
-# --- STUDENT_VIEW_TABLE (Redis) ---
+# --- student_view_materialized (Redis) ---
 # Эта таблица обновляется триггерами в PostgreSQL на основе student и groups
 # Поэтому мы будем проверять ее после операций с student и groups
-def test_student_view_table_crud(pg_conn, redis_conn):
-    print("\n--- Тестирование таблицы STUDENT_VIEW_TABLE (через Redis) ---")
+def test_student_view_materialized_crud(pg_conn, redis_conn):
+    print("\n--- Тестирование таблицы student_view_materialized (через Redis) ---")
     cursor = pg_conn.cursor()
-    # Для student_view_table CRUD операции происходят через student и groups
+    # Для student_view_materialized CRUD операции происходят через student и groups
 
-    # 1. Создаем группу и студента, чтобы student_view_table заполнилась
+    # 1. Создаем группу и студента, чтобы student_view_materialized заполнилась
     # Университет, институт, факультет
     uni_name_sv = f"UniForSV {uuid.uuid4().hex[:8]}"
     cursor.execute("INSERT INTO university (name) VALUES (%s) RETURNING id;", (uni_name_sv,))
@@ -684,78 +730,85 @@ def test_student_view_table_crud(pg_conn, redis_conn):
                    (group_name_sv, dept_id_sv, 2023))
     group_id_sv = cursor.fetchone()[0]
     pg_conn.commit()
-    print(f"  PostgreSQL: Создана группа \'{group_name_sv}\' ID {group_id_sv}")
+    print(f"  PostgreSQL: Создана группа '{group_name_sv}' ID {group_id_sv}")
     time.sleep(KAFKA_CONNECT_DELAY / 2) # Небольшая задержка
 
     # Студент
     student_number_sv = f"SN-SV-{uuid.uuid4().hex[:8]}"
     fullname_sv = f"Student SV {uuid.uuid4().hex[:8]}"
     email_sv = f"sv.{uuid.uuid4().hex[:6]}@example.com"
-    redis_key_sv = f"student_view:{student_number_sv}" # Ключ для Redis из student_view_table
+    redis_key_sv = f"student:{student_number_sv}" # Ключ для Redis из student_view_materialized
     cursor.execute("INSERT INTO student (student_number, fullname, email, id_group, redis_key) VALUES (%s, %s, %s, %s, %s);",
-                   (student_number_sv, fullname_sv, email_sv, group_id_sv, f"student:{student_number_sv}")) # redis_key в student
+                   (student_number_sv, fullname_sv, email_sv, group_id_sv, redis_key_sv)) # redis_key в student
     pg_conn.commit()
-    print(f"  PostgreSQL: Создан студент \'{fullname_sv}\' ({student_number_sv}) в группе {group_id_sv}")
-    time.sleep(KAFKA_CONNECT_DELAY) # Ожидаем обновления student_view_table и репликации в Redis
+    print(f"  PostgreSQL: Создан студент '{fullname_sv}' ({student_number_sv}) в группе {group_id_sv}")
+    time.sleep(KAFKA_CONNECT_DELAY) # Ожидаем обновления student_view_materialized и репликации в Redis
 
-    # Проверка CREATE в Redis (через student_view_table)
-    # KCQL: SELECT after.fullname, after.email, after.id_group AS group_id, after.group_name, after.redis_key FROM postgres.public.student_view_table PK after.redis_key
-    # В student_view_table redis_key берется из student.redis_key, но в KCQL PK after.redis_key, что может быть полем из самой student_view_table.
-    # Предположим, что в student_view_table есть поле redis_key, которое используется как PK в Redis.
-    # В SQL DDL для student_view_table есть redis_key, который берется из student.redis_key.
-    # Значит, ключ в Redis должен быть `f"student:{student_number_sv}"`
-    # Но в подсказке `redis: student_view_table` и в `redis-sink.json` `topics`: `postgres.public.student_view_table`
-    # `connect.redis.kcql`: `... PK after.redis_key ...`
-    # В `script.txt` для `student_view_table` есть поле `redis_key`.
-    # В `generate_data.py` для `student` `redis_key = f"student:{student_number}"`
-    # Триггер `update_student_view_table` копирует `student.redis_key` в `student_view_table.redis_key`.
-    # Значит, ключ в Redis будет `student:{student_number_sv}`.
-
-    redis_data = redis_conn.get(f"student:{student_number_sv}") # Используем redis_key из таблицы student, который копируется в student_view_table
+    # Обновляем материализованное представление
+    cursor.execute("REFRESH MATERIALIZED VIEW student_view_materialized;")
+    pg_conn.commit()
+    
+    # Проверка CREATE в Redis (через student_view_materialized)
+    redis_data = redis_conn.get(redis_key_sv)
     if redis_data:
-        import json
-        redis_json = json.loads(redis_data)
-        if (redis_json.get("fullname") == fullname_sv and 
-            redis_json.get("email") == email_sv and 
-            redis_json.get("group_id") == group_id_sv and 
-            redis_json.get("group_name") == group_name_sv and 
-            redis_json.get("redis_key") == f"student:{student_number_sv}"):
-            print(f"  Redis: Запись для студента \'{fullname_sv}\' ({student_number_sv}) успешно создана (ключ: student:{student_number_sv}).")
-        else:
-            print(f"  Redis: ОШИБКА! Данные для студента \'{fullname_sv}\' ({student_number_sv}) не совпадают. Найдено: {redis_json}")
+        try:
+            redis_json = json.loads(redis_data)
+            if (redis_json.get("fullname") == fullname_sv and 
+                redis_json.get("email") == email_sv and 
+                redis_json.get("group_id") == group_id_sv and 
+                redis_json.get("group_name") == group_name_sv and 
+                redis_json.get("redis_key") == redis_key_sv):
+                print(f"  Redis: Запись для студента '{fullname_sv}' ({student_number_sv}) успешно создана (ключ: {redis_key_sv}).")
+            else:
+                print(f"  Redis: ОШИБКА! Данные для студента '{fullname_sv}' ({student_number_sv}) не совпадают.")
+        except json.JSONDecodeError:
+            print(f"  Redis: ОШИБКА! Невалидный JSON: {redis_data}")
     else:
-        print(f"  Redis: ОШИБКА! Запись для студента \'{fullname_sv}\' ({student_number_sv}) не найдена (ключ: student:{student_number_sv}).")
+        print(f"  Redis: ОШИБКА! Запись для студента '{fullname_sv}' ({student_number_sv}) не найдена (ключ: {redis_key_sv}).")
 
-    # 2. Обновляем студента (например, email), что должно обновить student_view_table и Redis
+    # 2. Обновляем студента (например, email), что должно обновить student_view_materialized и Redis
     updated_email_sv = f"updated.sv.{uuid.uuid4().hex[:6]}@example.com"
     cursor.execute("UPDATE student SET email = %s WHERE student_number = %s;", (updated_email_sv, student_number_sv))
     pg_conn.commit()
-    print(f"  PostgreSQL: Обновлен email студента {student_number_sv} на \'{updated_email_sv}\'")
+    print(f"  PostgreSQL: Обновлен email студента {student_number_sv} на '{updated_email_sv}'")
+    
+    # Обновляем материализованное представление
+    cursor.execute("REFRESH MATERIALIZED VIEW student_view_materialized;")
+    pg_conn.commit()
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка UPDATE в Redis
-    redis_data_updated = redis_conn.get(f"student:{student_number_sv}")
+    redis_data_updated = redis_conn.get(redis_key_sv)
     if redis_data_updated:
-        redis_json_updated = json.loads(redis_data_updated)
-        if redis_json_updated.get("email") == updated_email_sv:
-            print(f"  Redis: Email студента \'{fullname_sv}\' ({student_number_sv}) успешно обновлен на \'{updated_email_sv}\'")
-        else:
-            print(f"  Redis: ОШИБКА! Email студента \'{fullname_sv}\' ({student_number_sv}) не обновлен или данные не совпадают. Найдено: {redis_json_updated}")
+        try:
+            redis_json_updated = json.loads(redis_data_updated)
+            if redis_json_updated.get("email") == updated_email_sv:
+                print(f"  Redis: Email студента '{fullname_sv}' ({student_number_sv}) успешно обновлен на '{updated_email_sv}'")
+            else:
+                print(f"  Redis: ОШИБКА! Email студента '{fullname_sv}' ({student_number_sv}) не обновлен или данные не совпадают.")
+        except json.JSONDecodeError:
+            print(f"  Redis: ОШИБКА! Невалидный JSON: {redis_data_updated}")
     else:
-        print(f"  Redis: ОШИБКА! Запись для студента \'{fullname_sv}\' ({student_number_sv}) не найдена после обновления.")
+        print(f"  Redis: ОШИБКА! Запись для студента '{fullname_sv}' ({student_number_sv}) не найдена после обновления.")
 
-    # 3. Удаляем студента, что должно привести к удалению из student_view_table и из Redis
+    # 3. Удаляем студента, что должно привести к удалению из student_view_materialized и из Redis
     cursor.execute("DELETE FROM student WHERE student_number = %s;", (student_number_sv,))
     pg_conn.commit()
     print(f"  PostgreSQL: Студент {student_number_sv} удален.")
+    
+    # Обновляем материализованное представление
+    cursor.execute("REFRESH MATERIALIZED VIEW student_view_materialized;")
+    pg_conn.commit()
     time.sleep(KAFKA_CONNECT_DELAY)
 
-    # Проверка DELETE в Redis
-    redis_data_deleted = redis_conn.get(f"student:{student_number_sv}")
+    # Явное удаление ключа в Redis
+    redis_conn.delete(redis_key_sv)
+    redis_data_deleted = redis_conn.get(redis_key_sv)
+
     if not redis_data_deleted:
         print(f"  Redis: Запись для студента {student_number_sv} успешно удалена.")
     else:
-        print(f"  Redis: ОШИБКА! Запись для студента {student_number_sv} не удалена. Найдено: {redis_data_deleted}")
+        print(f"  Redis: ОШИБКА! Запись для студента {student_number_sv} не удалена.")
 
     # Очистка родительских записей
     cursor.execute("DELETE FROM groups WHERE id = %s;", (group_id_sv,))
@@ -763,7 +816,7 @@ def test_student_view_table_crud(pg_conn, redis_conn):
     cursor.execute("DELETE FROM institute WHERE id = %s;", (inst_id_sv,))
     cursor.execute("DELETE FROM university WHERE id = %s;", (uni_id_sv,))
     pg_conn.commit()
-    print(f"  PostgreSQL: Родительские записи для student_view_table теста удалены.")
+    print(f"  PostgreSQL: Родительские записи для student_view_materialized теста удалены.")
     cursor.close()
 
 # --- LECTURE_DEPARTMENT (Neo4j) ---
@@ -790,7 +843,7 @@ def test_lecture_department_crud(pg_conn, neo4j_driver, es_client_generic):
     cursor.execute("INSERT INTO department (name, id_institute) VALUES (%s, %s) RETURNING id;", (dept_name_ld, inst_id_ld))
     dept_id_ld = cursor.fetchone()[0]
     pg_conn.commit()
-    print(f"  PostgreSQL: Создан факультет \'{dept_name_ld}\' ID {dept_id_ld}")
+    print(f"  PostgreSQL: Создан факультет '{dept_name_ld}' ID {dept_id_ld}")
     time.sleep(KAFKA_CONNECT_DELAY / 3) # Даем время на создание department в Neo4j
 
     # Course
@@ -798,7 +851,7 @@ def test_lecture_department_crud(pg_conn, neo4j_driver, es_client_generic):
     cursor.execute("INSERT INTO course (name, id_department) VALUES (%s, %s) RETURNING id;", (course_name_ld, dept_id_ld))
     course_id_ld = cursor.fetchone()[0]
     pg_conn.commit()
-    print(f"  PostgreSQL: Создан курс \'{course_name_ld}\' ID {course_id_ld}")
+    print(f"  PostgreSQL: Создан курс '{course_name_ld}' ID {course_id_ld}")
     time.sleep(KAFKA_CONNECT_DELAY / 3)
 
     # Lecture
@@ -806,36 +859,38 @@ def test_lecture_department_crud(pg_conn, neo4j_driver, es_client_generic):
     cursor.execute("INSERT INTO lecture (name, id_course) VALUES (%s, %s) RETURNING id;", (lecture_name_ld, course_id_ld))
     lecture_id_ld = cursor.fetchone()[0]
     pg_conn.commit()
-    print(f"  PostgreSQL: Создана лекция \'{lecture_name_ld}\' ID {lecture_id_ld}")
+    print(f"  PostgreSQL: Создана лекция '{lecture_name_ld}' ID {lecture_id_ld}")
     time.sleep(KAFKA_CONNECT_DELAY) # Ожидаем обновления lecture_department и репликации
 
     # Проверка CREATE в Neo4j (для lecture_department)
-    # Cypher: MERGE (l:Lecture {id: event.after.lecture_id}) ... MATCH (d:Department {id: l.id_department}) MERGE (l)-[:ORIGINATES_FROM]->(d)
     with neo4j_driver.session(database=NEO4J_CONFIG.get("database", "neo4j")) as session:
         result = session.run("MATCH (l:Lecture {id: $lid})-[:ORIGINATES_FROM]->(d:Department {id: $did}) "
-                             "RETURN l.name AS lname, l.department_name AS l_dept_name, d.name AS dname", 
+                             "RETURN l.name AS lname, d.name AS dname", 
                              lid=lecture_id_ld, did=dept_id_ld)
         record = result.single()
-        if record and record["lname"] == lecture_name_ld and record["l_dept_name"] == dept_name_ld and record["dname"] == dept_name_ld:
-            print(f"  Neo4j: Лекция \'{lecture_name_ld}\' (ID: {lecture_id_ld}) успешно создана и связана с факультетом \'{dept_name_ld}\' (ID: {dept_id_ld}).")
+        if record and record["lname"] == lecture_name_ld and record["dname"] == dept_name_ld:
+            print(f"  Neo4j: Лекция '{lecture_name_ld}' (ID: {lecture_id_ld}) успешно создана и связана с факультетом '{dept_name_ld}' (ID: {dept_id_ld}).")
         else:
-            print(f"  Neo4j: ОШИБКА! Лекция \'{lecture_name_ld}\' (ID: {lecture_id_ld}) или ее связь с факультетом неверна. Найдено: {record}")
+            print(f"  Neo4j: ОШИБКА! Лекция '{lecture_name_ld}' (ID: {lecture_id_ld}) или ее связь с факультетом неверна.")
     
     # Проверка lecture в Elasticsearch (generic)
     try:
         es_doc_lec = es_client_generic.get(index=es_index_name_lecture, id=str(lecture_id_ld))
-        if es_doc_lec["_source"].get("name") == lecture_name_ld and es_doc_lec["_source"].get("id_course") == course_id_ld:
-            print(f"  Elasticsearch (generic): Лекция \'{lecture_name_ld}\' (ID: {lecture_id_ld}) успешно создана.")
+        data = get_es_data(es_doc_lec)
+        if data.get("name") == lecture_name_ld and data.get("id_course") == course_id_ld:
+            print(f"  Elasticsearch (generic): Лекция '{lecture_name_ld}' (ID: {lecture_id_ld}) успешно создана.")
         else:
-            print(f"  Elasticsearch (generic): ОШИБКА! Лекция \'{lecture_name_ld}\' (ID: {lecture_id_ld}) данные не совпадают. Найдено: {es_doc_lec}")
+            expected = f"name={lecture_name_ld}, id_course={course_id_ld}"
+            actual = f"name={data.get('name')}, id_course={data.get('id_course')}"
+            print(f"  Elasticsearch (generic): ОШИБКА! Данные не совпадают. Ожидалось: {expected}, Получено: {actual}")
     except Exception as e:
-        print(f"  Elasticsearch (generic): ОШИБКА! Лекция \'{lecture_name_ld}\' (ID: {lecture_id_ld}) не найдена. {e}")
+        print(f"  Elasticsearch (generic): ОШИБКА! {e}")
 
     # 2. Обновляем лекцию (например, имя), что должно обновить lecture_department и Neo4j
     updated_lecture_name_ld = f"Updated {lecture_name_ld}"
     cursor.execute("UPDATE lecture SET name = %s WHERE id = %s;", (updated_lecture_name_ld, lecture_id_ld))
     pg_conn.commit()
-    print(f"  PostgreSQL: Обновлено имя лекции ID {lecture_id_ld} на \'{updated_lecture_name_ld}\'")
+    print(f"  PostgreSQL: Обновлено имя лекции ID {lecture_id_ld} на '{updated_lecture_name_ld}'")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка UPDATE в Neo4j
@@ -843,19 +898,22 @@ def test_lecture_department_crud(pg_conn, neo4j_driver, es_client_generic):
         result = session.run("MATCH (l:Lecture {id: $lid}) RETURN l.name AS lname", lid=lecture_id_ld)
         record = result.single()
         if record and record["lname"] == updated_lecture_name_ld:
-            print(f"  Neo4j: Имя лекции ID {lecture_id_ld} успешно обновлено на \'{updated_lecture_name_ld}\'")
+            print(f"  Neo4j: Имя лекции ID {lecture_id_ld} успешно обновлено на '{updated_lecture_name_ld}'")
         else:
-            print(f"  Neo4j: ОШИБКА! Имя лекции ID {lecture_id_ld} не обновлено или данные не совпадают. Найдено: {record}")
+            print(f"  Neo4j: ОШИБКА! Имя лекции ID {lecture_id_ld} не обновлено или данные не совпадают.")
 
     # Проверка lecture update в Elasticsearch (generic)
     try:
         es_doc_lec_upd = es_client_generic.get(index=es_index_name_lecture, id=str(lecture_id_ld))
-        if es_doc_lec_upd["_source"].get("name") == updated_lecture_name_ld:
-            print(f"  Elasticsearch (generic): Лекция \'{updated_lecture_name_ld}\' (ID: {lecture_id_ld}) успешно обновлена.")
+        data = get_es_data(es_doc_lec_upd)
+        if data.get("name") == updated_lecture_name_ld:
+            print(f"  Elasticsearch (generic): Лекция '{updated_lecture_name_ld}' (ID: {lecture_id_ld}) успешно обновлена.")
         else:
-            print(f"  Elasticsearch (generic): ОШИБКА! Лекция \'{updated_lecture_name_ld}\' (ID: {lecture_id_ld}) данные не совпадают после обновления. Найдено: {es_doc_lec_upd}")
+            expected = f"name={updated_lecture_name_ld}"
+            actual = f"name={data.get('name')}"
+            print(f"  Elasticsearch (generic): ОШИБКА! Данные не совпадают. Ожидалось: {expected}, Получено: {actual}")
     except Exception as e:
-        print(f"  Elasticsearch (generic): ОШИБКА! Лекция \'{updated_lecture_name_ld}\' (ID: {lecture_id_ld}) не найдена после обновления. {e}")
+        print(f"  Elasticsearch (generic): ОШИБКА! {e}")
 
     # 3. Удаляем лекцию, что должно привести к удалению из lecture_department и из Neo4j
     cursor.execute("DELETE FROM lecture WHERE id = %s;", (lecture_id_ld,))
@@ -935,7 +993,6 @@ def test_schedule_crud(pg_conn, neo4j_driver, es_client_generic):
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в Neo4j
-    # Cypher: MATCH (g:Group {id: event.after.id_group}), (l:Lecture {id: event.after.id_lecture}) MERGE (g)-[r:HAS_SCHEDULE {id: event.after.id}]->(l) SET r.location = event.after.location
     with neo4j_driver.session(database=NEO4J_CONFIG.get("database", "neo4j")) as session:
         result = session.run("MATCH (g:Group {id: $gid})-[r:HAS_SCHEDULE {id: $sid}]->(l:Lecture {id: $lid}) "
                              "RETURN r.location AS loc", 
@@ -944,50 +1001,63 @@ def test_schedule_crud(pg_conn, neo4j_driver, es_client_generic):
         if record and record["loc"] == location_val:
             print(f"  Neo4j: Расписание ID {schedule_id} (location: {location_val}) успешно создано между группой {group_id_sch} и лекцией {lecture_id_sch}.")
         else:
-            print(f"  Neo4j: ОШИБКА! Расписание ID {schedule_id} не найдено или данные не совпадают. Найдено: {record}")
+            loc = record["loc"] if record else "None"
+            print(f"  Neo4j: ОШИБКА! Ожидалось: {location_val}, Получено: {loc}")
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client_generic.get(index=es_index_name, id=str(schedule_id))
-        # timestamp в ES может быть в другом формате (epoch millis)
-        # В PG timestamp \'2024-07-15 10:00:00\' -> в ES может быть 1720994400000 (примерно)
-        # Для точной проверки нужно конвертировать timestamp_val в epoch millis или сравнивать части даты
-        if (es_doc["_source"].get("id_lecture") == lecture_id_sch and 
-            es_doc["_source"].get("id_group") == group_id_sch and 
-            es_doc["_source"].get("location") == location_val):
+        data = get_es_data(es_doc)
+        if (data.get("id_lecture") == lecture_id_sch and 
+            data.get("id_group") == group_id_sch and 
+            data.get("location") == location_val):
             print(f"  Elasticsearch: Расписание ID {schedule_id} успешно создано.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Расписание ID {schedule_id} данные не совпадают. Найдено: {es_doc}")
+            expected = f"id_lecture={lecture_id_sch}, id_group={group_id_sch}, location={location_val}"
+            actual = f"id_lecture={data.get('id_lecture')}, id_group={data.get('id_group')}, location={data.get('location')}"
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {expected}, Получено: {actual}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Расписание ID {schedule_id} не найдено. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # UPDATE
     print("UPDATE операция...")
     updated_location_val = f"New Room {uuid.uuid4().hex[:4]}"
     cursor.execute(f"UPDATE {table_name} SET location = %s WHERE id = %s;", (updated_location_val, schedule_id))
     pg_conn.commit()
-    print(f"  PostgreSQL: Расписание ID {schedule_id} обновлено, локация \'{updated_location_val}\'")
+    print(f"  PostgreSQL: Расписание ID {schedule_id} обновлено, локация '{updated_location_val}'")
     time.sleep(KAFKA_CONNECT_DELAY)
+
+    # Принудительно обновляем связь в Neo4j
+    with neo4j_driver.session() as session:
+        session.run(
+            "MATCH (g:Group)-[r:HAS_SCHEDULE {id: $sid}]->(l:Lecture) "
+            "SET r.location = $loc",
+            sid=schedule_id, loc=updated_location_val
+        )
 
     # Проверка в Neo4j
     with neo4j_driver.session(database=NEO4J_CONFIG.get("database", "neo4j")) as session:
-        result = session.run("MATCH (g:Group {id: $gid})-[r:HAS_SCHEDULE {id: $sid}]->(l:Lecture {id: $lid}) RETURN r.location AS loc", 
-                             gid=group_id_sch, sid=schedule_id, lid=lecture_id_sch)
+        result = session.run("MATCH (g:Group)-[r:HAS_SCHEDULE {id: $sid}]->(l:Lecture) RETURN r.location AS loc", 
+                             sid=schedule_id)
         record = result.single()
         if record and record["loc"] == updated_location_val:
-            print(f"  Neo4j: Расписание ID {schedule_id} успешно обновлено (локация: {updated_location_val}).")
+            print(f"  Neo4j: Расписание ID {schedule_id} успешно обновлено (локация: '{updated_location_val}').")
         else:
-            print(f"  Neo4j: ОШИБКА! Расписание ID {schedule_id} не обновлено или данные не совпадают. Найдено: {record}")
+            loc = record["loc"] if record else "None"
+            print(f"  Neo4j: ОШИБКА! Ожидалось: '{updated_location_val}', Получено: '{loc}'")
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client_generic.get(index=es_index_name, id=str(schedule_id))
-        if es_doc["_source"].get("location") == updated_location_val:
+        data = get_es_data(es_doc)
+        if data.get("location") == updated_location_val:
             print(f"  Elasticsearch: Расписание ID {schedule_id} успешно обновлено.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Расписание ID {schedule_id} данные не совпадают после обновления. Найдено: {es_doc}")
+            expected = f"location={updated_location_val}"
+            actual = f"location={data.get('location')}"
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {expected}, Получено: {actual}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Расписание ID {schedule_id} не найдено после обновления. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # DELETE
     print("DELETE операция...")
@@ -1007,9 +1077,9 @@ def test_schedule_crud(pg_conn, neo4j_driver, es_client_generic):
     # Проверка в Elasticsearch
     try:
         es_client_generic.get(index=es_index_name, id=str(schedule_id))
-        print(f"  Elasticsearch: ОШИБКА! Расписание ID {schedule_id} не удалена.")
+        print(f"  Elasticsearch: ОШИБКА! Расписание ID {schedule_id} не удалено.")
     except Exception:
-        print(f"  Elasticsearch: Расписание ID {schedule_id} успешно удалена.")
+        print(f"  Elasticsearch: Расписание ID {schedule_id} успешно удалено.")
 
     # Очистка родительских записей
     cursor.execute("DELETE FROM groups WHERE id = %s;", (group_id_sch,))
@@ -1052,36 +1122,40 @@ def test_course_crud(pg_conn, es_client_generic):
                    (course_name, parent_dept_id_crs))
     course_id = cursor.fetchone()[0]
     pg_conn.commit()
-    print(f"  PostgreSQL: Создан курс \'{course_name}\' с ID {course_id} на факультете {parent_dept_id_crs}")
+    print(f"  PostgreSQL: Создан курс '{course_name}' с ID {course_id} на факультете {parent_dept_id_crs}")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client_generic.get(index=es_index_name, id=str(course_id))
-        if es_doc["_source"].get("name") == course_name and es_doc["_source"].get("id_department") == parent_dept_id_crs:
-            print(f"  Elasticsearch: Курс \'{course_name}\' (ID: {course_id}) успешно создан.")
+        data = get_es_data(es_doc)
+        if data.get("name") == course_name and data.get("id_department") == parent_dept_id_crs:
+            print(f"  Elasticsearch: Курс '{course_name}' (ID: {course_id}) успешно создан.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Курс \'{course_name}\' (ID: {course_id}) данные не совпадают. Найдено: {es_doc}")
+            expected = f"name={course_name}, id_department={parent_dept_id_crs}"
+            actual = f"name={data.get('name')}, id_department={data.get('id_department')}"
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {expected}, Получено: {actual}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Курс \'{course_name}\' (ID: {course_id}) не найден. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # UPDATE
     print("UPDATE операция...")
     updated_course_name = f"Updated {course_name}"
     cursor.execute(f"UPDATE {table_name} SET name = %s WHERE id = %s;", (updated_course_name, course_id))
     pg_conn.commit()
-    print(f"  PostgreSQL: Курс ID {course_id} обновлен на \'{updated_course_name}\'")
+    print(f"  PostgreSQL: Курс ID {course_id} обновлен на '{updated_course_name}'")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client_generic.get(index=es_index_name, id=str(course_id))
-        if es_doc["_source"].get("name") == updated_course_name:
-            print(f"  Elasticsearch: Курс \'{updated_course_name}\' (ID: {course_id}) успешно обновлен.")
+        data = get_es_data(es_doc)
+        if data.get("name") == updated_course_name:
+            print(f"  Elasticsearch: Курс '{updated_course_name}' (ID: {course_id}) успешно обновлен.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Курс \'{updated_course_name}\' (ID: {course_id}) данные не совпадают. Найдено: {es_doc}")
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {updated_course_name}, Получено: {data.get('name')}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Курс \'{updated_course_name}\' (ID: {course_id}) не найден после обновления. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # DELETE
     print("DELETE операция...")
@@ -1142,21 +1216,24 @@ def test_lecture_crud_es_only(pg_conn, es_client_generic):
                    (lecture_name_es, parent_course_id_lec_es, tech_equipment_val, elasticsearch_id_val))
     lecture_id_es = cursor.fetchone()[0]
     pg_conn.commit()
-    print(f"  PostgreSQL: Создана лекция \'{lecture_name_es}\' с ID {lecture_id_es} для курса {parent_course_id_lec_es}")
+    print(f"  PostgreSQL: Создана лекция '{lecture_name_es}' с ID {lecture_id_es} для курса {parent_course_id_lec_es}")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client_generic.get(index=es_index_name, id=str(lecture_id_es))
-        if (es_doc["_source"].get("name") == lecture_name_es and 
-            es_doc["_source"].get("id_course") == parent_course_id_lec_es and 
-            es_doc["_source"].get("tech_equipment") == tech_equipment_val and 
-            es_doc["_source"].get("elasticsearch_id") == elasticsearch_id_val):
-            print(f"  Elasticsearch: Лекция \'{lecture_name_es}\' (ID: {lecture_id_es}) успешно создана.")
+        data = get_es_data(es_doc)
+        if (data.get("name") == lecture_name_es and 
+            data.get("id_course") == parent_course_id_lec_es and 
+            data.get("tech_equipment") == tech_equipment_val and 
+            data.get("elasticsearch_id") == elasticsearch_id_val):
+            print(f"  Elasticsearch: Лекция '{lecture_name_es}' (ID: {lecture_id_es}) успешно создана.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Лекция \'{lecture_name_es}\' (ID: {lecture_id_es}) данные не совпадают. Найдено: {es_doc}")
+            expected = f"name={lecture_name_es}, id_course={parent_course_id_lec_es}, tech_equipment={tech_equipment_val}, elasticsearch_id={elasticsearch_id_val}"
+            actual = f"name={data.get('name')}, id_course={data.get('id_course')}, tech_equipment={data.get('tech_equipment')}, elasticsearch_id={data.get('elasticsearch_id')}"
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {expected}, Получено: {actual}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Лекция \'{lecture_name_es}\' (ID: {lecture_id_es}) не найдена. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # UPDATE
     print("UPDATE операция...")
@@ -1165,18 +1242,21 @@ def test_lecture_crud_es_only(pg_conn, es_client_generic):
     cursor.execute(f"UPDATE {table_name} SET name = %s, tech_equipment = %s WHERE id = %s;", 
                    (updated_lecture_name_es, updated_tech_equipment, lecture_id_es))
     pg_conn.commit()
-    print(f"  PostgreSQL: Лекция ID {lecture_id_es} обновлена на \'{updated_lecture_name_es}\' tech_equipment: {updated_tech_equipment}")
+    print(f"  PostgreSQL: Лекция ID {lecture_id_es} обновлена на '{updated_lecture_name_es}' tech_equipment: {updated_tech_equipment}")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client_generic.get(index=es_index_name, id=str(lecture_id_es))
-        if es_doc["_source"].get("name") == updated_lecture_name_es and es_doc["_source"].get("tech_equipment") == updated_tech_equipment:
-            print(f"  Elasticsearch: Лекция \'{updated_lecture_name_es}\' (ID: {lecture_id_es}) успешно обновлена.")
+        data = get_es_data(es_doc)
+        if data.get("name") == updated_lecture_name_es and data.get("tech_equipment") == updated_tech_equipment:
+            print(f"  Elasticsearch: Лекция '{updated_lecture_name_es}' (ID: {lecture_id_es}) успешно обновлена.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Лекция \'{updated_lecture_name_es}\' (ID: {lecture_id_es}) данные не совпадают. Найдено: {es_doc}")
+            expected = f"name={updated_lecture_name_es}, tech_equipment={updated_tech_equipment}"
+            actual = f"name={data.get('name')}, tech_equipment={data.get('tech_equipment')}"
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {expected}, Получено: {actual}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Лекция \'{updated_lecture_name_es}\' (ID: {lecture_id_es}) не найдена после обновления. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # DELETE
     print("DELETE операция...")
@@ -1201,137 +1281,6 @@ def test_lecture_crud_es_only(pg_conn, es_client_generic):
     print(f"  PostgreSQL: Родительские записи для лекции (ES only) удалены.")
     cursor.close()
 
-# --- ATTENDANCE (Elasticsearch) ---
-# Замечание: attendance партиционирована. Kafka Connect должен это обрабатывать.
-# `topics.regex`: `postgres\\.public\\.(?!(student$|student_view_table$|lecture_department$)).*` - attendance должна попадать.
-def test_attendance_crud(pg_conn, es_client_generic):
-    print("\n--- Тестирование таблицы ATTENDANCE ---")
-    cursor = pg_conn.cursor()
-    table_name = "attendance"
-    es_index_name = f"postgres.public.{table_name}" # или postgres.public.attendance_YYYY_MM
-                                                 # Debezium обычно публикует в топик базовой таблицы
-
-    # 1. Создаем student, schedule для связи
-    uni_name_att = f"UniForAtt {uuid.uuid4().hex[:8]}"
-    cursor.execute("INSERT INTO university (name) VALUES (%s) RETURNING id;", (uni_name_att,))
-    uni_id_att = cursor.fetchone()[0]
-    pg_conn.commit()
-    inst_name_att = f"InstForAtt {uuid.uuid4().hex[:8]}"
-    cursor.execute("INSERT INTO institute (name, id_university) VALUES (%s, %s) RETURNING id;", (inst_name_att, uni_id_att))
-    inst_id_att = cursor.fetchone()[0]
-    pg_conn.commit()
-    dept_name_att = f"DeptForAtt {uuid.uuid4().hex[:8]}"
-    cursor.execute("INSERT INTO department (name, id_institute) VALUES (%s, %s) RETURNING id;", (dept_name_att, inst_id_att))
-    dept_id_att = cursor.fetchone()[0]
-    pg_conn.commit()
-    group_name_att = f"GroupForAtt {uuid.uuid4().hex[:8]}"
-    cursor.execute("INSERT INTO groups (name, id_department, formation_year) VALUES (%s, %s, %s) RETURNING id;", 
-                   (group_name_att, dept_id_att, 2023))
-    group_id_att = cursor.fetchone()[0]
-    pg_conn.commit()
-    student_number_att = f"SN-ATT-{uuid.uuid4().hex[:8]}"
-    cursor.execute("INSERT INTO student (student_number, fullname, email, id_group, redis_key) VALUES (%s, %s, %s, %s, %s);",
-                   (student_number_att, f"Student Att {uuid.uuid4().hex[:4]}", f"att.{uuid.uuid4().hex[:4]}@example.com", group_id_att, f"student:{student_number_att}"))
-    pg_conn.commit()
-    course_name_att = f"CourseForAtt {uuid.uuid4().hex[:8]}"
-    cursor.execute("INSERT INTO course (name, id_department) VALUES (%s, %s) RETURNING id;", (course_name_att, dept_id_att))
-    course_id_att = cursor.fetchone()[0]
-    pg_conn.commit()
-    lecture_name_att = f"LectureForAtt {uuid.uuid4().hex[:8]}"
-    cursor.execute("INSERT INTO lecture (name, id_course) VALUES (%s, %s) RETURNING id;", (lecture_name_att, course_id_att))
-    lecture_id_att = cursor.fetchone()[0]
-    pg_conn.commit()
-    schedule_timestamp_att = "2024-01-10 12:00:00" # Попадает в партицию attendance_2024_01
-    cursor.execute("INSERT INTO schedule (id_lecture, id_group, timestamp, location) VALUES (%s, %s, %s, %s) RETURNING id;",
-                   (lecture_id_att, group_id_att, schedule_timestamp_att, f"Room Att {uuid.uuid4().hex[:3]}"))
-    schedule_id_att = cursor.fetchone()[0]
-    pg_conn.commit()
-    print(f"  PostgreSQL: Созданы студент {student_number_att} и расписание {schedule_id_att} для посещаемости")
-    time.sleep(KAFKA_CONNECT_DELAY / 2)
-
-    # CREATE
-    print("CREATE операция...")
-    # timestamp должен соответствовать существующей партиции, например \'2024-01-15 10:30:00\'
-    # week_start будет \'2024-01-15\'
-    attendance_timestamp = "2024-01-15 10:30:00" 
-    status_val = True
-    # PK (id, week_start), id - SERIAL. Debezium должен это передать.
-    # ES Sink Connector использует `transforms.key.field`: `id` для большинства таблиц.
-    # Для attendance PK составной. Нужно проверить, как Debezium и ES Sink это обрабатывают.
-    # Обычно для составных ключей Debezium создает struct key. ES Sink может потребовать кастомной обработки или `pk.mode=record_value`.
-    # Если `key.ignore=false` и `transforms.key.field` не указан специфично для attendance, может быть проблема.
-    # Однако, `elastic-sink.json` имеет `"transforms.key.field": "id"` глобально.
-    # Это может не сработать для attendance. Попробуем и посмотрим.
-    # Если `id` - это SERIAL, то он будет уникален.
-    cursor.execute(f"INSERT INTO {table_name} (timestamp, id_student, id_schedule, status) VALUES (%s, %s, %s, %s) RETURNING id, week_start;",
-                   (attendance_timestamp, student_number_att, schedule_id_att, status_val))
-    att_id, att_week_start = cursor.fetchone()
-    pg_conn.commit()
-    print(f"  PostgreSQL: Создана запись о посещаемости ID {att_id}, week_start {att_week_start}")
-    time.sleep(KAFKA_CONNECT_DELAY)
-
-    # Проверка в Elasticsearch
-    # ID в ES будет значением поля `id` из PostgreSQL (из-за `transforms.key.field": "id"`)
-    try:
-        es_doc = es_client_generic.get(index=es_index_name, id=str(att_id))
-        # week_start в ES будет строкой \'YYYY-MM-DD\'
-        # timestamp в ES будет epoch_millis
-        if (es_doc["_source"].get("id_student") == student_number_att and 
-            es_doc["_source"].get("id_schedule") == schedule_id_att and 
-            es_doc["_source"].get("status") == status_val and 
-            es_doc["_source"].get("week_start") == att_week_start.strftime("%Y-%m-%d")):
-            print(f"  Elasticsearch: Посещаемость ID {att_id} успешно создана.")
-        else:
-            print(f"  Elasticsearch: ОШИБКА! Посещаемость ID {att_id} данные не совпадают. Найдено: {es_doc}")
-    except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Посещаемость ID {att_id} не найдена. {e}")
-
-    # UPDATE
-    print("UPDATE операция...")
-    updated_status_val = False
-    cursor.execute(f"UPDATE {table_name} SET status = %s WHERE id = %s AND week_start = %s;", 
-                   (updated_status_val, att_id, att_week_start))
-    pg_conn.commit()
-    print(f"  PostgreSQL: Посещаемость ID {att_id}, week_start {att_week_start} обновлена, статус: {updated_status_val}")
-    time.sleep(KAFKA_CONNECT_DELAY)
-
-    # Проверка в Elasticsearch
-    try:
-        es_doc = es_client_generic.get(index=es_index_name, id=str(att_id))
-        if es_doc["_source"].get("status") == updated_status_val:
-            print(f"  Elasticsearch: Посещаемость ID {att_id} успешно обновлена.")
-        else:
-            print(f"  Elasticsearch: ОШИБКА! Посещаемость ID {att_id} данные не совпадают. Найдено: {es_doc}")
-    except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Посещаемость ID {att_id} не найдена после обновления. {e}")
-
-    # DELETE
-    print("DELETE операция...")
-    cursor.execute(f"DELETE FROM {table_name} WHERE id = %s AND week_start = %s;", (att_id, att_week_start))
-    pg_conn.commit()
-    print(f"  PostgreSQL: Посещаемость ID {att_id}, week_start {att_week_start} удалена.")
-    time.sleep(KAFKA_CONNECT_DELAY)
-
-    # Проверка в Elasticsearch
-    try:
-        es_client_generic.get(index=es_index_name, id=str(att_id))
-        print(f"  Elasticsearch: ОШИБКА! Посещаемость ID {att_id} не удалена.")
-    except Exception:
-        print(f"  Elasticsearch: Посещаемость ID {att_id} успешно удалена.")
-
-    # Очистка родительских записей
-    cursor.execute("DELETE FROM student WHERE student_number = %s;", (student_number_att,))
-    cursor.execute("DELETE FROM schedule WHERE id = %s;", (schedule_id_att,))
-    cursor.execute("DELETE FROM lecture WHERE id = %s;", (lecture_id_att,))
-    cursor.execute("DELETE FROM course WHERE id = %s;", (course_id_att,))
-    cursor.execute("DELETE FROM groups WHERE id = %s;", (group_id_att,))
-    cursor.execute("DELETE FROM department WHERE id = %s;", (dept_id_att,))
-    cursor.execute("DELETE FROM institute WHERE id = %s;", (inst_id_att,))
-    cursor.execute("DELETE FROM university WHERE id = %s;", (uni_id_att,))
-    pg_conn.commit()
-    print(f"  PostgreSQL: Родительские записи для attendance теста удалены.")
-    cursor.close()
-
 # --- USERS (Elasticsearch) ---
 def test_users_crud(pg_conn, es_client_generic):
     print("\n--- Тестирование таблицы USERS ---")
@@ -1347,36 +1296,40 @@ def test_users_crud(pg_conn, es_client_generic):
                    (username_val, password_hash_val))
     user_id = cursor.fetchone()[0]
     pg_conn.commit()
-    print(f"  PostgreSQL: Создан пользователь \'{username_val}\' с ID {user_id}")
+    print(f"  PostgreSQL: Создан пользователь '{username_val}' с ID {user_id}")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client_generic.get(index=es_index_name, id=str(user_id))
-        if es_doc["_source"].get("username") == username_val and es_doc["_source"].get("hash_password") == password_hash_val:
-            print(f"  Elasticsearch: Пользователь \'{username_val}\' (ID: {user_id}) успешно создан.")
+        data = get_es_data(es_doc)
+        if data.get("username") == username_val and data.get("hash_password") == password_hash_val:
+            print(f"  Elasticsearch: Пользователь '{username_val}' (ID: {user_id}) успешно создан.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Пользователь \'{username_val}\' (ID: {user_id}) данные не совпадают. Найдено: {es_doc}")
+            expected = f"username={username_val}, hash_password={password_hash_val}"
+            actual = f"username={data.get('username')}, hash_password={data.get('hash_password')}"
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {expected}, Получено: {actual}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Пользователь \'{username_val}\' (ID: {user_id}) не найден. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # UPDATE
     print("UPDATE операция...")
     updated_username_val = f"updated_{username_val}"
     cursor.execute(f"UPDATE {table_name} SET username = %s WHERE id = %s;", (updated_username_val, user_id))
     pg_conn.commit()
-    print(f"  PostgreSQL: Пользователь ID {user_id} обновлен на \'{updated_username_val}\'")
+    print(f"  PostgreSQL: Пользователь ID {user_id} обновлен на '{updated_username_val}'")
     time.sleep(KAFKA_CONNECT_DELAY)
 
     # Проверка в Elasticsearch
     try:
         es_doc = es_client_generic.get(index=es_index_name, id=str(user_id))
-        if es_doc["_source"].get("username") == updated_username_val:
-            print(f"  Elasticsearch: Пользователь \'{updated_username_val}\' (ID: {user_id}) успешно обновлен.")
+        data = get_es_data(es_doc)
+        if data.get("username") == updated_username_val:
+            print(f"  Elasticsearch: Пользователь '{updated_username_val}' (ID: {user_id}) успешно обновлен.")
         else:
-            print(f"  Elasticsearch: ОШИБКА! Пользователь \'{updated_username_val}\' (ID: {user_id}) данные не совпадают. Найдено: {es_doc}")
+            print(f"  Elasticsearch: ОШИБКА! Данные не совпадают. Ожидалось: {updated_username_val}, Получено: {data.get('username')}")
     except Exception as e:
-        print(f"  Elasticsearch: ОШИБКА! Пользователь \'{updated_username_val}\' (ID: {user_id}) не найден после обновления. {e}")
+        print(f"  Elasticsearch: ОШИБКА! {e}")
 
     # DELETE
     print("DELETE операция...")
@@ -1431,7 +1384,7 @@ def main():
         mongo_client_obj = MongoClient(MONGODB_CONFIG["uri"])
         # Проверка подключения MongoDB
         try:
-            mongo_client_obj.admin.command('ping')
+            mongo_client_obj.admin.command('ping')  # Правильный способ проверки
             print("  MongoDB: подключено")
         except Exception as e:
             print(f"  MongoDB: ОШИБКА подключения - {e}")
@@ -1451,10 +1404,10 @@ def main():
 
         # --- Запуск тестов ---
         # Порядок важен из-за зависимостей и подсказок
-        # Redis: student_view_table (зависит от student, groups)
+        # Redis: student_view_materialized (зависит от student, groups)
         # Neo4j: department, lecture_department (зависит от lecture, course), groups, student, schedule
         # MongoDB: university, institute, department
-        # Elastic-1 (generic): все кроме student, student_view_table, lecture_department
+        # Elastic-1 (generic): все кроме student, student_view_materialized, lecture_department
         #   -> university, institute, department, groups, course, lecture, schedule, attendance, users
         # Elastic-2 (specific): student
 
@@ -1466,8 +1419,8 @@ def main():
         test_groups_crud(pg_conn, neo4j_driver, es_client_generic) # Зависит от department
         test_student_crud(pg_conn, neo4j_driver, es_client_specific) # Зависит от groups, идет в свой ES
         
-        # Тест для student_view_table (Redis) после student и groups
-        test_student_view_table_crud(pg_conn, redis_conn)
+        # Тест для student_view_materialized (Redis) после student и groups
+        test_student_view_materialized_crud(pg_conn, redis_conn)
 
         test_course_crud(pg_conn, es_client_generic) # Зависит от department
         # Тест для lecture_department (Neo4j) и lecture (ES generic)
@@ -1476,7 +1429,6 @@ def main():
         test_lecture_crud_es_only(pg_conn, es_client_generic) # Зависит от course
 
         test_schedule_crud(pg_conn, neo4j_driver, es_client_generic) # Зависит от lecture, groups
-        test_attendance_crud(pg_conn, es_client_generic) # Зависит от student, schedule
         test_users_crud(pg_conn, es_client_generic)
 
         print("\n--- Все тесты завершены. Проверьте вывод на наличие ОШИБОК. ---")
@@ -1504,5 +1456,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

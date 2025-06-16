@@ -28,6 +28,15 @@ RUN curl -L \
 # 7) Копируем наш собственный JAR с кастомным CDC handler
 COPY sink/kafka-connect-mongo-1.17.0 /usr/share/confluent-hub-components/mongodb-kafka-connect-mongodb
 
+# Создаем директорию для кэша и настраиваем права доступа
+RUN mkdir -p /data/cache && \
+    chmod 777 /data/cache
+
+RUN mkdir -p /etc/kafka/config
+COPY config/connect-log4j.properties /etc/kafka/config/
+COPY config/connect.properties /etc/kafka/config/
+COPY config/mongodb-sink.properties /etc/kafka/config/
+COPY config/mongodb-sink-hierarchical.properties /etc/kafka/config/
 
 # 5) Скачиваем необходимые зависимости для MongoDB (обновленная версия 4.7.2)
 RUN mkdir -p /tmp/mongodb-driver-deps && \
